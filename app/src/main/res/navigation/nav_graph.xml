@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dayFragment">
+
+    <fragment
+        android:id="@+id/dayFragment"
+        android:name="com.alex.riacalc.screens.day.DayFragment"
+        android:label="fragment_day"
+        tools:layout="@layout/fragment_day" >
+        <action
+            android:id="@+id/action_dayFragment_to_monthFragment"
+            app:destination="@id/monthFragment" />
+        <action
+            android:id="@+id/action_dayFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/monthFragment"
+        android:name="com.alex.riacalc.screens.month.MonthFragment"
+        android:label="fragment_month"
+        tools:layout="@layout/fragment_month" >
+        <action
+            android:id="@+id/action_monthFragment_to_exportFragmet"
+            app:destination="@id/exportFragmet" />
+        <action
+            android:id="@+id/action_monthFragment_to_dayFragment"
+            app:destination="@id/dayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/exportFragmet"
+        android:name="com.alex.riacalc.screens.export.ExportFragmet"
+        android:label="fragment_export"
+        tools:layout="@layout/fragment_export" >
+        <action
+            android:id="@+id/action_exportFragmet_to_monthFragment"
+            app:destination="@id/monthFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.alex.riacalc.screens.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_dayFragment"
+            app:destination="@id/dayFragment" />
+    </fragment>
+</navigation>

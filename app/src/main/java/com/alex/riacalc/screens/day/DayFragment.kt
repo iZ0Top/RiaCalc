@@ -8,25 +8,28 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentDayBinding
+import com.alex.riacalc.screens.MyViewModelFactory
 
 class DayFragment : Fragment() {
 
     private var _binding: FragmentDayBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var viewModel: DayFragmentVM
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
+        viewModel = ViewModelProvider(this, MyViewModelFactory()).get(DayFragmentVM::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentDayBinding.inflate(inflater, container, false)
+
+        viewModel.eventListLD.observe(viewLifecycleOwner){
+
+        }
 
         return binding.root
     }
