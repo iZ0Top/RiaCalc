@@ -3,7 +3,7 @@ package com.alex.riacalc.screens.day
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.alex.riacalc.Event
+import com.alex.riacalc.model.Event
 
 class DayFragmentVM: ViewModel() {
 

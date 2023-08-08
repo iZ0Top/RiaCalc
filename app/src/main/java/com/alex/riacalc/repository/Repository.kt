@@ -1,13 +1,14 @@
 package com.alex.riacalc.repository
 
+import androidx.lifecycle.LiveData
+import com.alex.riacalc.model.Event
+
 interface Repository {
 
-    fun getEvent()
+    suspend fun getEvent(): LiveData<List<Event>>
 
-    fun getEventsPerDay()
+    suspend fun insertEvent(event: Event)
 
-    fun putEvent()
-
-    fun deleteEvent()
+    suspend fun deleteEvent(event: Event)
 
 }

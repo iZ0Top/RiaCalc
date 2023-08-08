@@ -1,14 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".screens.day.DayFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/text_day_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Сьогодні"
+        app:layout_constraintBottom_toTopOf="@id/text_date"
+        app:layout_constraintEnd_toStartOf="@+id/btn_month"
+        app:layout_constraintStart_toEndOf="@+id/btn_setting"
+        app:layout_constraintTop_toTopOf="@+id/btn_setting"
+        style="@style/text_headline_h1"
+        />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="08 серпня"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_setting"
+        app:layout_constraintEnd_toStartOf="@+id/btn_month"
+        app:layout_constraintStart_toEndOf="@+id/btn_setting"
+        app:layout_constraintTop_toBottomOf="@id/text_day_name"
+        style="@style/text_normal"/>
+
+    <ImageButton
+        android:id="@+id/btn_month"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@null"
+        android:src="@drawable/ic_calendar_month"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_setting"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@null"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linear_inspections"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/text_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/txt_reviews"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="@string/text_reviews"
+            style="@style/text_normal"
+            />
+        <TextView
+            android:id="@+id/txt_reviews_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:text="99"
+            style="@style/text_normal"
+            />
+        <TextView
+            android:id="@+id/txt_reviews_sum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_weight="1"
+            android:text="@string/text_formatted_value"
+            style="@style/text_normal"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_trips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/linear_inspections"
+        >
+        <TextView
+            android:id="@+id/txt_trips"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/text_trips"
+            style="@style/text_normal"
+            />
+        <TextView
+            android:id="@+id/txt_trips_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:text="9"
+            style="@style/text_normal"
+            />
+        <TextView
+            android:id="@+id/txt_trips_sum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/text_formatted_value"
+            style="@style/text_normal"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_other"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_trips"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        >
+        <TextView
+            android:id="@+id/txt_other"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:text="@string/text_other_expenses"
+            style="@style/text_normal"
+            />
+        <TextView
+            android:id="@+id/txt_other_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center_horizontal"
+            android:text="9"
+            style="@style/text_normal"
+            />
+        <TextView
+            android:id="@+id/txt_other_sum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:text="@string/text_formatted_value"
+            style="@style/text_normal"
+            />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/linear_other"
+        app:layout_constraintBottom_toTopOf="@id/btn_add_trip"
+        tools:listitem="@layout/item_event"
+        />
+
+    <Button
+        android:id="@+id/btn_add_inspection"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/text_btn_inspection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_add_trip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_add_trip"
+        style="@style/my_button"
+        />
+
+    <Button
+        android:id="@+id/btn_add_trip"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="@string/text_btn_trip"
+        android:layout_marginEnd="6dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        app:layout_constraintBottom_toTopOf="@+id/btn_add_other"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_add_inspection"
+        style="@style/my_button"
+        />
+
+    <Button
+        android:id="@+id/btn_add_other"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="@string/text_btn_other"
+        android:layout_marginBottom="6dp"
+        android:layout_marginEnd="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btn_add_inspection"
+        style="@style/my_button"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

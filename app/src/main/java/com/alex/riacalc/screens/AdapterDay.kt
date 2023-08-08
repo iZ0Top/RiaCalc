@@ -1,4 +1,4 @@
 package com.alex.riacalc.screens
 
-class AdpterDay {
+class AdapterDay {
 }

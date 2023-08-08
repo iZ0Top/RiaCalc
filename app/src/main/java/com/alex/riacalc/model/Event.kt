@@ -1,4 +1,4 @@
-package com.alex.riacalc
+package com.alex.riacalc.model
 
 data class Event(
     val id: Int,
