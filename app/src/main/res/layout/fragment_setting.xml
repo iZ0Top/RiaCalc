@@ -7,7 +7,7 @@
     tools:context=".screens.setting.SettingFragment">
 
     <ImageButton
-        android:id="@+id/ic_setting_back"
+        android:id="@+id/btn_setting_back"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="16dp"
@@ -28,7 +28,7 @@
         android:text="@string/text_setting_title_general"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ic_setting_back" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_setting_back" />
 
     <TextView
         android:id="@+id/text_setting_price"

@@ -7,29 +7,35 @@
     android:layout_height="match_parent"
     tools:context=".screens.day.DayFragment">
 
-    <TextView
-        android:id="@+id/text_day_name"
+    <LinearLayout
+        android:id="@+id/frame_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Сьогодні"
-        app:layout_constraintBottom_toTopOf="@id/text_date"
-        app:layout_constraintEnd_toStartOf="@+id/btn_month"
-        app:layout_constraintStart_toEndOf="@+id/btn_setting"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="@+id/btn_setting"
-        style="@style/text_headline_h1"
-        />
-
-    <TextView
-        android:id="@+id/text_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="08 серпня"
         app:layout_constraintBottom_toBottomOf="@+id/btn_setting"
-        app:layout_constraintEnd_toStartOf="@+id/btn_month"
-        app:layout_constraintStart_toEndOf="@+id/btn_setting"
-        app:layout_constraintTop_toBottomOf="@id/text_day_name"
-        style="@style/text_normal"/>
+        app:layout_constraintStart_toEndOf="@id/btn_setting"
+        app:layout_constraintEnd_toStartOf="@id/btn_month"
+        >
+        <TextView
+            android:id="@+id/text_day_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Сьогодні"
+            style="@style/text_headline_h1"
+            />
+        <TextView
+            android:id="@+id/text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="08 серпня"
+            style="@style/text_normal"/>
+
+
+    </LinearLayout>
+
+
 
     <ImageButton
         android:id="@+id/btn_month"
@@ -62,7 +68,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/text_date"
+        app:layout_constraintTop_toBottomOf="@+id/frame_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
