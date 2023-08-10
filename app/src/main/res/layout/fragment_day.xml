@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:layout_weight="1"
-            android:text="@string/text_formatted_value"
+            android:text="@string/text_formatted_currency"
             style="@style/text_normal"
             />
     </LinearLayout>
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="@string/text_formatted_value"
+            android:text="@string/text_formatted_currency"
             style="@style/text_normal"
             />
     </LinearLayout>
@@ -174,7 +174,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="@string/text_formatted_value"
+            android:text="@string/text_formatted_currency"
             style="@style/text_normal"
             />
     </LinearLayout>
