@@ -3,12 +3,18 @@ package com.alex.riacalc.repository
 import androidx.lifecycle.LiveData
 import com.alex.riacalc.model.Event
 
-interface Repository {
+class Repository: RepositoryInterface {
 
-    suspend fun getEvent(): LiveData<List<Event>>
+    private val db = LocalDB()
+    override fun getEvent(): LiveData<List<Event>> {
+        return db.getEvent()
+    }
 
-    suspend fun insertEvent(event: Event)
+    override suspend fun insertEvent(event: Event) {
+        TODO("Not yet implemented")
+    }
 
-    suspend fun deleteEvent(event: Event)
-
+    override suspend fun deleteEvent(event: Event) {
+        TODO("Not yet implemented")
+    }
 }

@@ -2,22 +2,26 @@ package com.alex.riacalc.screens
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
-import com.alex.riacalc.databinding.ItemDayBinding
 import com.alex.riacalc.databinding.ItemEventBinding
 import com.alex.riacalc.model.Event
 
-class AdapterDay: RecyclerView.Adapter<AdapterDay.mHolder>() {
+interface ActionListener {
+    fun onEditEvent()
+    fun onDeleteEvent()
+}
+
+class AdapterDay(private val actionListener: ActionListener): RecyclerView.Adapter<AdapterDay.mHolder>() {
 
     lateinit var context: Context
     var eventList: List<Event> = emptyList()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+
+    fun setList(list: List<Event>){
+        eventList = list
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount(): Int = eventList.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): mHolder {
@@ -47,7 +51,5 @@ class AdapterDay: RecyclerView.Adapter<AdapterDay.mHolder>() {
         }
     }
 
-    class mHolder(val binding: ItemEventBinding): RecyclerView.ViewHolder(binding.root){
-
-    }
+    class mHolder(val binding: ItemEventBinding): RecyclerView.ViewHolder(binding.root)
 }

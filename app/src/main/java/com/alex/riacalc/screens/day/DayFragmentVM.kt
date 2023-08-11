@@ -4,13 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.alex.riacalc.model.Event
-import java.util.Calendar
+import com.alex.riacalc.repository.Repository
 
 class DayFragmentVM: ViewModel() {
 
-    private val _eventListLD = MutableLiveData<List<Event>>()
-    val eventListLD: LiveData<List<Event>> = _eventListLD
-    private var currentDate: Calendar = Calendar.getInstance()
+    private val repository = Repository()
+
+    var eventListLD: LiveData<List<Event>> = MutableLiveData()
+
+    init {
+        getData()
+    }
+
+
+
+    fun getData(){
+        eventListLD = repository.getEvent()
+    }
 
 
 

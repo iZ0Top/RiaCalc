@@ -7,11 +7,14 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.screens.AdapterDay
 import com.alex.riacalc.screens.DialogAdd
 import com.alex.riacalc.screens.MyViewModelFactory
 
@@ -20,10 +23,17 @@ class DayFragment : Fragment(), OnClickListener {
     private var _binding: FragmentDayBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: DayFragmentVM
+    private lateinit var adapter: AdapterDay
+    private lateinit var layoutManager: LinearLayoutManager
+    private lateinit var observer: Observer<List<Event>>
+
+    private var list = mutableListOf<Event>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this, MyViewModelFactory()).get(DayFragmentVM::class.java)
+        adapter = AdapterDay()
+        layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onCreateView(
@@ -32,6 +42,8 @@ class DayFragment : Fragment(), OnClickListener {
     ): View? {
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.adapter = adapter
 
         binding.btnSetting.setOnClickListener(this)
         binding.btnMonth.setOnClickListener(this)
@@ -41,17 +53,20 @@ class DayFragment : Fragment(), OnClickListener {
 
         setupDialogListener()
 
+        observer = Observer { adapter.setList(it) }
+
+        viewModel.eventListLD.observe(viewLifecycleOwner, observer)
+
         return binding.root
     }
 
 
 
-
     override fun onDestroy() {
         super.onDestroy()
+        viewModel.eventListLD.removeObserver(observer)
         _binding = null
     }
-
 
 
 
@@ -94,24 +109,13 @@ class DayFragment : Fragment(), OnClickListener {
 
     private fun setupDialogListener(){
         DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {
-            listTEMP.
+
             Log.d("TAG", "DayFragment - setUpDialogListener result\n + ${it.toString()}" )
         }
     }
 
-//    private fun setupDialogListener(){
-//        Log.d("TAG", "setUpDialogListener" )
-//        parentFragmentManager.setFragmentResultListener(DialogAdd.DIALOG_REQUEST_KEY, viewLifecycleOwner, FragmentResultListener { _, result ->
-//
-//            val event = result.getSerializable(DialogAdd.BUNDLE_KEY)
-//
-//            Log.d("TAG", "setUpDialogListener result\n + ${event.toString()}")
-//        })
-//    }
 
     companion object{
-
-
         const val KEY_REQUEST_DIALOG_INSPECTION = "dialog_inspection"
         const val KEY_REQUEST_DIALOG_TRIP = "dialog_trip"
         const val KEY_REQUEST_DIALOG_OTHER = "dialog_other"

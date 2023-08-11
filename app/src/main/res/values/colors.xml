@@ -18,10 +18,10 @@
     <color name="green_100">#CCEBC1</color>
 
     <color name="blue_600">#004280</color>
-    <color name="blue_500">#</color>
-    <color name="blue_400">#</color>
-    <color name="blue_300">#</color>
-    <color name="blue_200">#</color>
+    <color name="blue_500">#0063BF</color>
+    <color name="blue_400">#0085FF</color>
+    <color name="blue_300">#40A3FF</color>
+    <color name="blue_200">#80C2FF</color>
     <color name="blue_100">#BFE0FF</color>
 
     <color name="red_600">#670000</color>
