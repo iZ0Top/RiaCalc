@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.screens.ActionListener
 import com.alex.riacalc.screens.AdapterDay
 import com.alex.riacalc.screens.DialogAdd
 import com.alex.riacalc.screens.MyViewModelFactory
@@ -31,8 +33,14 @@ class DayFragment : Fragment(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("TAG", "DayFragment - onCreate" )
+
         viewModel = ViewModelProvider(this, MyViewModelFactory()).get(DayFragmentVM::class.java)
-        adapter = AdapterDay()
+        adapter = AdapterDay(object : ActionListener {
+            override fun onEditEvent(event: Event) { /* Dialog edit Event */ }
+            override fun onDeleteEvent(event: Event) { /* Repository delete Event */ }
+            override fun onShowDetails(event: Event) { /* Dialog show details */ }
+        })
         layoutManager = LinearLayoutManager(requireContext())
     }
 
@@ -40,6 +48,8 @@ class DayFragment : Fragment(), OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("TAG", "DayFragment - onCreateView" )
+
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
         binding.recyclerView.layoutManager = layoutManager
@@ -54,7 +64,6 @@ class DayFragment : Fragment(), OnClickListener {
         setupDialogListener()
 
         observer = Observer { adapter.setList(it) }
-
         viewModel.eventListLD.observe(viewLifecycleOwner, observer)
 
         return binding.root
@@ -64,10 +73,11 @@ class DayFragment : Fragment(), OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("TAG", "DayFragment - onDestroy" )
+
         viewModel.eventListLD.removeObserver(observer)
         _binding = null
     }
-
 
 
     override fun onClick(v: View?) {
@@ -109,7 +119,7 @@ class DayFragment : Fragment(), OnClickListener {
 
     private fun setupDialogListener(){
         DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {
-
+            // Add result to Repository
             Log.d("TAG", "DayFragment - setUpDialogListener result\n + ${it.toString()}" )
         }
     }
@@ -120,5 +130,4 @@ class DayFragment : Fragment(), OnClickListener {
         const val KEY_REQUEST_DIALOG_TRIP = "dialog_trip"
         const val KEY_REQUEST_DIALOG_OTHER = "dialog_other"
     }
-
 }

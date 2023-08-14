@@ -34,6 +34,8 @@
 
     <string name="text_0">0</string>
 
+    <string name="text_item_inspection">+%1$d  %2$s</string>
+    <string name="text_item_expense">-%1$d  %2$s</string>
 
 
 </resources>

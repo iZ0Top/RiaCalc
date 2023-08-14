@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground">
 
         <ImageView
             android:id="@+id/item_popup_menu"
@@ -23,19 +24,23 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_popup_menu" />
+            app:srcCompat="@drawable/ic_popup_menu"
+            android:background="?android:attr/selectableItemBackground"
+            />
 
         <TextView
             android:id="@+id/item_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="+80"
+            android:lines="1"
             android:layout_marginStart="4dp"
             app:layout_constraintBottom_toBottomOf="@+id/item_popup_menu"
             app:layout_constraintEnd_toStartOf="@+id/item_popup_menu"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/item_popup_menu"
-            style="@style/text_normal"/>
+            style="@style/text_normal"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
