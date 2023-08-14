@@ -1,5 +1,6 @@
 package com.alex.riacalc.screens.day
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,7 +40,7 @@ class DayFragment : Fragment(), OnClickListener {
         adapter = AdapterDay(object : ActionListener {
             override fun onEditEvent(event: Event) { /* Dialog edit Event */ }
             override fun onDeleteEvent(event: Event) { /* Repository delete Event */ }
-            override fun onShowDetails(event: Event) { /* Dialog show details */ }
+            override fun onShowDetails(event: Event) { showDialogDescription(event) }
         })
         layoutManager = LinearLayoutManager(requireContext())
     }
@@ -68,8 +69,6 @@ class DayFragment : Fragment(), OnClickListener {
 
         return binding.root
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()
@@ -122,6 +121,15 @@ class DayFragment : Fragment(), OnClickListener {
             // Add result to Repository
             Log.d("TAG", "DayFragment - setUpDialogListener result\n + ${it.toString()}" )
         }
+    }
+
+    fun showDialogDescription(event: Event){
+        val dialogDescription = AlertDialog.Builder(context)
+            .setMessage(event.toString())
+            .setCancelable(true)
+            .setPositiveButton("Ok", null)
+            .create()
+            .show()
     }
 
 
