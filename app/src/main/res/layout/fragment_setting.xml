@@ -38,7 +38,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/text_setting_price"
-        app:layout_constraintEnd_toStartOf="@+id/et_setting_input_price"
+        app:layout_constraintEnd_toStartOf="@+id/et_setting_input_cost"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_setting_general" />
 
@@ -53,7 +53,7 @@
 
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/et_setting_input_price"
+        android:id="@+id/et_setting_input_cost"
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:ems="10"
@@ -73,19 +73,21 @@
         android:text="@string/text_setting_title_export"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch_show_price" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_show_cost" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_show_price"
-        android:layout_width="379dp"
+        android:id="@+id/switch_show_cost"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/text_setting_show_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_setting_price" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/switch_add_other_expenses"
+        android:id="@+id/switch_add_other"
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:text="@string/text_setting_add_other"

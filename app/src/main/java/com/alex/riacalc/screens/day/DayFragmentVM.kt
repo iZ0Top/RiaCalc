@@ -1,26 +1,22 @@
 package com.alex.riacalc.screens.day
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.alex.riacalc.model.Event
-import com.alex.riacalc.repository.Repository
 
-class DayFragmentVM: ViewModel() {
+class DayFragmentVM(application: Application): AndroidViewModel(application) {
 
-    private val repository = Repository()
+    private val context = application
 
     var eventListLD: LiveData<List<Event>> = MutableLiveData()
 
-    init {
-        getData()
+    fun initDatabase(){
+
     }
 
 
-
-    fun getData(){
-        eventListLD = repository.getEvent()
-    }
 
 
 

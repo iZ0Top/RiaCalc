@@ -42,7 +42,7 @@ class DayFragment : Fragment(), OnClickListener {
             override fun onDeleteEvent(event: Event) { /* Repository delete Event */ }
             override fun onShowDetails(event: Event) { showDialogDescription(event) }
         })
-        layoutManager = LinearLayoutManager(requireContext())
+
     }
 
     override fun onCreateView(
@@ -53,6 +53,7 @@ class DayFragment : Fragment(), OnClickListener {
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
+        layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.adapter = adapter
 
@@ -124,7 +125,7 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     fun showDialogDescription(event: Event){
-        val dialogDescription = AlertDialog.Builder(context)
+        AlertDialog.Builder(context)
             .setMessage(event.toString())
             .setCancelable(true)
             .setPositiveButton("Ok", null)

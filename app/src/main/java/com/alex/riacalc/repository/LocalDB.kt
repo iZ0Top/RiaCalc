@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.alex.riacalc.model.Event
 import java.util.Calendar
 
-class LocalDB(): RepositoryInterface {
+class LocalDB(): Repository {
 
 
 
