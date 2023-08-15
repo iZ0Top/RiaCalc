@@ -4,18 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.alex.riacalc.model.Event
 
 @Dao
-interface MyDao {
-
-    @Query("SELECT * FROM event_table")
+interface EventDao {
+    @Query("SELECT * FROM events")
     suspend fun getAllEvents(): LiveData<List<Event>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     suspend fun insertEvent(event: Event)
+
+    @Update
+    suspend fun editEvent(event: Event)
 
     @Delete
     suspend fun deleteEvent(event: Event)

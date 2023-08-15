@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 
-@Entity
+@Entity(tableName = "events")
 data class Event(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
