@@ -7,8 +7,8 @@ import com.alex.riacalc.screens.day.DayFragmentVM
 
 class MyViewModelFactory(): ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
-        return DayFragmentVM() as T
-    }
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//
+//        return DayFragmentVM() as T
+//    }
 }

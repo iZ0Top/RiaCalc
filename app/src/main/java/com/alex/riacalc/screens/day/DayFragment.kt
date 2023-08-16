@@ -36,7 +36,10 @@ class DayFragment : Fragment(), OnClickListener {
         super.onCreate(savedInstanceState)
         Log.d("TAG", "DayFragment - onCreate" )
 
-        viewModel = ViewModelProvider(this, MyViewModelFactory()).get(DayFragmentVM::class.java)
+        viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
+
+        viewModel.initDatabase()
+
         adapter = AdapterDay(object : ActionListener {
             override fun onEditEvent(event: Event) { /* Dialog edit Event */ }
             override fun onDeleteEvent(event: Event) { /* Repository delete Event */ }

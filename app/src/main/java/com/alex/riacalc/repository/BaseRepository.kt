@@ -1,13 +1,16 @@
-package com.alex.riacalc.repository.room
+package com.alex.riacalc.repository
 
 import androidx.lifecycle.LiveData
 import com.alex.riacalc.model.Event
 
-interface EventRepository {
+interface BaseRepository {
 
-    suspend fun getAllEvents(): LiveData<List<Event>>
+    val allEvents: LiveData<List<Event>>
 
     suspend fun insertEvent(event: Event)
 
+//    suspend fun updateEvent(event: Event)
+
     suspend fun deleteEvent(event: Event)
+
 }
