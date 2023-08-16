@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,7 @@ import com.alex.riacalc.model.Event
 import com.alex.riacalc.screens.ActionListener
 import com.alex.riacalc.screens.AdapterDay
 import com.alex.riacalc.screens.DialogAdd
-import com.alex.riacalc.screens.MyViewModelFactory
+import com.alex.riacalc.utils.AppPreferences
 
 class DayFragment : Fragment(), OnClickListener {
 
@@ -28,7 +27,7 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var viewModel: DayFragmentVM
     private lateinit var adapter: AdapterDay
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var observer: Observer<List<Event>>
+    private lateinit var observerEvents: Observer<List<Event>>
 
     private var list = mutableListOf<Event>()
 
@@ -38,13 +37,15 @@ class DayFragment : Fragment(), OnClickListener {
 
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
 
-        viewModel.initDatabase()
+
 
         adapter = AdapterDay(object : ActionListener {
             override fun onEditEvent(event: Event) { /* Dialog edit Event */ }
             override fun onDeleteEvent(event: Event) { /* Repository delete Event */ }
             override fun onShowDetails(event: Event) { showDialogDescription(event) }
         })
+
+
 
     }
 
@@ -68,17 +69,18 @@ class DayFragment : Fragment(), OnClickListener {
 
         setupDialogListener()
 
-        observer = Observer { adapter.setList(it) }
-        viewModel.eventListLD.observe(viewLifecycleOwner, observer)
+        observerEvents = Observer { adapter.setList(it) }
+
+        viewModel.eventListLD.observe(viewLifecycleOwner, observerEvents)
 
         return binding.root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("TAG", "DayFragment - onDestroy" )
 
-        viewModel.eventListLD.removeObserver(observer)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("TAG", "DayFragment - onDestroy" )
+        viewModel.eventListLD.removeObserver(observerEvents)
         _binding = null
     }
 
@@ -110,7 +112,8 @@ class DayFragment : Fragment(), OnClickListener {
     private fun createEvent(type: Int): Event{
         Log.d("TAG","DayFragment - createEvent")
 
-        val defaultCost = if (type == DialogAdd.TYPE_INSPECTION) 80 else 0
+        val defaultCost = if
+                (type == DialogAdd.TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
 
         return Event(
             id = 0,
@@ -123,6 +126,7 @@ class DayFragment : Fragment(), OnClickListener {
     private fun setupDialogListener(){
         DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {
             // Add result to Repository
+            viewModel.insertEvent(it)
             Log.d("TAG", "DayFragment - setUpDialogListener result\n + ${it.toString()}" )
         }
     }
