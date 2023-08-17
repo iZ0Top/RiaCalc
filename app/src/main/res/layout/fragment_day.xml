@@ -19,16 +19,18 @@
         >
         <TextView
             android:id="@+id/text_day_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Сьогодні"
+            android:gravity="center_horizontal"
+            android:text="четвер"
             style="@style/text_headline_h1"
             />
         <TextView
             android:id="@+id/text_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:text="08 серпня"
             style="@style/text_normal"/>
 

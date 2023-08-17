@@ -43,7 +43,7 @@ class AdapterDay(private val actionListener: ActionListener): RecyclerView.Adapt
 
         when(event.type){
             0 -> {
-                holder.binding.itemText.text = holder.itemView.context.getString(R.string.text_item_inspection, event.cost, event.description)
+                holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
                 if (event.cost <= 80) // Replace 80 with variable default cost
                     holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
                 else {
@@ -51,7 +51,7 @@ class AdapterDay(private val actionListener: ActionListener): RecyclerView.Adapt
                 }
             }
             1, 2 -> {
-                holder.binding.itemText.text = holder.itemView.context.getString(R.string.text_item_expense, event.cost, event.description)
+                holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_expense, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.red_100))
             }
         }
