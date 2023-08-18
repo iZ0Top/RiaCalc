@@ -23,14 +23,14 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
     private var _eventListLD: LiveData<List<Event>> = MutableLiveData()
     val eventListLD: LiveData<List<Event>> get() = _eventListLD
-    var calendarLD =  MutableLiveData<Calendar>()
-
+    var calendarLD = MutableLiveData<Calendar>()
 
     init {
+
         Log.d("TAG", "DayFragmentVM - init")
+        calendarLD.value = Calendar.getInstance()
         initDatabase()
         loadEvents()
-        calendarLD.value = Calendar.getInstance()
     }
 
     private fun initDatabase() {

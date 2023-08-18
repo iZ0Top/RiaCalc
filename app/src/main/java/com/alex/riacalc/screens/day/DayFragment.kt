@@ -32,8 +32,6 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var observerEvents: Observer<List<Event>>
     private lateinit var observerDate: Observer<Calendar>
 
-    private var list = mutableListOf<Event>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TAG", "DayFragment - onCreate")
@@ -76,7 +74,6 @@ class DayFragment : Fragment(), OnClickListener {
 
         return binding.root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
