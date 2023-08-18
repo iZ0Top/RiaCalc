@@ -39,21 +39,30 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         REPOSITORY = RoomRepository(dao)
     }
 
-    fun initDate(){
-        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val date = Calendar.getInstance()
-    }
-
     private fun loadEvents(){
         _eventListLD = REPOSITORY.eventDao.getAllEvents()
     }
 
     fun insertEvent(event: Event){
+        Log.d("TAG", "DayFragmentVM - insertEvent")
         viewModelScope.launch (Dispatchers.IO) {
             REPOSITORY.eventDao.insertEvent(event)
         }
     }
 
+    fun editEvent(event: Event){
+        Log.d("TAG", "DayFragmentVM - editEvent")
+        viewModelScope.launch(Dispatchers.IO){
+            REPOSITORY.editEvent(event)
+        }
+    }
+
+    fun deleteEvent(event: Event){
+        Log.d("TAG", "DayFragmentVM - deleteEvent")
+        viewModelScope.launch (Dispatchers.IO){
+            REPOSITORY.eventDao.deleteEvent(event)
+        }
+    }
     override fun onCleared() {
         super.onCleared()
 

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemEventBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.utils.AppPreferences
 
 interface ActionListener {
     fun onEditEvent(event: Event)
@@ -44,7 +45,7 @@ class AdapterDay(private val actionListener: ActionListener): RecyclerView.Adapt
         when(event.type){
             0 -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
-                if (event.cost <= 80) // Replace 80 with variable default cost
+                if (event.cost <= AppPreferences.getReviewDefaultCost())
                     holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
                 else {
                     holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.blue_100))

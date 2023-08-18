@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.alex.riacalc.model.Event
 
 @Dao
@@ -16,8 +17,8 @@ interface RoomDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEvent(event: Event)
 
-//    @Update(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun editEvent(event: Event)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun editEvent(event: Event)
 
     @Delete
     suspend fun deleteEvent(event: Event)

@@ -13,9 +13,9 @@ class RoomRepository(val eventDao: RoomDao) : BaseRepository {
         eventDao.insertEvent(event)
     }
 
-//    override suspend fun updateEvent(event: Event) {
-//        eventDao.editEvent(event)
-//    }
+    override suspend fun editEvent(event: Event) {
+        eventDao.editEvent(event)
+    }
 
     override suspend fun deleteEvent(event: Event) {
         eventDao.deleteEvent(event)

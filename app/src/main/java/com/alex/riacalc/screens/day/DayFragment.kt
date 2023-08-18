@@ -40,17 +40,10 @@ class DayFragment : Fragment(), OnClickListener {
 
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
 
-
         adapter = AdapterDay(object : ActionListener {
-            override fun onEditEvent(event: Event) { /* Dialog edit Event */
-            }
-
-            override fun onDeleteEvent(event: Event) { /* Repository delete Event */
-            }
-
-            override fun onShowDetails(event: Event) {
-                showDialogDescription(event)
-            }
+            override fun onEditEvent(event: Event) { dialogEditEvent(event) }
+            override fun onDeleteEvent(event: Event) { viewModel.deleteEvent(event) }
+            override fun onShowDetails(event: Event) { showDialogDescription(event) }
         })
     }
 
@@ -97,38 +90,21 @@ class DayFragment : Fragment(), OnClickListener {
 
         if (v != null) {
             when (v.id) {
-                R.id.btn_setting -> {
-                    findNavController().navigate(R.id.action_dayFragment_to_settingFragment)
-                }
-
-                R.id.btn_month -> {
-                    findNavController().navigate(R.id.action_dayFragment_to_monthFragment)
-                }
-
-                R.id.frame_date -> {
-                    showDatePickerDialog(viewModel.calendarLD.value!!)
-                }
-
-                R.id.btn_add_inspection -> {
-                    DialogAdd.show(parentFragmentManager, createEvent(DialogAdd.TYPE_INSPECTION))
-                }
-
-                R.id.btn_add_trip -> {
-                    DialogAdd.show(parentFragmentManager, createEvent(DialogAdd.TYPE_TRIP))
-                }
-
-                R.id.btn_add_other -> {
-                    DialogAdd.show(parentFragmentManager, createEvent(DialogAdd.TYPE_OTHER))
-                }
+                R.id.btn_setting -> { findNavController().navigate(R.id.action_dayFragment_to_settingFragment) }
+                R.id.btn_month -> { findNavController().navigate(R.id.action_dayFragment_to_monthFragment) }
+                R.id.frame_date -> { showDatePickerDialog(viewModel.calendarLD.value!!) }
+                R.id.btn_add_inspection -> { dialogAddEvent(DialogAdd.TYPE_INSPECTION) }
+                R.id.btn_add_trip -> { dialogAddEvent(DialogAdd.TYPE_TRIP) }
+                R.id.btn_add_other -> { dialogAddEvent(DialogAdd.TYPE_OTHER) }
             }
         }
     }
 
-    fun setDate(calendar: Calendar) {
-        Log.d("TAG","DayFragment - setDate")
+    private fun setDate(calendar: Calendar) {
+        Log.d("TAG", "DayFragment - setDate")
 
-        val dayNamesArray = resources.getStringArray(R.array.day_name)
-        val monthNamesArray = resources.getStringArray(R.array.month_name)
+        val dayNames = resources.getStringArray(R.array.day_name)
+        val monthNames = resources.getStringArray(R.array.month_name)
 
         val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)        // 1
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)      // 1
@@ -141,59 +117,62 @@ class DayFragment : Fragment(), OnClickListener {
         val y = year == realDate.get(Calendar.YEAR)
         val m = montNumber == realDate.get(Calendar.MONTH)
         val dm = dayOfMonth == realDate.get(Calendar.DAY_OF_MONTH)
-        Log.d("TAG", "DayFragment - compare = $y, $m, $dm\n" +
-                "setDate. year = ${year}, mountNumber = $montNumber, dayOfMonth = $dayOfMonth, dayOfWeek = $dayOfWeek \n" +
-                "realDate. year = ${realDate.get(Calendar.YEAR)}, mountNumber = ${realDate.get(Calendar.MONTH)}, dayOfMonth = ${realDate.get(Calendar.DAY_OF_MONTH)}, dayOfWeek = ${realDate.get(Calendar.DAY_OF_WEEK)}")
+        Log.d(
+            "TAG", "DayFragment - compare = $y, $m, $dm\n" +
+                    "setDate. year = ${year}, mountNumber = $montNumber, dayOfMonth = $dayOfMonth, dayOfWeek = $dayOfWeek \n" +
+                    "realDate. year = ${realDate.get(Calendar.YEAR)}, mountNumber = ${
+                        realDate.get(
+                            Calendar.MONTH
+                        )
+                    }, dayOfMonth = ${realDate.get(Calendar.DAY_OF_MONTH)}, dayOfWeek = ${
+                        realDate.get(
+                            Calendar.DAY_OF_WEEK
+                        )
+                    }"
+        )
 
-        binding.textDate.text = resources.getString(R.string.template_date, dayOfMonth, monthNamesArray[montNumber])
-        binding.textDayName.text = dayNamesArray[dayOfWeek - 1]
-
+        binding.textDate.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
+        binding.textDayName.text = dayNames[dayOfWeek - 1]
     }
 
-    private fun createEvent(type: Int): Event {
-        Log.d("TAG", "DayFragment - createEvent")
 
-        val defaultCost =
-            if (type == DialogAdd.TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
-        return Event(
+    private fun dialogAddEvent(type: Int){
+        val defaultCost = if (type == DialogAdd.TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
+        val event = Event(
             id = 0,
             type = type,
             cost = defaultCost,
             description = "",
             date = Calendar.getInstance().toString()
         )
+        DialogAdd.show(parentFragmentManager, event, true)
+    }
+
+    private fun dialogEditEvent(event: Event){
+        DialogAdd.show(parentFragmentManager, event, false)
     }
 
     private fun setupDialogListener() {
-        DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {
-            viewModel.insertEvent(it)
-            Log.d("TAG", "DayFragment - setUpDialogListener result\n + ${it.toString()}")
+        Log.d("TAG", "DayFragment - setupDialogListener")
+        DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {resultEvent, resultIsNew->
+            Log.d("TAG", "DayFragment - setupDialogListener - result")
+            if (resultIsNew) viewModel.insertEvent(resultEvent) else viewModel.editEvent(resultEvent)
         }
     }
 
-    fun showDatePickerDialog(currentDate: Calendar) {
+    private fun showDatePickerDialog(currentDate: Calendar) {
         Log.d("TAG", "DayFragment - showDatePickerDialog")
 
-        val datePickerDialog = DatePickerDialog(
-            requireContext(), DatePickerDialog.OnDateSetListener { datePicker, i, i2, i3 ->
-
+        DatePickerDialog(
+            requireContext(), DatePickerDialog.OnDateSetListener { _, i, i2, i3 ->
                 val cal = Calendar.getInstance()
                 cal.set(i, i2, i3)
-
-                Log.d(
-                    "TAG", "DayFragment - showDatePickerDialog - OnDateSetListener. new value = " +
-                            "year: ${cal.get(Calendar.YEAR)}, " +
-                            "month: ${cal.get(Calendar.MONTH)}," +
-                            " day: ${cal.get(Calendar.DAY_OF_MONTH)}"
-                )
-
                 viewModel.calendarLD.value = cal
             },
             currentDate.get(Calendar.YEAR),
             currentDate.get(Calendar.MONTH),
             currentDate.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
+        ).show()
     }
 
     fun showDialogDescription(event: Event) {

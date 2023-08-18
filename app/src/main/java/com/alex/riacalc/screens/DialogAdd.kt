@@ -13,14 +13,13 @@ import androidx.lifecycle.LifecycleOwner
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.DialogAddBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.utils.AppPreferences
 import java.util.Calendar
 
 class DialogAdd: DialogFragment() {
 
     private var _binding: DialogAddBinding? = null
     private val binding get() = _binding!!
-    private val event: Event
-        get() = requireArguments().getSerializable(BUNDLE_KEY) as Event
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Log.d("TAG", "DialogAdd - onCreateDialog")
@@ -28,7 +27,23 @@ class DialogAdd: DialogFragment() {
         val inflater = requireActivity().layoutInflater
         _binding = DialogAddBinding.inflate(inflater)
 
+        val event = arguments?.getSerializable(BUNDLE_EVENT_KEY) as Event
+        val isNew = arguments?.getBoolean(BUNDLE_TYPE_KEY) as Boolean
+
         changeView(event.type)
+
+        if (isNew) {
+            if (event.type == TYPE_INSPECTION) {
+                binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
+            }
+            else{
+                binding.etDialogPrice.setText("0")
+            }
+        }
+        else{
+            binding.etDialogDescription.setText(event.description)
+            binding.etDialogPrice.setText(event.cost.toString())
+        }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -43,16 +58,18 @@ class DialogAdd: DialogFragment() {
 
                 if (cost == 0 || cost == null){
                     binding.etDialogPrice.text = null
-                    binding.etDialogPrice.hint = "0"
-                    binding.etDialogPrice.setHintTextColor(resources.getColor(R.color.red_500))
+                    binding.etDialogPrice.setText("0")
+                    binding.etDialogPrice.setTextColor(resources.getColor(R.color.red_500))
                     return@setOnClickListener
                 }
-
                 event.description = description
                 event.cost = cost
                 event.date = Calendar.getInstance().toString()
 
-                parentFragmentManager.setFragmentResult(DIALOG_REQUEST_KEY, bundleOf(BUNDLE_KEY to event))
+                val bundleRequest = Bundle()
+                bundleRequest.putSerializable(BUNDLE_EVENT_KEY, event)
+                bundleRequest.putBoolean(BUNDLE_TYPE_KEY, isNew)
+                parentFragmentManager.setFragmentResult(DIALOG_REQUEST_KEY, bundleRequest)
                 dialog.dismiss()
             }
         }
@@ -88,19 +105,31 @@ class DialogAdd: DialogFragment() {
         const val TYPE_OTHER = 2
 
         const val DIALOG_TAG = "add_dialog"
-        const val BUNDLE_KEY = "bundle_key"
+        const val BUNDLE_EVENT_KEY = "bundle_event_key"
+        const val BUNDLE_TYPE_KEY = "bundle_status_key"
         const val ARG_KEY = "arguments_key"
         const val DIALOG_REQUEST_KEY = "add_request-key"
+        const val DIALOG_REQUEST_KEY2 = "add_request-key2"
 
-        fun show(fManager: FragmentManager, event: Event){                                          //публічний метод з конструктором (фрагментменеджер та аргументи)
+        fun show(fManager: FragmentManager, event: Event, isNew: Boolean){                          //публічний метод з конструктором (фрагментменеджер та аргументи)
+            Log.d("TAG", "DialogAdd - show")
             val dialogFragment = DialogAdd()                                                        //створюємо екземляр діалога
-            dialogFragment.arguments = bundleOf(BUNDLE_KEY to event )                         //передаемо аргументи в діалог через бандл, бандл створюємо тут же
+
+            val bundle = Bundle()
+            bundle.putSerializable(BUNDLE_EVENT_KEY, event)
+            bundle.putBoolean(BUNDLE_TYPE_KEY, isNew)
+            dialogFragment.arguments = bundle
+                                                                                                    //передаемо аргументи в діалог через бандл, бандл створюємо тут же
             dialogFragment.show(fManager, DIALOG_TAG)                                               //показ діалога (фрагмент менеджер і тег діалога)
         }
 
-        fun setupListener(fManager: FragmentManager, lcOwner: LifecycleOwner, listener: (Event) -> Unit){
+        fun setupListener(fManager: FragmentManager, lcOwner: LifecycleOwner, listener: (Event, Boolean) -> Unit){
+            Log.d("TAG", "DialogAdd - setupListener")
             fManager.setFragmentResultListener(DIALOG_REQUEST_KEY, lcOwner, FragmentResultListener { _, result ->
-                listener.invoke(result.getSerializable(BUNDLE_KEY) as Event)
+
+                val event = result.getSerializable(BUNDLE_EVENT_KEY) as Event
+                val isNew = result.getBoolean(BUNDLE_TYPE_KEY)
+                listener.invoke(event, isNew)
             })
         }
     }

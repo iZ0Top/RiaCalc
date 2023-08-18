@@ -9,7 +9,7 @@ interface BaseRepository {
 
     suspend fun insertEvent(event: Event)
 
-//    suspend fun updateEvent(event: Event)
+    suspend fun editEvent(event: Event)
 
     suspend fun deleteEvent(event: Event)
 
