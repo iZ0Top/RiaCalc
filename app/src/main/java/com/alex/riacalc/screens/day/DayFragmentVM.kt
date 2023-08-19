@@ -26,7 +26,6 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     var calendarLD = MutableLiveData<Calendar>()
 
     init {
-
         Log.d("TAG", "DayFragmentVM - init")
         calendarLD.value = Calendar.getInstance()
         initDatabase()

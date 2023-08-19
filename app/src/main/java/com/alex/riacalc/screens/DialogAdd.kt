@@ -30,15 +30,10 @@ class DialogAdd: DialogFragment() {
         val event = arguments?.getSerializable(BUNDLE_EVENT_KEY) as Event
         val isNew = arguments?.getBoolean(BUNDLE_TYPE_KEY) as Boolean
 
-        changeView(event.type)
+        changeView(event.type, isNew)
 
         if (isNew) {
-            if (event.type == TYPE_INSPECTION) {
-                binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
-            }
-            else{
-                binding.etDialogPrice.setText("0")
-            }
+            if (event.type == TYPE_INSPECTION) binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
         }
         else{
             binding.etDialogDescription.setText(event.description)
@@ -64,7 +59,6 @@ class DialogAdd: DialogFragment() {
                 }
                 event.description = description
                 event.cost = cost
-                event.date = Calendar.getInstance().toString()
 
                 val bundleRequest = Bundle()
                 bundleRequest.putSerializable(BUNDLE_EVENT_KEY, event)
@@ -82,9 +76,8 @@ class DialogAdd: DialogFragment() {
         Log.d("TAG", "DialogAdd - onDestroy")
     }
 
-    private fun changeView(type: Int){
+    private fun changeView(type: Int, isNew: Boolean){
         when(type){
-            TYPE_INSPECTION -> { return }
             TYPE_TRIP -> {
                 binding.textDialogTitle.text = resources.getString(R.string.text_trip)
                 binding.textDialogPrice.text = resources.getString(R.string.text_cost)
@@ -107,26 +100,21 @@ class DialogAdd: DialogFragment() {
         const val DIALOG_TAG = "add_dialog"
         const val BUNDLE_EVENT_KEY = "bundle_event_key"
         const val BUNDLE_TYPE_KEY = "bundle_status_key"
-        const val ARG_KEY = "arguments_key"
         const val DIALOG_REQUEST_KEY = "add_request-key"
-        const val DIALOG_REQUEST_KEY2 = "add_request-key2"
 
         fun show(fManager: FragmentManager, event: Event, isNew: Boolean){                          //публічний метод з конструктором (фрагментменеджер та аргументи)
             Log.d("TAG", "DialogAdd - show")
             val dialogFragment = DialogAdd()                                                        //створюємо екземляр діалога
-
             val bundle = Bundle()
             bundle.putSerializable(BUNDLE_EVENT_KEY, event)
             bundle.putBoolean(BUNDLE_TYPE_KEY, isNew)
-            dialogFragment.arguments = bundle
-                                                                                                    //передаемо аргументи в діалог через бандл, бандл створюємо тут же
+            dialogFragment.arguments = bundle                                                       //передаемо аргументи в діалог через бандл, бандл створюємо тут же
             dialogFragment.show(fManager, DIALOG_TAG)                                               //показ діалога (фрагмент менеджер і тег діалога)
         }
 
         fun setupListener(fManager: FragmentManager, lcOwner: LifecycleOwner, listener: (Event, Boolean) -> Unit){
             Log.d("TAG", "DialogAdd - setupListener")
             fManager.setFragmentResultListener(DIALOG_REQUEST_KEY, lcOwner, FragmentResultListener { _, result ->
-
                 val event = result.getSerializable(BUNDLE_EVENT_KEY) as Event
                 val isNew = result.getBoolean(BUNDLE_TYPE_KEY)
                 listener.invoke(event, isNew)

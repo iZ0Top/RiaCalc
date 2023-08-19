@@ -20,6 +20,7 @@ import com.alex.riacalc.screens.ActionListener
 import com.alex.riacalc.screens.AdapterDay
 import com.alex.riacalc.screens.DialogAdd
 import com.alex.riacalc.utils.AppPreferences
+import com.alex.riacalc.utils.dateForDatabase
 import java.util.Calendar
 
 class DayFragment : Fragment(), OnClickListener {
@@ -114,19 +115,6 @@ class DayFragment : Fragment(), OnClickListener {
         val y = year == realDate.get(Calendar.YEAR)
         val m = montNumber == realDate.get(Calendar.MONTH)
         val dm = dayOfMonth == realDate.get(Calendar.DAY_OF_MONTH)
-        Log.d(
-            "TAG", "DayFragment - compare = $y, $m, $dm\n" +
-                    "setDate. year = ${year}, mountNumber = $montNumber, dayOfMonth = $dayOfMonth, dayOfWeek = $dayOfWeek \n" +
-                    "realDate. year = ${realDate.get(Calendar.YEAR)}, mountNumber = ${
-                        realDate.get(
-                            Calendar.MONTH
-                        )
-                    }, dayOfMonth = ${realDate.get(Calendar.DAY_OF_MONTH)}, dayOfWeek = ${
-                        realDate.get(
-                            Calendar.DAY_OF_WEEK
-                        )
-                    }"
-        )
 
         binding.textDate.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
         binding.textDayName.text = dayNames[dayOfWeek - 1]
@@ -140,7 +128,7 @@ class DayFragment : Fragment(), OnClickListener {
             type = type,
             cost = defaultCost,
             description = "",
-            date = Calendar.getInstance().toString()
+            date = dateForDatabase(viewModel.calendarLD.value!!)
         )
         DialogAdd.show(parentFragmentManager, event, true)
     }
