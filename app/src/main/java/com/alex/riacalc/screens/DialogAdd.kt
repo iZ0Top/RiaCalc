@@ -14,6 +14,9 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.DialogAddBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.utils.AppPreferences
+import com.alex.riacalc.utils.TYPE_INSPECTION
+import com.alex.riacalc.utils.TYPE_OTHER
+import com.alex.riacalc.utils.TYPE_TRIP
 import java.util.Calendar
 
 class DialogAdd: DialogFragment() {
@@ -93,9 +96,6 @@ class DialogAdd: DialogFragment() {
 
     companion object{
 
-        const val TYPE_INSPECTION = 0
-        const val TYPE_TRIP = 1
-        const val TYPE_OTHER = 2
 
         const val DIALOG_TAG = "add_dialog"
         const val BUNDLE_EVENT_KEY = "bundle_event_key"
