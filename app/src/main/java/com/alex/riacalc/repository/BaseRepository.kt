@@ -5,7 +5,7 @@ import com.alex.riacalc.model.Event
 
 interface BaseRepository {
 
-    fun allEvents(): LiveData<List<Event>>
+    fun allEvents(selectedDate: String): LiveData<List<Event>>
 
     suspend fun insertEvent(event: Event)
 

@@ -13,4 +13,7 @@ const val TYPE_INSPECTION = 0
 const val TYPE_TRIP = 1
 const val TYPE_OTHER = 2
 
+const val patternDateAndTime = "yyyy-MM-dd HH:mm:ss"
+const val patternDate = "yyyy-MM-dd"
+
 

@@ -24,11 +24,9 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
     private val context = application
 
-    private val _eventListLD = MutableLiveData<List<Event>>()
     private var _calendarLD = MutableLiveData<Calendar>()
     private var _statisticLD = MutableLiveData<Statistic>()
 
-    val eventListLD: LiveData<List<Event>> get() = _eventListLD
     val calendarLD: LiveData<Calendar> get() = _calendarLD
     val statisticLD: LiveData<Statistic> get() = _statisticLD
 
@@ -37,9 +35,15 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
     init {
         Log.d("TAG", "DayFragmentVM - init")
-        _calendarLD.value = Calendar.getInstance()
+        val currentDate = Calendar.getInstance()
+        _calendarLD.value = currentDate
+
         initDatabase()
-        mediatorLiveData.addSource(REPOSITORY.eventDao.getAllEvents()){
+
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val d = dateFormatter.format(currentDate.time)
+
+        mediatorLiveData.addSource(REPOSITORY.eventDao.getAllEvents(d)) {
             mediatorLiveData.value = it
         }
     }
@@ -50,19 +54,21 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         REPOSITORY = RoomRepository(dao)
     }
 
-     fun loadEventsForDate(calendar: Calendar): LiveData<List<Event>> {
-         Log.d("TAG", "DayFragmentVM - loadEvents")
+    fun getMediatorLiveData(): LiveData<List<Event>>{
+        return mediatorLiveData
+    }
+    fun loadEventsForDate(calendar: Calendar){
+        Log.d("TAG", "DayFragmentVM - loadEvents")
 
-         mediatorLiveData.apply {
-             removeSource(mediatorLiveData)}
+        val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val selectedDate = dateFormatter.format(calendar.time)
 
+        mediatorLiveData.removeSource(mediatorLiveData)
+        mediatorLiveData.addSource(REPOSITORY.eventDao.getAllEvents(selectedDate)){
+            mediatorLiveData.value = it
+        }
 
-         val dateFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-         val date = dateFormatter.format(calendar.time)
-         Log.d("TAG", "DayFragmentVM - loadEvents: date=$date")
-//         _eventListLD = REPOSITORY.eventDao.getAllEvents()
-//         Log.d("TAG", "DayFragmentVM - loadEvents: date=${_eventListLD.toString()}")
-         return REPOSITORY.eventDao.getAllEvents()
+        Log.d("TAG", "DayFragmentVM - loadEvents: date=$selectedDate")
     }
 
     fun insertEvent(event: Event) {
@@ -97,15 +103,17 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         var otherSum = 0
 
         for (i in list) {
-            when (i.type){
+            when (i.type) {
                 TYPE_INSPECTION -> {
                     inspectionsCount++
                     inspectionsSum += i.cost
                 }
+
                 TYPE_TRIP -> {
                     tripsCount++
                     tripsSum += i.cost
                 }
+
                 TYPE_OTHER -> {
                     otherCount++
                     otherSum += i.cost
@@ -121,8 +129,6 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
             otherSum = otherSum.toString()
         )
     }
-
-
 
 
     override fun onCleared() {

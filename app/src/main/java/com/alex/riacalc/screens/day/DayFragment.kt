@@ -25,7 +25,7 @@ import com.alex.riacalc.utils.AppPreferences
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
-import com.alex.riacalc.utils.dateForDatabase
+import com.alex.riacalc.utils.dateAndTimeFormatterForDB
 import java.util.Calendar
 
 class DayFragment : Fragment(), OnClickListener {
@@ -37,7 +37,7 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var adapter: AdapterDay
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var observerEvents: Observer<List<Event>>
+    private lateinit var observerMediatorLD: Observer<List<Event>>
     private lateinit var observerDate: Observer<Calendar>
     private lateinit var observerStatistic: Observer<DayFragmentVM.Companion.Statistic>
     private lateinit var date: Calendar
@@ -84,13 +84,15 @@ class DayFragment : Fragment(), OnClickListener {
         observerDate = Observer {
             Log.d("TAG", "observerDate")
             changeDate(it)
-
+            viewModel.loadEventsForDate(it)
         }
-        observerEvents = Observer {
-            Log.d("TAG", "observerEvents")
+
+        observerMediatorLD = Observer {
+            Log.d("TAG", "observerMediatorLD")
             adapter.setList(it)
             viewModel.calculateDay(it)
         }
+
         observerStatistic = Observer {
             Log.d("TAG", "observerStatistic")
             with(binding.includeDayHeader){
@@ -106,7 +108,7 @@ class DayFragment : Fragment(), OnClickListener {
         if (!AppPreferences.getShowCost()) changeView()
 
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        viewModel.loadEventsForDate(date).observe(viewLifecycleOwner, observerEvents)
+        viewModel.getMediatorLiveData().observe(viewLifecycleOwner, observerMediatorLD)
         viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
 
         return binding.root
@@ -115,7 +117,7 @@ class DayFragment : Fragment(), OnClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         Log.d("TAG", "DayFragment - onDestroy")
-        viewModel.eventListLD.removeObserver(observerEvents)
+        viewModel.getMediatorLiveData().removeObserver(observerMediatorLD)
         viewModel.calendarLD.removeObserver(observerDate)
         viewModel.statisticLD.removeObserver(observerStatistic)
         _binding = null
@@ -131,9 +133,7 @@ class DayFragment : Fragment(), OnClickListener {
                 R.id.btn_add_inspection -> { showDialogAddEvent(TYPE_INSPECTION) }
                 R.id.btn_add_trip -> { showDialogAddEvent(TYPE_TRIP) }
                 R.id.btn_add_other -> { showDialogAddEvent(TYPE_OTHER) }
-                R.id.btn_month_day -> {
-                    sharedViewModel.setDate(date)
-                    findNavController().navigate(R.id.action_dayFragment_to_monthFragment ) }
+                R.id.btn_month_day -> { findNavController().navigate(R.id.action_dayFragment_to_monthFragment) }
             }
         }
     }
@@ -149,7 +149,7 @@ class DayFragment : Fragment(), OnClickListener {
             type = type,
             cost = defaultCost,
             description = "",
-            date = dateForDatabase(date)
+            date = dateAndTimeFormatterForDB(date)
         )
         DialogAdd.show(parentFragmentManager, event, true)
     }

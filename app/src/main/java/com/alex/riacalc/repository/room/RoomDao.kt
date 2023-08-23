@@ -11,8 +11,8 @@ import com.alex.riacalc.model.Event
 
 @Dao
 interface RoomDao {
-    @Query("SELECT * FROM events")
-    fun getAllEvents(): LiveData<List<Event>>
+    @Query("SELECT * FROM events WHERE DATE(date) = :selectedDate")
+    fun getAllEvents(selectedDate: String): LiveData<List<Event>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEvent(event: Event)

@@ -7,8 +7,8 @@ import com.alex.riacalc.repository.BaseRepository
 
 class RoomRepository(val eventDao: RoomDao) : BaseRepository {
 
-    override fun allEvents(): LiveData<List<Event>> {
-        return eventDao.getAllEvents()
+    override fun allEvents(selectedDate: String): LiveData<List<Event>> {
+        return eventDao.getAllEvents(selectedDate)
     }
 
     override suspend fun insertEvent(event: Event) {
