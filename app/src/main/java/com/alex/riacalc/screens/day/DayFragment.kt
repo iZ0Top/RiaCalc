@@ -9,11 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.R
@@ -34,6 +32,7 @@ class DayFragment : Fragment(), OnClickListener {
 
     private var _binding: FragmentDayBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var viewModel: DayFragmentVM
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var adapter: AdapterDay
@@ -41,8 +40,7 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var observerEvents: Observer<List<Event>>
     private lateinit var observerDate: Observer<Calendar>
     private lateinit var observerStatistic: Observer<DayFragmentVM.Companion.Statistic>
-
-    private lateinit var setDate: Calendar
+    private lateinit var date: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +64,8 @@ class DayFragment : Fragment(), OnClickListener {
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
+        date = Calendar.getInstance()
+
         binding.includeDayHeader.btnExport.visibility = View.GONE
 
         layoutManager = LinearLayoutManager(requireContext())
@@ -81,12 +81,18 @@ class DayFragment : Fragment(), OnClickListener {
 
         setupDialogListener()
 
-        observerDate = Observer { setDate(it) }
+        observerDate = Observer {
+            Log.d("TAG", "observerDate")
+            changeDate(it)
+
+        }
         observerEvents = Observer {
-            adapter.setList(it.reversed())
+            Log.d("TAG", "observerEvents")
+            adapter.setList(it)
             viewModel.calculateDay(it)
         }
         observerStatistic = Observer {
+            Log.d("TAG", "observerStatistic")
             with(binding.includeDayHeader){
                 txtReviewsCount.text = it.inspectionsCount
                 txtReviewsSum.text = it.inspectionsSum
@@ -100,7 +106,7 @@ class DayFragment : Fragment(), OnClickListener {
         if (!AppPreferences.getShowCost()) changeView()
 
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        viewModel.eventListLD.observe(viewLifecycleOwner, observerEvents)
+        viewModel.loadEventsForDate(date).observe(viewLifecycleOwner, observerEvents)
         viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
 
         return binding.root
@@ -121,29 +127,19 @@ class DayFragment : Fragment(), OnClickListener {
         if (v != null) {
             when (v.id) {
                 R.id.btn_setting -> { findNavController().navigate(R.id.action_dayFragment_to_settingFragment) }
-                R.id.frame_date -> { showDatePickerDialog(setDate) }
+                R.id.frame_date -> { showDatePickerDialog() }
                 R.id.btn_add_inspection -> { showDialogAddEvent(TYPE_INSPECTION) }
                 R.id.btn_add_trip -> { showDialogAddEvent(TYPE_TRIP) }
                 R.id.btn_add_other -> { showDialogAddEvent(TYPE_OTHER) }
                 R.id.btn_month_day -> {
-                    sharedViewModel.setDate(setDate)
+                    sharedViewModel.setDate(date)
                     findNavController().navigate(R.id.action_dayFragment_to_monthFragment ) }
             }
         }
     }
 
-    private fun setDate(calendar: Calendar) {
-        Log.d("TAG", "DayFragment - setDate")
+    private fun loadList(){
 
-        val dayNames = resources.getStringArray(R.array.day_name)
-        val monthNames = resources.getStringArray(R.array.month_name)
-
-        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)        // 1
-        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)      // 1
-        val montNumber = calendar.get(Calendar.MONTH)             // 0
-
-        binding.includeDayHeader.textDate.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
-        binding.includeDayHeader.textDayName.text = dayNames[dayOfWeek - 1]
     }
 
     private fun showDialogAddEvent(type: Int){
@@ -153,7 +149,7 @@ class DayFragment : Fragment(), OnClickListener {
             type = type,
             cost = defaultCost,
             description = "",
-            date = dateForDatabase(setDate)
+            date = dateForDatabase(date)
         )
         DialogAdd.show(parentFragmentManager, event, true)
     }
@@ -170,7 +166,7 @@ class DayFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun showDatePickerDialog(currentDate: Calendar) {
+    private fun showDatePickerDialog() {
         Log.d("TAG", "DayFragment - showDatePickerDialog")
 
         DatePickerDialog(
@@ -179,10 +175,26 @@ class DayFragment : Fragment(), OnClickListener {
                 newCalendar.set(i, i2, i3)
                 viewModel.setNewDate(newCalendar)
             },
-            currentDate.get(Calendar.YEAR),
-            currentDate.get(Calendar.MONTH),
-            currentDate.get(Calendar.DAY_OF_MONTH)
+            date.get(Calendar.YEAR),
+            date.get(Calendar.MONTH),
+            date.get(Calendar.DAY_OF_MONTH)
         ).show()
+    }
+
+    private fun changeDate(calendar: Calendar) {
+        Log.d("TAG", "DayFragment - setDate")
+
+        val dayNames = resources.getStringArray(R.array.day_name)
+        val monthNames = resources.getStringArray(R.array.month_name)
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)        // 1
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)      // 1
+        val montNumber = calendar.get(Calendar.MONTH)             // 0
+
+        binding.includeDayHeader.textDate.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
+        binding.includeDayHeader.textDayName.text = dayNames[dayOfWeek - 1]
+
+        date = calendar
     }
 
     private fun showDialogDescription(event: Event) {

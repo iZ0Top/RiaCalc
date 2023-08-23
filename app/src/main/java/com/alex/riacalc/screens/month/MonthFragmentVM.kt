@@ -10,7 +10,7 @@ class MonthFragmentVM: ViewModel() {
 
     private lateinit var sharedViewModel: SharedViewModel
 
-    private val _calendarLD = MutableLiveData<Calendar>()
+    private var _calendarLD = MutableLiveData<Calendar>()
     val calendarLD: LiveData<Calendar> get() = _calendarLD
 
 
@@ -18,11 +18,17 @@ class MonthFragmentVM: ViewModel() {
         this.sharedViewModel = sharedViewModel
     }
 
+    init {
+        getDte()
+    }
+
     override fun onCleared() {
         super.onCleared()
     }
 
-    fun getDte()
+    private fun getDte(){
+        _calendarLD = sharedViewModel.getDate() as MutableLiveData<Calendar>
+    }
 
     fun editDay(){
 

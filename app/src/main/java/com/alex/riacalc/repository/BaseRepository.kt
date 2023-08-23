@@ -5,7 +5,7 @@ import com.alex.riacalc.model.Event
 
 interface BaseRepository {
 
-    val allEvents: LiveData<List<Event>>
+    fun allEvents(): LiveData<List<Event>>
 
     suspend fun insertEvent(event: Event)
 

@@ -7,8 +7,8 @@ import java.util.Calendar
 
 class SharedViewModel: ViewModel() {
 
-
     private val calendarLiveData = MutableLiveData<Calendar>()
+
     fun setDate(calendar: Calendar){
         calendarLiveData.value = calendar
     }
