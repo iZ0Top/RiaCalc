@@ -19,7 +19,7 @@ class MonthFragmentVM: ViewModel() {
     }
 
     init {
-        getDte()
+        //getDte()
     }
 
     override fun onCleared() {

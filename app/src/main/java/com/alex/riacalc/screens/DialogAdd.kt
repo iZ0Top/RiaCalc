@@ -92,8 +92,6 @@ class DialogAdd: DialogFragment() {
         }
     }
 
-
-
     companion object{
 
 

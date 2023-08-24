@@ -16,7 +16,7 @@ interface ActionListener {
     fun onShowDetails(event: Event)
 }
 
-class AdapterDay(private val actionListener: ActionListener): RecyclerView.Adapter<AdapterDay.MyHolder>(), View.OnClickListener {
+class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Adapter<AdapterForDay.MyHolder>(), View.OnClickListener {
 
     var eventList: List<Event> = emptyList()
 

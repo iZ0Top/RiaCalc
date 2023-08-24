@@ -18,7 +18,7 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.screens.ActionListener
-import com.alex.riacalc.screens.AdapterDay
+import com.alex.riacalc.screens.AdapterForDay
 import com.alex.riacalc.screens.DialogAdd
 import com.alex.riacalc.screens.SharedViewModel
 import com.alex.riacalc.utils.AppPreferences
@@ -35,7 +35,7 @@ class DayFragment : Fragment(), OnClickListener {
 
     private lateinit var viewModel: DayFragmentVM
     private lateinit var sharedViewModel: SharedViewModel
-    private lateinit var adapter: AdapterDay
+    private lateinit var adapter: AdapterForDay
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var observerMediatorLD: Observer<List<Event>>
     private lateinit var observerDate: Observer<Calendar>
@@ -49,7 +49,7 @@ class DayFragment : Fragment(), OnClickListener {
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
-        adapter = AdapterDay(object : ActionListener {
+        adapter = AdapterForDay(object : ActionListener {
             override fun onEditEvent(event: Event) { showDialogEditEvent(event) }
             override fun onDeleteEvent(event: Event) { viewModel.deleteEvent(event) }
             override fun onShowDetails(event: Event) { showDialogDescription(event) }
@@ -64,13 +64,16 @@ class DayFragment : Fragment(), OnClickListener {
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
+        val arg = arguments?.getSerializable("K")
+
         date = Calendar.getInstance()
 
-        binding.includeDayHeader.btnExport.visibility = View.GONE
-
         layoutManager = LinearLayoutManager(requireContext())
+
         binding.recyclerViewDay.layoutManager = layoutManager
         binding.recyclerViewDay.adapter = adapter
+
+        binding.includeDayHeader.btnExport.visibility = View.GONE
 
         binding.includeDayHeader.btnSetting.setOnClickListener(this)
         binding.includeDayHeader.btnMonthDay.setOnClickListener(this)
@@ -123,6 +126,10 @@ class DayFragment : Fragment(), OnClickListener {
         _binding = null
     }
 
+    private fun init(){
+
+    }
+
     override fun onClick(v: View?) {
         Log.d("TAG", "DayFragment - onClick")
 
@@ -136,10 +143,6 @@ class DayFragment : Fragment(), OnClickListener {
                 R.id.btn_month_day -> { findNavController().navigate(R.id.action_dayFragment_to_monthFragment) }
             }
         }
-    }
-
-    private fun loadList(){
-
     }
 
     private fun showDialogAddEvent(type: Int){

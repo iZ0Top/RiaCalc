@@ -11,7 +11,7 @@ fun dateAndTimeFormatterForDB(calendar: Calendar): String {
     return formatter.format(calendar.time)
 }
 fun dateFormatterForDB(calendar: Calendar): String {
-    val pattern = "yyyy-MM-dd HH:mm:ss"
+    val pattern = "yyyy-MM-dd"
     val formatter = SimpleDateFormat(pattern, Locale.getDefault())
     return formatter.format(calendar.time)
 }
