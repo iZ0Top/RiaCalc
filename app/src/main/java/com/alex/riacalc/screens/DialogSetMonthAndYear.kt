@@ -28,7 +28,7 @@ class DialogSetMonthAndYear : DialogFragment() {
 
         val monthNames = resources.getStringArray(R.array.month_name_for_picker)
 
-        var month = arguments?.getInt(BUNDLE_KEY_MONTH) ?: (calendar.get(Calendar.MONTH) - 1)
+        var month = arguments?.getInt(BUNDLE_KEY_MONTH) ?: (calendar.get(Calendar.MONTH))
         var year = arguments?.getInt(BUNDLE_KEY_YEAR) ?: calendar.get(Calendar.YEAR)
 
 
@@ -57,9 +57,8 @@ class DialogSetMonthAndYear : DialogFragment() {
             .setView(binding.root)
             .setCancelable(true)
             .setPositiveButton("ok", DialogInterface.OnClickListener { _, _ ->
-
                 val bundleRequest = Bundle()
-                bundleRequest.putInt(BUNDLE_KEY_MONTH, month +1)
+                bundleRequest.putInt(BUNDLE_KEY_MONTH, month)
                 bundleRequest.putInt(BUNDLE_KEY_YEAR, year)
                 parentFragmentManager.setFragmentResult(REQUEST_KEY_DIALOG_MONTH_AND_YEAR, bundleRequest)
             })

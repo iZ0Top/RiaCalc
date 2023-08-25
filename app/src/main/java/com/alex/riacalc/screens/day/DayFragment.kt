@@ -21,6 +21,7 @@ import com.alex.riacalc.screens.ActionListener
 import com.alex.riacalc.screens.AdapterForDay
 import com.alex.riacalc.screens.DialogAdd
 import com.alex.riacalc.screens.SharedViewModel
+import com.alex.riacalc.screens.month.MonthFragment
 import com.alex.riacalc.utils.AppPreferences
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
@@ -87,7 +88,7 @@ class DayFragment : Fragment(), OnClickListener {
         observerDate = Observer {
             Log.d("TAG", "observerDate")
             changeDate(it)
-            viewModel.loadEventsForDate(it)
+            viewModel.loadEventsForDay(it)
         }
 
         observerMediatorLD = Observer {
@@ -126,10 +127,6 @@ class DayFragment : Fragment(), OnClickListener {
         _binding = null
     }
 
-    private fun init(){
-
-    }
-
     override fun onClick(v: View?) {
         Log.d("TAG", "DayFragment - onClick")
 
@@ -140,7 +137,11 @@ class DayFragment : Fragment(), OnClickListener {
                 R.id.btn_add_inspection -> { showDialogAddEvent(TYPE_INSPECTION) }
                 R.id.btn_add_trip -> { showDialogAddEvent(TYPE_TRIP) }
                 R.id.btn_add_other -> { showDialogAddEvent(TYPE_OTHER) }
-                R.id.btn_month_day -> { findNavController().navigate(R.id.action_dayFragment_to_monthFragment) }
+                R.id.btn_month_day -> {
+                    val bundle = Bundle()
+                    bundle.putSerializable(MonthFragment.KEY_ARGUMENTS, date)
+                    findNavController().navigate(R.id.action_dayFragment_to_monthFragment, bundle)
+                }
             }
         }
     }
@@ -161,13 +162,6 @@ class DayFragment : Fragment(), OnClickListener {
         DialogAdd.show(parentFragmentManager, event, false)
     }
 
-    private fun setupDialogListener() {
-        Log.d("TAG", "DayFragment - setupDialogListener")
-        DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {resultEvent, resultIsNew->
-            Log.d("TAG", "DayFragment - setupDialogListener - result")
-            if (resultIsNew) viewModel.insertEvent(resultEvent) else viewModel.editEvent(resultEvent)
-        }
-    }
 
     private fun showDatePickerDialog() {
         Log.d("TAG", "DayFragment - showDatePickerDialog")
@@ -184,6 +178,14 @@ class DayFragment : Fragment(), OnClickListener {
         ).show()
     }
 
+    private fun setupDialogListener() {
+        Log.d("TAG", "DayFragment - setupDialogListener")
+        DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {resultEvent, resultIsNew->
+            Log.d("TAG", "DayFragment - setupDialogListener - result")
+            if (resultIsNew) viewModel.insertEvent(resultEvent) else viewModel.editEvent(resultEvent)
+        }
+    }
+
     private fun changeDate(calendar: Calendar) {
         Log.d("TAG", "DayFragment - setDate")
 
@@ -194,8 +196,8 @@ class DayFragment : Fragment(), OnClickListener {
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)      // 1
         val montNumber = calendar.get(Calendar.MONTH)             // 0
 
-        binding.includeDayHeader.textDate.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
-        binding.includeDayHeader.textDayName.text = dayNames[dayOfWeek - 1]
+        binding.includeDayHeader.textDateFirst.text = dayNames[dayOfWeek - 1]
+        binding.includeDayHeader.textDateSecond.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
 
         date = calendar
     }

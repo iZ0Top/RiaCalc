@@ -1,14 +1,17 @@
 package com.alex.riacalc.repository.room
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.repository.BaseRepository
 
 class RoomRepository(val eventDao: RoomDao) : BaseRepository {
 
-    override fun allEvents(selectedDate: String): LiveData<List<Event>> {
-        return eventDao.getAllEvents(selectedDate)
+    override fun getEventsForDay(selectedDay: String): LiveData<List<Event>> {
+        return eventDao.getEventsForDay(selectedDay)
+    }
+
+    override fun getEventsForMonth(selectedMonth: String): LiveData<List<Event>> {
+        return eventDao.getEventsForMonth(selectedMonth)
     }
 
     override suspend fun insertEvent(event: Event) {

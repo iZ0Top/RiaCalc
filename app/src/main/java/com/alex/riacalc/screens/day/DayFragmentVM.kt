@@ -35,7 +35,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         initDatabase()
         val currentDate = Calendar.getInstance()
         _calendarLD.value = currentDate
-        mediatorLiveData.addSource(REPOSITORY.eventDao.getAllEvents(dateFormatterForDB(currentDate))) {
+        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(dateFormatterForDB(currentDate))) {
             mediatorLiveData.value = it
         }
     }
@@ -49,9 +49,9 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         return mediatorLiveData
     }
 
-    fun loadEventsForDate(calendar: Calendar){
+    fun loadEventsForDay(calendar: Calendar){
         mediatorLiveData.removeSource(mediatorLiveData)
-        mediatorLiveData.addSource(REPOSITORY.eventDao.getAllEvents(dateFormatterForDB(calendar))){
+        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(dateFormatterForDB(calendar))){
             mediatorLiveData.value = it
         }
     }
