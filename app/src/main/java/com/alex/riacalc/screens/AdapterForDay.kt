@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemEventBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.utils.AppPreferences
 
 interface ActionListener {
@@ -18,7 +19,7 @@ interface ActionListener {
 
 class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Adapter<AdapterForDay.MyHolder>(), View.OnClickListener {
 
-    var eventList: List<Event> = emptyList()
+    private var eventList: List<Event> = emptyList()
 
     fun setList(list: List<Event>){
         eventList = list

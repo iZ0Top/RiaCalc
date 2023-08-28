@@ -8,13 +8,16 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.repository.room.AppDatabase
 import com.alex.riacalc.repository.room.RoomRepository
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
-import com.alex.riacalc.utils.dateFormatterForDB
+import com.alex.riacalc.utils.convertDateAndTimeToString
+import com.alex.riacalc.utils.toEvent
+import com.alex.riacalc.utils.toEventForDB
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -35,8 +38,8 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         initDatabase()
         val currentDate = Calendar.getInstance()
         _calendarLD.value = currentDate
-        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(dateFormatterForDB(currentDate))) {
-            mediatorLiveData.value = it
+        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(convertDateAndTimeToString(currentDate))) { listEventForDB ->
+            mediatorLiveData.value = listEventForDB.map { toEvent(it) }
         }
     }
 
@@ -51,26 +54,29 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
     fun loadEventsForDay(calendar: Calendar){
         mediatorLiveData.removeSource(mediatorLiveData)
-        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(dateFormatterForDB(calendar))){
-            mediatorLiveData.value = it
+        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(convertDateAndTimeToString(calendar))){ listEventForDB ->
+            mediatorLiveData.value = listEventForDB.map { toEvent(it) }
         }
     }
 
     fun insertEvent(event: Event) {
+        val eventForDB = toEventForDB(event)
         viewModelScope.launch(Dispatchers.IO) {
-            REPOSITORY.eventDao.insertEvent(event)
+            REPOSITORY.eventDao.insertEvent(eventForDB)
         }
     }
 
     fun editEvent(event: Event) {
+        val eventForDB = toEventForDB(event)
         viewModelScope.launch(Dispatchers.IO) {
-            REPOSITORY.editEvent(event)
+            REPOSITORY.eventDao.editEvent(eventForDB)
         }
     }
 
     fun deleteEvent(event: Event) {
+        val eventForDB = toEventForDB(event)
         viewModelScope.launch(Dispatchers.IO) {
-            REPOSITORY.eventDao.deleteEvent(event)
+            REPOSITORY.eventDao.deleteEvent(eventForDB)
         }
     }
 

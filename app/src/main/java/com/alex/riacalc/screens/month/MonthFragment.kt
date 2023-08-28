@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.screens.DialogSetMonthAndYear
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
@@ -97,15 +98,12 @@ class MonthFragment : Fragment(), OnClickListener {
                 R.id.btn_setting -> {
                     findNavController().navigate(R.id.action_monthFragment_to_settingFragment)
                 }
-
                 R.id.btn_month_day -> {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
-
                 R.id.btn_export -> {
                     Toast.makeText(requireContext(), "in progress..", Toast.LENGTH_SHORT).show()
                 }
-
                 R.id.frame_date -> {
                     showDialogSetMonthAndYear()
                 }
@@ -153,82 +151,4 @@ class MonthFragment : Fragment(), OnClickListener {
     companion object {
         const val KEY_ARGUMENTS = "key_argument"
     }
-
-    fun rebuildEvents(list: List<Event>) {
-        val newList = mutableListOf<EventWithDate>()
-        for (event in list) {
-            newList.add(
-                EventWithDate(
-                    id = event.id,
-                    type = event.type,
-                    cost = event.cost,
-                    description = event.description,
-                    date = dateParser(event.date)
-                )
-            )
-        }
-    }
-
-    private fun dateParser(dateString: String): Calendar {
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val date = format.parse(dateString)
-        val calendar = Calendar.getInstance()
-        if (date != null) calendar.time = date
-        return calendar
-    }
-
-    private fun createDay(list: List<EventWithDate>){
-        val dayList = mutableListOf<Day>()
-
-        val group = list.groupBy { it.date.get(Calendar.DAY_OF_MONTH) }
-
-        val newList = group.map { (date, events) ->
-            var inspectionCount = 0
-            var inspectionSum = 0
-            var tripCount = 0
-            var tripSum = 0
-            var otherCount = 0
-            var otherSum = 0
-
-            for (event in events){
-                when(event.type){
-                    TYPE_INSPECTION -> {
-                        inspectionCount++
-                        inspectionSum += event.cost
-                    }
-                    TYPE_TRIP -> {
-                        tripCount++
-                        tripSum += event.cost
-                    }
-                    TYPE_OTHER -> {
-                        otherCount++
-                        otherSum += event.cost
-                    }
-                }
-            }
-
-            Day(date, inspectionCount, inspectionSum, tripCount,tripSum,otherCount,otherSum, events)
-        }
-
-
-    }
-
-    data class EventWithDate(
-        val id: Int,
-        val type: Int,
-        var cost: Int,
-        var description: String,
-        var date: Calendar
-    )
-
-    data class Day(
-        val day: Int,
-        val inspectionCount: Int,
-        val inspectionSum: Int,
-        val tripCount: Int,
-        val tripSum: Int,
-        val otherCount: Int,
-        val otherSum: Int,
-        val list: List<EventWithDate>
-    )
 }

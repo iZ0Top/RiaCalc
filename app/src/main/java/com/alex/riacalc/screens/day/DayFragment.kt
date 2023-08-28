@@ -26,7 +26,6 @@ import com.alex.riacalc.utils.AppPreferences
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
-import com.alex.riacalc.utils.dateAndTimeFormatterForDB
 import java.util.Calendar
 
 class DayFragment : Fragment(), OnClickListener {
@@ -153,7 +152,7 @@ class DayFragment : Fragment(), OnClickListener {
             type = type,
             cost = defaultCost,
             description = "",
-            date = dateAndTimeFormatterForDB(date)
+            date = date
         )
         DialogAdd.show(parentFragmentManager, event, true)
     }

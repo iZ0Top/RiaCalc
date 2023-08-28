@@ -5,8 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.utils.REPOSITORY
+import com.alex.riacalc.utils.toEvent
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -38,10 +41,18 @@ class MonthFragmentVM: ViewModel() {
         val date = formatter.format(calendarLD.value?.time!!)
 
         val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
-        mediatorLiveData.addSource(eventsLD){
-            mediatorLiveData.value = it
+        mediatorLiveData.addSource(eventsLD){listEventForDB ->
+            mediatorLiveData.value = listEventForDB.map { toEvent(it) }
         }
         return mediatorLiveData
+    }
+
+    fun createDays(list: List<Event>): List<Day>{
+
+        val  listDays = mutableListOf<Day>()
+
+        val m = list.map {  }
+
     }
 
     fun editDay(){
@@ -51,4 +62,8 @@ class MonthFragmentVM: ViewModel() {
     fun exportReport(){
 
     }
+
+
+
+
 }
