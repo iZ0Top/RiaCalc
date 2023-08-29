@@ -1,7 +1,7 @@
 package com.alex.riacalc.model
 
 data class Day(
-    val day: Int,
+    val date: Int,
     val inspectionCount: Int,
     val inspectionSum: Int,
     val tripCount: Int,

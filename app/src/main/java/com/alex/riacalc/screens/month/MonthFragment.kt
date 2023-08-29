@@ -11,10 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentMonthBinding
+import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.model.EventForDB
+import com.alex.riacalc.screens.AdapterForMonth
 import com.alex.riacalc.screens.DialogSetMonthAndYear
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
@@ -30,10 +33,10 @@ class MonthFragment : Fragment(), OnClickListener {
     private var _binding: FragmentMonthBinding? = null
     private val binding get() = _binding!!
     private lateinit var dateObserver: Observer<Calendar>
-    private lateinit var mediatorObserver: Observer<List<Event>>
-
+    private lateinit var mediatorObserver: Observer<List<Day>>
+    private lateinit var adapter: AdapterForMonth
+    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var calendar: Calendar
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +61,10 @@ class MonthFragment : Fragment(), OnClickListener {
         //Спрацьовує обсервер
         //оновлюємо інтерфейс
         //завантажуємо дані
+
+        layoutManager = LinearLayoutManager(requireContext())
+
+        binding.recyclerViewMonth.layoutManager = layoutManager
 
         dateObserver = Observer<Calendar> {
             Log.d("TAGM", "MonthFragment - onCreateView - observerDate")

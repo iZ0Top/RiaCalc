@@ -9,6 +9,9 @@ import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.utils.REPOSITORY
+import com.alex.riacalc.utils.TYPE_INSPECTION
+import com.alex.riacalc.utils.TYPE_OTHER
+import com.alex.riacalc.utils.TYPE_TRIP
 import com.alex.riacalc.utils.toEvent
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -17,7 +20,7 @@ import java.util.Locale
 class MonthFragmentVM: ViewModel() {
 
 
-    private val mediatorLiveData = MediatorLiveData<List<Event>>()
+    private val mediatorLiveData = MediatorLiveData<List<Day>>()
 
     private var _calendarLD = MutableLiveData<Calendar>()
     val calendarLD: LiveData<Calendar> get() = _calendarLD
@@ -35,24 +38,61 @@ class MonthFragmentVM: ViewModel() {
         _calendarLD.value = calendar
     }
 
-    fun loadEventsForMonth (): LiveData<List<Event>>{
+    fun loadEventsForMonth (): LiveData<List<Day>>{
         Log.d("TAGM", "MonthFragmentVM - loadEventsForMonth")
         val formatter = SimpleDateFormat("yyyy-MM", Locale.getDefault())
         val date = formatter.format(calendarLD.value?.time!!)
 
         val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
         mediatorLiveData.addSource(eventsLD){listEventForDB ->
-            mediatorLiveData.value = listEventForDB.map { toEvent(it) }
+            val listEvent = listEventForDB.map { toEvent(it) }
+            val listDay = createDays(listEvent)
+            mediatorLiveData.value = listDay
         }
         return mediatorLiveData
     }
 
-    fun createDays(list: List<Event>): List<Day>{
+    private fun createDays(list: List<Event>): List<Day>{
 
-        val  listDays = mutableListOf<Day>()
+        val days = list.groupBy { it.date.get(Calendar.DAY_OF_MONTH) }
+        val listDays = days.map {(date, events) ->
 
-        val m = list.map {  }
+            var inspectionCount = 0
+            var inspectionSum = 0
+            var tripCount = 0
+            var tripSum = 0
+            var otherCount = 0
+            var otherSum = 0
 
+            for (event in events){
+                when(event.type){
+                    TYPE_INSPECTION -> {
+                        inspectionCount++
+                        inspectionSum += event.cost
+                    }
+                    TYPE_TRIP -> {
+                        tripCount++
+                        tripSum += event.cost
+                    }
+                    TYPE_OTHER -> {
+                        otherCount++
+                        otherSum += event.cost
+                    }
+                }
+            }
+
+            Day(
+                date = date,
+                inspectionCount = inspectionCount,
+                inspectionSum = inspectionSum,
+                tripCount = tripSum,
+                tripSum = tripSum,
+                otherCount = otherCount,
+                otherSum = otherSum,
+                list = events)
+        }.toList()
+
+        return listDays
     }
 
     fun editDay(){
