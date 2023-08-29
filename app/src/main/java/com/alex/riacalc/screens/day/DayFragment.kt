@@ -34,7 +34,6 @@ class DayFragment : Fragment(), OnClickListener {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: DayFragmentVM
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var adapter: AdapterForDay
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var observerMediatorLD: Observer<List<Event>>
@@ -47,7 +46,6 @@ class DayFragment : Fragment(), OnClickListener {
         Log.d("TAG", "DayFragment - onCreate")
 
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         adapter = AdapterForDay(object : ActionListener {
             override fun onEditEvent(event: Event) { showDialogEditEvent(event) }
@@ -64,7 +62,9 @@ class DayFragment : Fragment(), OnClickListener {
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
-        val arg = arguments?.getSerializable("K")
+        if (arguments != null){
+            Log.d("TAG", "DayFragment - onCreateView, found arguments")
+        }
 
         date = Calendar.getInstance()
 
@@ -85,19 +85,19 @@ class DayFragment : Fragment(), OnClickListener {
         setupDialogListener()
 
         observerDate = Observer {
-            Log.d("TAG", "observerDate")
+            Log.d("TAG", "DayFragment - observerDate")
             changeDate(it)
             viewModel.loadEventsForDay(it)
         }
 
         observerMediatorLD = Observer {
-            Log.d("TAG", "observerMediatorLD")
+            Log.d("TAG", "DayFragment - observerMediatorLD")
             adapter.setList(it)
             viewModel.calculateDay(it)
         }
 
         observerStatistic = Observer {
-            Log.d("TAG", "observerStatistic")
+            Log.d("TAG", "DayFragment - observerStatistic")
             with(binding.includeDayHeader){
                 txtReviewsCount.text = it.inspectionsCount
                 txtReviewsSum.text = it.inspectionsSum

@@ -29,19 +29,21 @@ fun toEvent(eventForDB: EventForDB): Event{
 }
 
 val patternDT = "yyyy-MM-dd HH:mm:ss"
-val patternD = "yyyy-MM-dd HH:mm:ss"
+val patternD = "yyyy-MM-dd"
 
 fun convertDateAndTimeToString(calendar: Calendar): String {
     val formatter = SimpleDateFormat(patternDT, Locale.getDefault())
     return formatter.format(calendar.time)
 }
+
+fun convertDateToString(calendar: Calendar): String {
+    val formatter = SimpleDateFormat(patternD, Locale.getDefault())
+    return formatter.format(calendar.time)
+}
+
 fun convertDateAndTimeToCalendar(string: String): Calendar {
     val formatter = SimpleDateFormat(patternDT, Locale.getDefault())
     val date = formatter.parse(string)
     return Calendar.getInstance().apply { time = date }
 }
 
-fun convertDateToString(calendar: Calendar): String {
-    val formatter = SimpleDateFormat(patternDT, Locale.getDefault())
-    return formatter.format(calendar.time)
-}
