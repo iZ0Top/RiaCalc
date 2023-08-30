@@ -28,8 +28,8 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     private val context = application
 
     private val mediatorLiveData = MediatorLiveData<List<Event>>()
-    private val _calendarLD = MutableLiveData<Calendar>()
-    private val _statisticLD = MutableLiveData<Statistic>()
+    private var _calendarLD = MutableLiveData<Calendar>()
+    private var _statisticLD = MutableLiveData<Statistic>()
 
     val calendarLD: LiveData<Calendar> get() = _calendarLD
     val statisticLD: LiveData<Statistic> get() = _statisticLD

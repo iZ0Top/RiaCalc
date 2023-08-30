@@ -43,7 +43,7 @@ class DayFragment : Fragment(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG", "DayFragment - onCreate")
+        Log.d("TAG", "___________________________\nDayFragment - onCreate")
 
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
 
@@ -82,7 +82,29 @@ class DayFragment : Fragment(), OnClickListener {
         binding.btnAddTrip.setOnClickListener(this)
         binding.btnAddOther.setOnClickListener(this)
 
+        initObservers()
+
         setupDialogListener()
+
+        if (!AppPreferences.getShowCost()) changeView()
+
+        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
+        viewModel.getMediatorLiveData().observe(viewLifecycleOwner, observerMediatorLD)
+        viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
+
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("TAG", "DayFragment - onDestroy")
+        viewModel.getMediatorLiveData().removeObserver(observerMediatorLD)
+        viewModel.calendarLD.removeObserver(observerDate)
+        viewModel.statisticLD.removeObserver(observerStatistic)
+        _binding = null
+    }
+
+    private fun initObservers(){
 
         observerDate = Observer {
             Log.d("TAG", "DayFragment - observerDate")
@@ -107,23 +129,6 @@ class DayFragment : Fragment(), OnClickListener {
                 txtOtherSum.text = it.otherSum
             }
         }
-
-        if (!AppPreferences.getShowCost()) changeView()
-
-        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        viewModel.getMediatorLiveData().observe(viewLifecycleOwner, observerMediatorLD)
-        viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
-
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("TAG", "DayFragment - onDestroy")
-        viewModel.getMediatorLiveData().removeObserver(observerMediatorLD)
-        viewModel.calendarLD.removeObserver(observerDate)
-        viewModel.statisticLD.removeObserver(observerStatistic)
-        _binding = null
     }
 
     override fun onClick(v: View?) {

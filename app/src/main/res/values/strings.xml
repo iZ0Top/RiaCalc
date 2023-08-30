@@ -18,7 +18,6 @@
     <string name="text_trips">Поїздки:</string>
     <string name="text_other_expenses">Інші витрати:</string>
     <string name="text_formatted_currency">%1$d грн</string>
-    <string name="text_currency">грн</string>
     
     <string name="text_setting_title_general">Налаштування програми</string>
     <string name="text_setting_title_export">Налаштування експорту </string>
@@ -36,6 +35,8 @@
     <string name="template_item_inspection">+%1$d  %2$s</string>
     <string name="template_item_expense">-%1$d  %2$s</string>
     <string name="template_date">%1$d %2$s</string>
+    <string name="template_item_day_day">%1$d. %2$s</string>
+    <string name="template_int_string">%1$d %2$s</string>
 
     <string-array name="day_name">
         <item>Неділя</item>

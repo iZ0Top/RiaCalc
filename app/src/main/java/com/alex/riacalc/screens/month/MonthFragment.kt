@@ -15,16 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
-import com.alex.riacalc.model.Event
-import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.screens.AdapterForMonth
 import com.alex.riacalc.screens.DialogSetMonthAndYear
-import com.alex.riacalc.utils.TYPE_INSPECTION
-import com.alex.riacalc.utils.TYPE_OTHER
-import com.alex.riacalc.utils.TYPE_TRIP
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 class MonthFragment : Fragment(), OnClickListener {
 
@@ -32,8 +25,8 @@ class MonthFragment : Fragment(), OnClickListener {
 
     private var _binding: FragmentMonthBinding? = null
     private val binding get() = _binding!!
-    private lateinit var dateObserver: Observer<Calendar>
-    private lateinit var mediatorObserver: Observer<List<Day>>
+    private lateinit var observerDate: Observer<Calendar>
+    private lateinit var observerDays: Observer<List<Day>>
     private lateinit var adapter: AdapterForMonth
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var calendar: Calendar
@@ -52,34 +45,21 @@ class MonthFragment : Fragment(), OnClickListener {
 
         _binding = FragmentMonthBinding.inflate(inflater, container, false)
 
-        val d = requireArguments().getSerializable(KEY_ARGUMENTS) as Calendar
-        viewModel.setDate(d)
-
-        //отримуємо дату з аргуменітв
-        //встановлюємо дату у вьюмодель
-
-        //Спрацьовує обсервер
-        //оновлюємо інтерфейс
-        //завантажуємо дані
+        val argCalendar = requireArguments().getSerializable(KEY_ARGUMENTS) as Calendar
+        viewModel.setDate(argCalendar)
 
         layoutManager = LinearLayoutManager(requireContext())
+        adapter = AdapterForMonth()
 
         binding.recyclerViewMonth.layoutManager = layoutManager
+        binding.recyclerViewMonth.adapter = adapter
 
-        dateObserver = Observer<Calendar> {
-            Log.d("TAGM", "MonthFragment - onCreateView - observerDate")
-            calendar = it
-            updateView()
-            loadEvents()
-        }
+        initObservers()
 
-        mediatorObserver = Observer {
-            Log.d("TAGM", "MonthFragment - onCreateView - observerDate, list size = ${it.size}")
-            Log.d("TAGM", it.toString())
-        }
+        setupDialogSetMonthAndYearListener()
 
-        viewModel.calendarLD.observe(viewLifecycleOwner, dateObserver)
-        viewModel.loadEventsForMonth().observe(viewLifecycleOwner, mediatorObserver)
+        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
+        viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
 
         binding.includedMonthHeader.btnMonthDay.setImageDrawable(resources.getDrawable(R.drawable.ic_calendar_day))
         binding.includedMonthHeader.frameDate.setOnClickListener(this)
@@ -87,16 +67,15 @@ class MonthFragment : Fragment(), OnClickListener {
         binding.includedMonthHeader.btnExport.setOnClickListener(this)
         binding.includedMonthHeader.btnSetting.setOnClickListener(this)
 
-        setupDialogSetMonthAndYearListener()
-
         return binding.root
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.calendarLD.removeObserver(dateObserver)
+        viewModel.calendarLD.removeObserver(observerDate)
         _binding = null
     }
+
 
     override fun onClick(v: View?) {
 
@@ -115,6 +94,21 @@ class MonthFragment : Fragment(), OnClickListener {
                     showDialogSetMonthAndYear()
                 }
             }
+        }
+    }
+
+    private fun initObservers(){
+
+        observerDate = Observer<Calendar> {
+            Log.d("TAGM", "MonthFragment - onCreateView - observerDate")
+            calendar = it
+            updateView()
+            loadEvents()
+        }
+
+        observerDays = Observer {
+            Log.d("TAGM", "MonthFragment - onCreateView - observerDate, list size = ${it.size}")
+            Log.d("TAGM", it.toString())
         }
     }
 

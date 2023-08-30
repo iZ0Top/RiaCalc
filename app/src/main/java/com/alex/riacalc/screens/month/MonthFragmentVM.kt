@@ -82,7 +82,7 @@ class MonthFragmentVM: ViewModel() {
             }
 
             Day(
-                date = date,
+                date = events[0].date,
                 inspectionCount = inspectionCount,
                 inspectionSum = inspectionSum,
                 tripCount = tripSum,

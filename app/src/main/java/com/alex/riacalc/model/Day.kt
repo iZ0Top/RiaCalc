@@ -1,7 +1,9 @@
 package com.alex.riacalc.model
 
+import java.util.Calendar
+
 data class Day(
-    val date: Int,
+    val date: Calendar,
     val inspectionCount: Int,
     val inspectionSum: Int,
     val tripCount: Int,
