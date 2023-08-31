@@ -45,8 +45,8 @@ class MonthFragmentVM: ViewModel() {
 
         val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
         mediatorLiveData.addSource(eventsLD){listEventForDB ->
-            val listEvent = listEventForDB.map { toEvent(it) }
-            val listDay = createDays(listEvent)
+            val listEvent = listEventForDB.map { toEvent(it) }.toList()
+            val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }
             mediatorLiveData.value = listDay
         }
         return mediatorLiveData
@@ -55,7 +55,7 @@ class MonthFragmentVM: ViewModel() {
     private fun createDays(list: List<Event>): List<Day>{
 
         val days = list.groupBy { it.date.get(Calendar.DAY_OF_MONTH) }
-        val listDays = days.map {(date, events) ->
+        val listDays = days.map {(_, events) ->
 
             var inspectionCount = 0
             var inspectionSum = 0
@@ -80,8 +80,7 @@ class MonthFragmentVM: ViewModel() {
                     }
                 }
             }
-
-            Day(
+            val day = Day(
                 date = events[0].date,
                 inspectionCount = inspectionCount,
                 inspectionSum = inspectionSum,
@@ -90,9 +89,11 @@ class MonthFragmentVM: ViewModel() {
                 otherCount = otherCount,
                 otherSum = otherSum,
                 list = events)
-        }.toList()
+            Log.d("TAGM", "createDays: \n $day").toString()
+            day
+        }
 
-        return listDays
+        return listDays.toList()
     }
 
     fun editDay(){

@@ -107,8 +107,10 @@ class MonthFragment : Fragment(), OnClickListener {
         }
 
         observerDays = Observer {
-            Log.d("TAGM", "MonthFragment - onCreateView - observerDate, list size = ${it.size}")
-            Log.d("TAGM", it.toString())
+            Log.d("TAGM", "MonthFragment - onCreateView - observerDays. list size: = ${it.size}")
+
+            updateInfo(it)
+            adapter.setList(it)
         }
     }
 
@@ -146,6 +148,28 @@ class MonthFragment : Fragment(), OnClickListener {
             newDate.set(Calendar.YEAR, year)
             newDate.set(Calendar.MONTH, month)
             viewModel.setDate(newDate)
+        }
+    }
+
+    private fun updateInfo(listDays: List<Day>){
+
+        with(binding.includedMonthHeader){
+            txtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
+            txtTripsCount.text = listDays.sumOf { it.tripCount }.toString()
+            txtOtherCount.text = listDays.sumOf { it.otherCount }.toString()
+
+            txtReviewsSum.text = resources.getString(
+                R.string.template_formatted_currency,
+                listDays.sumOf { it.inspectionSum }
+            )
+            txtTripsSum.text = resources.getString(
+                R.string.template_formatted_currency,
+                listDays.sumOf { it.tripSum }
+            )
+            txtOtherSum.text = resources.getString(
+                R.string.template_formatted_currency,
+                listDays.sumOf { it.otherSum }
+            )
         }
     }
 

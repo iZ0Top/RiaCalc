@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemEventBinding
 import com.alex.riacalc.model.Event
-import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.utils.AppPreferences
 
 interface ActionListener {
@@ -19,14 +18,14 @@ interface ActionListener {
 
 class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Adapter<AdapterForDay.MyHolder>(), View.OnClickListener {
 
-    private var eventList: List<Event> = emptyList()
+    private var listEvents: List<Event> = emptyList()
 
     fun setList(list: List<Event>){
-        eventList = list
+        listEvents = list
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = eventList.size
+    override fun getItemCount(): Int = listEvents.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemEventBinding.inflate(inflater, parent, false)
@@ -38,7 +37,7 @@ class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        val event = eventList[position]
+        val event = listEvents[position]
 
         holder.itemView.tag = event
         holder.binding.itemPopupMenu.tag = event

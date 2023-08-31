@@ -35,15 +35,16 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     val statisticLD: LiveData<Statistic> get() = _statisticLD
 
     init {
-        Log.d("TAG", "DayFragmentVM - init")
+        Log.d("DAY", "DayFragmentVM - init")
         initDatabase()
         val currentDate = Calendar.getInstance()
         _calendarLD.value = currentDate
+
         val date = convertDateToString(currentDate)
         mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(date)) { listEventForDB ->
-            Log.d("TAG", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
+            Log.d("DAY", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
             val listEvent = listEventForDB.map { toEvent(it) }.toList()
-            Log.d("TAG", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
+            Log.d("DAY", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
             mediatorLiveData.value = listEvent
         }
     }
@@ -58,23 +59,24 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun loadEventsForDay(calendar: Calendar){
-        Log.d("TAG", "DayFragmentVM - loadEventsForDay")
+        Log.d("DAY", "DayFragmentVM - loadEventsForDay")
         val date = convertDateToString(calendar)
-        Log.d("TAG", "DayFragmentVM - loadEventsForDay, day = $date")
+        Log.d("DAY", "DayFragmentVM - loadEventsForDay, day = $date")
         mediatorLiveData.removeSource(mediatorLiveData)
+
         mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(date)){ listEventForDB ->
-            Log.d("TAG", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
+            Log.d("DAY", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
             val listEvent = listEventForDB.map { toEvent(it) }.toList()
-            Log.d("TAG", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
+            Log.d("DAY", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
             mediatorLiveData.value = listEvent
         }
     }
 
     fun insertEvent(event: Event) {
-        Log.d("TAG", "DayFragmentVM - insertEvent")
-        Log.d("TAG", "Base Event: \n ${event.toString()}")
+        Log.d("DAY", "DayFragmentVM - insertEvent")
+        Log.d("DAY", "Base Event: \n ${event.toString()}")
         val eventForDB = toEventForDB(event)
-        Log.d("TAG", "eventForDB: \n ${eventForDB.toString()}")
+        Log.d("DAY", "eventForDB: \n ${eventForDB.toString()}")
         viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.eventDao.insertEvent(eventForDB)
         }
@@ -88,7 +90,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteEvent(event: Event) {
-        Log.d("TAG", "DayFragmentVM - deleteEvent")
+        Log.d("DAY", "DayFragmentVM - deleteEvent")
         val eventForDB = toEventForDB(event)
         viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.eventDao.deleteEvent(eventForDB)

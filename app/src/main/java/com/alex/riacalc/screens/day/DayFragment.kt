@@ -43,7 +43,7 @@ class DayFragment : Fragment(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG", "___________________________\nDayFragment - onCreate")
+        Log.d("DAY", "___________________________\nDayFragment - onCreate")
 
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
 
@@ -58,12 +58,12 @@ class DayFragment : Fragment(), OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("TAG", "DayFragment - onCreateView")
+        Log.d("DAY", "DayFragment - onCreateView")
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
         if (arguments != null){
-            Log.d("TAG", "DayFragment - onCreateView, found arguments")
+            Log.d("DAY", "DayFragment - onCreateView, found arguments")
         }
 
         date = Calendar.getInstance()
@@ -97,7 +97,7 @@ class DayFragment : Fragment(), OnClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        Log.d("TAG", "DayFragment - onDestroy")
+        Log.d("DAY", "DayFragment - onDestroy")
         viewModel.getMediatorLiveData().removeObserver(observerMediatorLD)
         viewModel.calendarLD.removeObserver(observerDate)
         viewModel.statisticLD.removeObserver(observerStatistic)
@@ -105,21 +105,22 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     private fun initObservers(){
+        Log.d("DAY", "DayFragment - initObservers")
 
         observerDate = Observer {
-            Log.d("TAG", "DayFragment - observerDate")
+            Log.d("DAY", "DayFragment - observerDate worked")
             changeDate(it)
             viewModel.loadEventsForDay(it)
         }
 
         observerMediatorLD = Observer {
-            Log.d("TAG", "DayFragment - observerMediatorLD")
+            Log.d("DAY", "DayFragment - observerMediatorLD worked")
             adapter.setList(it)
             viewModel.calculateDay(it)
         }
 
         observerStatistic = Observer {
-            Log.d("TAG", "DayFragment - observerStatistic")
+            Log.d("DAY", "DayFragment - observerStatistic worked")
             with(binding.includeDayHeader){
                 txtReviewsCount.text = it.inspectionsCount
                 txtReviewsSum.text = it.inspectionsSum
@@ -132,7 +133,7 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        Log.d("TAG", "DayFragment - onClick")
+        Log.d("DAY", "DayFragment - onClick")
 
         if (v != null) {
             when (v.id) {
@@ -151,6 +152,7 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     private fun showDialogAddEvent(type: Int){
+        Log.d("DAY", "DayFragment - showDialogAddEvent")
         val defaultCost = if (type == TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
         val event = Event(
             id = 0,
@@ -163,12 +165,13 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     private fun showDialogEditEvent(event: Event){
+        Log.d("DAY", "DayFragment - showDialogEditEvent")
         DialogAdd.show(parentFragmentManager, event, false)
     }
 
 
     private fun showDatePickerDialog() {
-        Log.d("TAG", "DayFragment - showDatePickerDialog")
+        Log.d("DAY", "DayFragment - showDatePickerDialog")
 
         DatePickerDialog(
             requireContext(), DatePickerDialog.OnDateSetListener { _, i, i2, i3 ->
@@ -183,15 +186,15 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     private fun setupDialogListener() {
-        Log.d("TAG", "DayFragment - setupDialogListener")
+        Log.d("DAY", "DayFragment - setupDialogListener")
         DialogAdd.setupListener(parentFragmentManager, viewLifecycleOwner) {resultEvent, resultIsNew->
-            Log.d("TAG", "DayFragment - setupDialogListener - result")
+            Log.d("DAY", "DayFragment - setupDialogListener - result")
             if (resultIsNew) viewModel.insertEvent(resultEvent) else viewModel.editEvent(resultEvent)
         }
     }
 
     private fun changeDate(calendar: Calendar) {
-        Log.d("TAG", "DayFragment - setDate")
+        Log.d("DAY", "DayFragment - changeDate")
 
         val dayNames = resources.getStringArray(R.array.day_name)
         val monthNames = resources.getStringArray(R.array.month_name)
@@ -207,7 +210,7 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     private fun showDialogDescription(event: Event) {
-        Log.d("TAG", "DayFragment - showDialogDescription")
+        Log.d("DAY", "DayFragment - showDialogDescription")
 
         AlertDialog.Builder(context)
             .setMessage(event.toString())
@@ -218,6 +221,7 @@ class DayFragment : Fragment(), OnClickListener {
     }
 
     private fun changeView(){
+        Log.d("DAY", "DayFragment - changeView")
         with(binding.includeDayHeader){
             txtReviewsSum.visibility = View.GONE
             txtReviewsCount.gravity = Gravity.END
