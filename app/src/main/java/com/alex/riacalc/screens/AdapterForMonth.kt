@@ -39,7 +39,9 @@ class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
 
         with(holder.binding){
             itemDayCount.text = day.inspectionCount.toString()
-            itemDaySum.text = context.getString(R.string.template_formatted_currency, day.inspectionSum)
+            itemDaySum.text = context.getString(
+                R.string.template_formatted_currency,
+                day.inspectionSum)
             itemDayDay.text = context.getString(
                 R.string.template_item_day_day,
                 day.date.get(Calendar.DAY_OF_MONTH),
