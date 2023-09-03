@@ -3,6 +3,7 @@ package com.alex.riacalc
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.alex.riacalc.databinding.ActivityMainBinding
@@ -15,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     private val binding get() = _binding!!
 
     private lateinit var navController: NavController
+    //private lateinit var toolbar: Toolbar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,8 +25,13 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
 //        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 //        navController = navHost.navController
+
+
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
 
         AppPreferences.getPreferences(this)
     }

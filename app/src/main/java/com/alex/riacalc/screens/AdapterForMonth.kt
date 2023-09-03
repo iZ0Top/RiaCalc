@@ -45,7 +45,7 @@ class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
             itemDayDay.text = context.getString(
                 R.string.template_item_day_day,
                 day.date.get(Calendar.DAY_OF_MONTH),
-                dayNames[day.date.get(Calendar.DAY_OF_WEEK)]
+                dayNames[day.date.get(Calendar.DAY_OF_WEEK) -1]
             )
 
             var insp = 0

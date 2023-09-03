@@ -66,7 +66,7 @@ class DayFragment : Fragment(), OnClickListener {
             Log.d("DAY", "DayFragment - onCreateView, found arguments")
         }
 
-        date = Calendar.getInstance()
+    //    date = Calendar.getInstance()
 
         layoutManager = LinearLayoutManager(requireContext())
 
