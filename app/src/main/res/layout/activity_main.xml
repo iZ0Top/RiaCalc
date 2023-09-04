@@ -8,14 +8,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <include
         android:id="@+id/toolbar"
+        layout="@layout/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/nav_host_fragment"/>
+        app:layout_constraintBottom_toTopOf="@id/nav_host_fragment">
+    </include>
 
     <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"

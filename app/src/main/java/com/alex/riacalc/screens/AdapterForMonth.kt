@@ -3,6 +3,7 @@ package com.alex.riacalc.screens
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemDayBinding
@@ -60,9 +61,13 @@ class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
                 }
             }
 
-            val text = "size = ${day.list.size}, insp = $insp, trips = $trips, other = $other"
+            val width = holder.binding.itemDayConstraint.width
+
+            val text = "size = ${day.list.size}, insp = $insp, trips = $trips, other = $other\n" +
+                    "width = $width"
 
             itemDayTextView.text = text
+
         }
     }
 

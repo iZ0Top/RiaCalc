@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.utils.AppPreferences
 
@@ -13,10 +12,10 @@ class MainActivity : AppCompatActivity() {
 
 
     private var _binding: ActivityMainBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private lateinit var navController: NavController
-    //private lateinit var toolbar: Toolbar
+    private lateinit var toolbar: Toolbar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +24,10 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
 //        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 //        navController = navHost.navController
 
-
-        val toolbar = binding.toolbar
+        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         AppPreferences.getPreferences(this)

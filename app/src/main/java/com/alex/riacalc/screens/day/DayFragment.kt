@@ -14,7 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alex.riacalc.MainActivity
 import com.alex.riacalc.R
+import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.screens.ActionListener
@@ -40,6 +42,8 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var observerDate: Observer<Calendar>
     private lateinit var observerStatistic: Observer<DayFragmentVM.Companion.Statistic>
     private lateinit var date: Calendar
+    private lateinit var mainActivityBinding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +72,9 @@ class DayFragment : Fragment(), OnClickListener {
 
     //    date = Calendar.getInstance()
 
+        val mainActivity = activity as MainActivity
+        mainActivityBinding = mainActivity.binding
+
         layoutManager = LinearLayoutManager(requireContext())
 
         binding.recyclerViewDay.layoutManager = layoutManager
@@ -81,6 +88,14 @@ class DayFragment : Fragment(), OnClickListener {
         binding.btnAddInspection.setOnClickListener(this)
         binding.btnAddTrip.setOnClickListener(this)
         binding.btnAddOther.setOnClickListener(this)
+
+
+        //--------------toolbar-------
+        mainActivityBinding.toolbar.toolbarBtnExport.visibility = View.GONE
+
+        mainActivityBinding.toolbar.toolbarFrameDate.setOnClickListener(this)
+
+        //----------------------------
 
         initObservers()
 
@@ -147,6 +162,11 @@ class DayFragment : Fragment(), OnClickListener {
                     bundle.putSerializable(MonthFragment.KEY_ARGUMENTS, date)
                     findNavController().navigate(R.id.action_dayFragment_to_monthFragment, bundle)
                 }
+                //------toolbar------
+
+                R.id.toolbar_frame_date -> { showDatePickerDialog() }
+
+                //
             }
         }
     }
@@ -205,6 +225,11 @@ class DayFragment : Fragment(), OnClickListener {
 
         binding.includeDayHeader.textDateFirst.text = dayNames[dayOfWeek - 1]
         binding.includeDayHeader.textDateSecond.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
+
+        //---------toolbar----------
+        mainActivityBinding.toolbar.toolbarTextDateFirst.text = dayNames[dayOfWeek - 1]
+        mainActivityBinding.toolbar.toolbarTextDateSecond.text = resources.getString(R.string.template_date, dayOfMonth, monthNames[montNumber])
+        //--------------------------
 
         date = calendar
     }
