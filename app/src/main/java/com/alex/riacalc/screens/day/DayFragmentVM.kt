@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.repository.room.AppDatabase
@@ -27,9 +28,12 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
     private val context = application
 
-    private val mediatorLiveData = MediatorLiveData<List<Event>>()
+    private var currentListLD: LiveData<List<EventForDB>>? = null
+
+    private var mediatorLiveData = MediatorLiveData<List<Event>>()
     private var _calendarLD = MutableLiveData<Calendar>()
     private var _statisticLD = MutableLiveData<Statistic>()
+
 
     val calendarLD: LiveData<Calendar> get() = _calendarLD
     val statisticLD: LiveData<Statistic> get() = _statisticLD
@@ -58,9 +62,13 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         val day = convertDateToString(calendar)
         Log.d("DAY", "DayFragmentVM - loadEventsForDay, day = $day")
 
+        currentListLD?.let {
+            mediatorLiveData.removeSource(it)
+        }
+
         val eventsLD = REPOSITORY.eventDao.getEventsForDay(day)
 
-        mediatorLiveData.removeSource(eventsLD)
+        currentListLD = eventsLD
 
         mediatorLiveData.addSource(eventsLD){ listEventForDB ->
             Log.d("DAY", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
