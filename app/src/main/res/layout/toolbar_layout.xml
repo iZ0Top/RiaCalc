@@ -59,6 +59,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
+            android:visibility="gone"
             android:background="@null"
             android:src="@drawable/ic_upload"
             app:layout_constraintEnd_toStartOf="@+id/toolbar_btn_month_day"

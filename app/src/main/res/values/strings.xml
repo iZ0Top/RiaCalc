@@ -39,6 +39,8 @@
     <string name="template_date">%1$d %2$s</string>
     <string name="template_item_day_day">%1$d. %2$s</string>
     <string name="template_int_string">%1$d %2$s</string>
+    <string name="template_plus">+%d</string>
+    <string name="template_minus">-%d</string>
 
     <string-array name="day_name">
         <item>Неділя</item>

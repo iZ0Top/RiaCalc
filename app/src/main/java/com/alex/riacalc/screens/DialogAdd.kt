@@ -91,8 +91,6 @@ class DialogAdd: DialogFragment() {
     }
 
     companion object{
-
-
         const val DIALOG_TAG = "add_dialog"
         const val BUNDLE_EVENT_KEY = "bundle_event_key"
         const val BUNDLE_TYPE_KEY = "bundle_status_key"

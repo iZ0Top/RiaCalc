@@ -12,7 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.alex.riacalc.MainActivity
 import com.alex.riacalc.R
+import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
 import com.alex.riacalc.screens.AdapterForMonth
@@ -30,6 +32,7 @@ class MonthFragment : Fragment(), OnClickListener {
     private lateinit var adapter: AdapterForMonth
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var calendar: Calendar
+    private lateinit var mainBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +47,10 @@ class MonthFragment : Fragment(), OnClickListener {
         Log.d("TAGM", "MonthFragment - onCreateView")
 
         _binding = FragmentMonthBinding.inflate(inflater, container, false)
+        val mainActivity = activity as MainActivity
+        mainBinding = mainActivity.binding
 
-        val argCalendar = requireArguments().getSerializable(KEY_ARGUMENTS) as Calendar
+        val argCalendar = arguments?.getSerializable(KEY_ARGUMENTS) as Calendar
         viewModel.setDate(argCalendar)
 
         layoutManager = LinearLayoutManager(requireContext())
@@ -61,12 +66,16 @@ class MonthFragment : Fragment(), OnClickListener {
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
         viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
 
-        binding.includedMonthHeader.btnMonthDay.setImageDrawable(resources.getDrawable(R.drawable.ic_calendar_day))
-        binding.includedMonthHeader.frameDate.setOnClickListener(this)
-        binding.includedMonthHeader.btnMonthDay.setOnClickListener(this)
-        binding.includedMonthHeader.btnExport.setOnClickListener(this)
-        binding.includedMonthHeader.btnSetting.setOnClickListener(this)
-
+        //--------------toolbar-------
+        with(mainBinding.toolbar){
+            toolbarBtnMonthDay.setImageResource(R.drawable.ic_calendar_day)
+            toolbarBtnExport.visibility = View.VISIBLE
+            toolbarFrameDate.setOnClickListener(this@MonthFragment)
+            toolbarBtnSetting.setOnClickListener(this@MonthFragment)
+            toolbarBtnMonthDay.setOnClickListener(this@MonthFragment)
+            toolbarBtnExport.setOnClickListener(this@MonthFragment)
+        }
+        //----------------------------
         return binding.root
     }
 
@@ -78,19 +87,18 @@ class MonthFragment : Fragment(), OnClickListener {
 
 
     override fun onClick(v: View?) {
-
         if (v != null) {
             when (v.id) {
-                R.id.btn_setting -> {
+                R.id.toolbar_btn_setting -> {
                     findNavController().navigate(R.id.action_monthFragment_to_settingFragment)
                 }
-                R.id.btn_month_day -> {
+                R.id.toolbar_btn_month_day -> {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
-                R.id.btn_export -> {
+                R.id.toolbar_btn_export -> {
                     Toast.makeText(requireContext(), "in progress..", Toast.LENGTH_SHORT).show()
                 }
-                R.id.frame_date -> {
+                R.id.toolbar_frame_date -> {
                     showDialogSetMonthAndYear()
                 }
             }
@@ -101,25 +109,24 @@ class MonthFragment : Fragment(), OnClickListener {
 
         observerDate = Observer<Calendar> {
             Log.d("TAGM", "MonthFragment - onCreateView - observerDate")
-            calendar = it
-            updateView()
+            changeDate(it)
             loadEvents()
         }
 
         observerDays = Observer {
             Log.d("TAGM", "MonthFragment - onCreateView - observerDays. list size: = ${it.size}")
-
             updateInfo(it)
             adapter.setList(it)
         }
     }
 
-    private fun updateView() {
+    private fun changeDate(newDate: Calendar) {
         Log.d("TAGM", "MonthFragment - updateView")
+        calendar = newDate
         val monthNames = resources.getStringArray(R.array.month_name_for_picker)
-        with(binding.includedMonthHeader) {
-            textDateFirst.text = monthNames[calendar.get(Calendar.MONTH)]
-            textDateSecond.text = calendar.get(Calendar.YEAR).toString()
+        with(mainBinding.toolbar) {
+            toolbarTextDateFirst.text = monthNames[calendar.get(Calendar.MONTH)]
+            toolbarTextDateSecond.text = calendar.get(Calendar.YEAR).toString()
         }
     }
 
@@ -153,20 +160,20 @@ class MonthFragment : Fragment(), OnClickListener {
 
     private fun updateInfo(listDays: List<Day>){
 
-        with(binding.includedMonthHeader){
-            txtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
-            txtTripsCount.text = listDays.sumOf { it.tripCount }.toString()
-            txtOtherCount.text = listDays.sumOf { it.otherCount }.toString()
+        with(mainBinding.toolbar){
+            toolbarTxtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
+            toolbarTxtTripsCount.text = listDays.sumOf { it.tripCount }.toString()
+            toolbarTxtOtherCount.text = listDays.sumOf { it.otherCount }.toString()
 
-            txtReviewsSum.text = resources.getString(
+            toolbarTxtReviewsSum.text = resources.getString(
                 R.string.template_formatted_currency,
                 listDays.sumOf { it.inspectionSum }
             )
-            txtTripsSum.text = resources.getString(
+            toolbarTxtTripsSum.text = resources.getString(
                 R.string.template_formatted_currency,
                 listDays.sumOf { it.tripSum }
             )
-            txtOtherSum.text = resources.getString(
+            toolbarTxtOtherSum.text = resources.getString(
                 R.string.template_formatted_currency,
                 listDays.sumOf { it.otherSum }
             )

@@ -40,31 +40,29 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         val currentDate = Calendar.getInstance()
         _calendarLD.value = currentDate
 
-//        val date = convertDateToString(currentDate)
-//        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(date)) { listEventForDB ->
-//            Log.d("DAY", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
-//            val listEvent = listEventForDB.map { toEvent(it) }.toList()
-//            Log.d("DAY", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
-//            mediatorLiveData.value = listEvent
-//        }
     }
 
     private fun initDatabase() {
+        Log.d("DAY", "DayFragmentVM - initDatabase")
         val dao = AppDatabase.getInstance(context).getEventDao()
         REPOSITORY = RoomRepository(dao)
     }
 
     fun getMediatorLiveData(): LiveData<List<Event>>{
+        Log.d("DAY", "DayFragmentVM - getMediatorLiveData")
         return mediatorLiveData
     }
 
     fun loadEventsForDay(calendar: Calendar){
         Log.d("DAY", "DayFragmentVM - loadEventsForDay")
-        val date = convertDateToString(calendar)
-        Log.d("DAY", "DayFragmentVM - loadEventsForDay, day = $date")
-//        mediatorLiveData.removeSource(mediatorLiveData)
+        val day = convertDateToString(calendar)
+        Log.d("DAY", "DayFragmentVM - loadEventsForDay, day = $day")
 
-        mediatorLiveData.addSource(REPOSITORY.eventDao.getEventsForDay(date)){ listEventForDB ->
+        val eventsLD = REPOSITORY.eventDao.getEventsForDay(day)
+
+        mediatorLiveData.removeSource(eventsLD)
+
+        mediatorLiveData.addSource(eventsLD){ listEventForDB ->
             Log.d("DAY", "DayFragmentVM - loadEventsForDay. Loaded list size: ${listEventForDB.size}")
             val listEvent = listEventForDB.map { toEvent(it) }.toList()
             Log.d("DAY", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
@@ -73,10 +71,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun insertEvent(event: Event) {
-        Log.d("DAY", "DayFragmentVM - insertEvent")
-        Log.d("DAY", "Base Event: \n ${event.toString()}")
         val eventForDB = toEventForDB(event)
-        Log.d("DAY", "eventForDB: \n ${eventForDB.toString()}")
         viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.eventDao.insertEvent(eventForDB)
         }
@@ -90,7 +85,6 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteEvent(event: Event) {
-        Log.d("DAY", "DayFragmentVM - deleteEvent")
         val eventForDB = toEventForDB(event)
         viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.eventDao.deleteEvent(eventForDB)
@@ -98,11 +92,12 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun setNewDate(calendar: Calendar) {
+        Log.d("DAY", "DayFragmentVM - setNewDate")
         _calendarLD.value = calendar
     }
 
     fun calculateDay(list: List<Event>) {
-
+        Log.d("DAY", "DayFragmentVM - calculateDay")
         var inspectionsCount = 0
         var inspectionsSum = 0
         var tripsCount = 0
@@ -127,12 +122,12 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
             }
         }
         _statisticLD.value = Statistic(
-            inspectionsCount = inspectionsCount.toString(),
-            inspectionsSum = inspectionsSum.toString(),
-            tripsCount = tripsCount.toString(),
-            tripsSum = tripsSum.toString(),
-            otherCount = otherCount.toString(),
-            otherSum = otherSum.toString()
+            inspectionsCount = inspectionsCount,
+            inspectionsSum = inspectionsSum,
+            tripsCount = tripsCount,
+            tripsSum = tripsSum,
+            otherCount = otherCount,
+            otherSum = otherSum
         )
     }
 
@@ -142,12 +137,12 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
     companion object {
         data class Statistic(
-            var inspectionsCount: String,
-            var inspectionsSum: String,
-            var tripsCount: String,
-            var tripsSum: String,
-            var otherCount: String,
-            var otherSum: String
+            var inspectionsCount: Int,
+            var inspectionsSum: Int,
+            var tripsCount: Int,
+            var tripsSum: Int,
+            var otherCount: Int,
+            var otherSum: Int
         )
     }
 }

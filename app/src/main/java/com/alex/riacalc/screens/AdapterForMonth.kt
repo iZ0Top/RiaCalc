@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.get
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemDayBinding
@@ -48,27 +49,14 @@ class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
                 day.date.get(Calendar.DAY_OF_MONTH),
                 dayNames[day.date.get(Calendar.DAY_OF_WEEK) -1]
             )
-
-            var insp = 0
-            var trips = 0
-            var other = 0
-
-            for (d in day.list){
-                when(d.type){
-                    TYPE_INSPECTION -> insp++
-                    TYPE_TRIP -> trips++
-                    TYPE_OTHER -> other++
-                }
-            }
-
-            val width = holder.binding.itemDayConstraint.width
-
-            val text = "size = ${day.list.size}, insp = $insp, trips = $trips, other = $other\n" +
-                    "width = $width"
-
-            itemDayTextView.text = text
-
         }
+
+        val layoutManager = GridLayoutManager(context, 5)
+        val adapter = AdapterForDayItem(day.list, context)
+
+        holder.binding.itemDayRecyclerview.layoutManager = layoutManager
+        holder.binding.itemDayRecyclerview.adapter = adapter
+
     }
 
     class MyHolder(val binding: ItemDayBinding): RecyclerView.ViewHolder(binding.root)

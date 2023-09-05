@@ -2,7 +2,8 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item_day_constraint"
@@ -22,7 +23,7 @@
             app:layout_constraintEnd_toStartOf="@+id/item_day_count"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/item_day_text_view"/>
+            app:layout_constraintBottom_toTopOf="@id/item_day_recyclerview"/>
 
         <TextView
             android:id="@+id/item_day_count"
@@ -48,12 +49,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_day_count"
             app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:id="@+id/item_day_text_view"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/item_day_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:text="text"
             android:textSize="10dp"
+            tools:listitem="@layout/item_grid"
             app:layout_constraintTop_toBottomOf="@+id/item_day_day"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

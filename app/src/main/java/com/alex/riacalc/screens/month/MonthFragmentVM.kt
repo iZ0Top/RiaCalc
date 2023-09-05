@@ -44,6 +44,7 @@ class MonthFragmentVM: ViewModel() {
         val date = formatter.format(calendarLD.value?.time!!)
 
         val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
+
         mediatorLiveData.addSource(eventsLD){listEventForDB ->
             val listEvent = listEventForDB.map { toEvent(it) }.toList()
             val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }
@@ -84,7 +85,7 @@ class MonthFragmentVM: ViewModel() {
                 date = events[0].date,
                 inspectionCount = inspectionCount,
                 inspectionSum = inspectionSum,
-                tripCount = tripSum,
+                tripCount = tripCount,
                 tripSum = tripSum,
                 otherCount = otherCount,
                 otherSum = otherSum,
