@@ -76,6 +76,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
             Log.d("DAY", "DayFragmentVM - loadEventsForDay. Converted list size: ${listEvent.size}")
             mediatorLiveData.value = listEvent
         }
+
     }
 
     fun insertEvent(event: Event) {
