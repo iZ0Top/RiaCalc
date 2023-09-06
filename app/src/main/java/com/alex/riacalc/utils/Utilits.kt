@@ -8,7 +8,6 @@ import java.util.Locale
 
 
 fun toEventForDB(event: Event): EventForDB{
-
     return EventForDB(
         id = event.id,
         type = event.type,
@@ -28,21 +27,18 @@ fun toEvent(eventForDB: EventForDB): Event{
     )
 }
 
-val patternDT = "yyyy-MM-dd HH:mm:ss"
-val patternD = "yyyy-MM-dd"
-
 fun convertDateAndTimeToString(calendar: Calendar): String {
-    val formatter = SimpleDateFormat(patternDT, Locale.getDefault())
+    val formatter = SimpleDateFormat(PATTERN_DATE_TIME, Locale.getDefault())
     return formatter.format(calendar.time)
 }
 
 fun convertDateToString(calendar: Calendar): String {
-    val formatter = SimpleDateFormat(patternD, Locale.getDefault())
+    val formatter = SimpleDateFormat(PATTERN_DATE, Locale.getDefault())
     return formatter.format(calendar.time)
 }
 
 fun convertDateAndTimeToCalendar(string: String): Calendar {
-    val formatter = SimpleDateFormat(patternDT, Locale.getDefault())
+    val formatter = SimpleDateFormat(PATTERN_DATE_TIME, Locale.getDefault())
     val date = formatter.parse(string)
     return Calendar.getInstance().apply { time = date }
 }

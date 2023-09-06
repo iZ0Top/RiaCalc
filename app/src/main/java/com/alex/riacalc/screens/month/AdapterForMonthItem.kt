@@ -1,11 +1,9 @@
-package com.alex.riacalc.screens
+package com.alex.riacalc.screens.month
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.content.res.Resources.Theme
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
@@ -16,10 +14,10 @@ import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 
-class AdapterForDayItem(
+class AdapterForMonthItem(
     private val listItem: List<Event>,
     private val context: Context
-): RecyclerView.Adapter<AdapterForDayItem.MyHolder>() {
+): RecyclerView.Adapter<AdapterForMonthItem.MyHolder>() {
 
     override fun getItemCount(): Int = listItem.size
 

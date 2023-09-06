@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_cost_setting_ti_layout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:errorEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_tv_header">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dialog_cost_setting_et"
+            android:inputType="numberDecimal"
+            android:digits="0123456789"
+            android:lines="1"
+            android:maxLength="3"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/dialog_cost_setting_currency"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/text_currency"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_setting_ti_layout"
+        app:layout_constraintStart_toEndOf="@+id/dialog_cost_setting_ti_layout"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_setting_ti_layout" />
+
+    <TextView
+        android:id="@+id/dialog_cost_setting_tv_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/text_headline_h1"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_cost_default_inspection"
+        app:layout_constraintBottom_toTopOf="@id/dialog_cost_setting_ti_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/dialog_cost_setting_tv_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dialog_cost_setting_ti_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

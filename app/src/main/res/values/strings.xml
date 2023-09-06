@@ -11,6 +11,9 @@
     <string name="text_change_price">Змінити вартість</string>
     <string name="text_cost">Вартість</string>
     <string name="text_sum">Сума</string>
+    <string name="text_cost_default_inspection">Вартість переврки</string>
+    <string name="text_need_specify_cost">Вкажіть вартість</string>
+
 
     <string name="text_currency">грн</string>
     
@@ -41,6 +44,9 @@
     <string name="template_int_string">%1$d %2$s</string>
     <string name="template_plus">+%d</string>
     <string name="template_minus">-%d</string>
+    <string name="tmp_day_month">день / місяць</string>
+    <string name="tmp_date_year">число / рік</string>
+
 
     <string-array name="day_name">
         <item>Неділя</item>

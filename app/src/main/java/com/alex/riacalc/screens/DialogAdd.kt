@@ -91,7 +91,7 @@ class DialogAdd: DialogFragment() {
     }
 
     companion object{
-        const val DIALOG_TAG = "add_dialog"
+        const val DIALOG_ADD_TAG = "add_dialog"
         const val BUNDLE_EVENT_KEY = "bundle_event_key"
         const val BUNDLE_TYPE_KEY = "bundle_status_key"
         const val DIALOG_REQUEST_KEY = "add_request-key"
@@ -103,7 +103,7 @@ class DialogAdd: DialogFragment() {
             bundle.putSerializable(BUNDLE_EVENT_KEY, event)
             bundle.putBoolean(BUNDLE_TYPE_KEY, isNew)
             dialogFragment.arguments = bundle                                                       //передаемо аргументи в діалог через бандл, бандл створюємо тут же
-            dialogFragment.show(fManager, DIALOG_TAG)                                               //показ діалога (фрагмент менеджер і тег діалога)
+            dialogFragment.show(fManager, DIALOG_ADD_TAG)                                           //показ діалога (фрагмент менеджер і тег діалога)
         }
 
         fun setupListener(fManager: FragmentManager, lcOwner: LifecycleOwner, listener: (Event, Boolean) -> Unit){

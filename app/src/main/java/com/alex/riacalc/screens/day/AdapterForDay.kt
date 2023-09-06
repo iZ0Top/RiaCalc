@@ -1,4 +1,4 @@
-package com.alex.riacalc.screens
+package com.alex.riacalc.screens.day
 
 import android.view.LayoutInflater
 import android.view.View

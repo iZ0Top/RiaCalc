@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,11 +19,11 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
-import com.alex.riacalc.screens.ActionListener
-import com.alex.riacalc.screens.AdapterForDay
 import com.alex.riacalc.screens.DialogAdd
-import com.alex.riacalc.screens.month.MonthFragment
+import com.alex.riacalc.screens.DialogCostSetting
 import com.alex.riacalc.utils.AppPreferences
+import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
+import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
@@ -48,12 +49,6 @@ class DayFragment : Fragment(), OnClickListener {
         Log.d("DAY", "___________________________\nDayFragment - onCreate")
 
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
-
-        adapter = AdapterForDay(object : ActionListener {
-            override fun onEditEvent(event: Event) { showDialogEditEvent(event) }
-            override fun onDeleteEvent(event: Event) { viewModel.deleteEvent(event) }
-            override fun onShowDetails(event: Event) { showDialogDescription(event) }
-        })
     }
 
     override fun onCreateView(
@@ -64,15 +59,19 @@ class DayFragment : Fragment(), OnClickListener {
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
 
+        if (AppPreferences.getReviewDefaultCost() == 0) showDialogSetting()
         if (arguments != null){
-            Log.d("DAY", "DayFragment - onCreateView, found arguments")
+            viewModel.setNewDate(requireArguments().getSerializable(KEY_ARGUMENTS_TO_DAY) as Calendar)
         }
-
         val mainActivity = activity as MainActivity
-
         mainBinding = mainActivity.binding
         layoutManager = LinearLayoutManager(requireContext())
 
+        adapter = AdapterForDay(object : ActionListener {
+            override fun onEditEvent(event: Event) { showDialogEditEvent(event) }
+            override fun onDeleteEvent(event: Event) { viewModel.deleteEvent(event) }
+            override fun onShowDetails(event: Event) { showDialogDescription(event) }
+        })
         binding.recyclerViewDay.layoutManager = layoutManager
         binding.recyclerViewDay.adapter = adapter
 
@@ -82,14 +81,17 @@ class DayFragment : Fragment(), OnClickListener {
 
         with(mainBinding.toolbar){
             toolbarBtnExport.visibility = View.GONE
-            toolbarBtnMonthDay.setImageResource(R.drawable.ic_calendar_month)
+            toolbarBtnBack.visibility = View.GONE
+
+            toolbarBtnSetting.visibility = View.VISIBLE
+            toolbarBtnMonth.visibility = VISIBLE
+
             toolbarFrameDate.setOnClickListener(this@DayFragment)
             toolbarBtnSetting.setOnClickListener(this@DayFragment)
-            toolbarBtnMonthDay.setOnClickListener(this@DayFragment)
+            toolbarBtnMonth.setOnClickListener(this@DayFragment)
         }
 
         initObservers()
-
         setupDialogListener()
 
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
@@ -134,14 +136,14 @@ class DayFragment : Fragment(), OnClickListener {
 
         if (v != null) {
             when (v.id) {
-                R.id.toolbar_btn_setting -> { findNavController().navigate(R.id.action_dayFragment_to_settingFragment) }
+                R.id.toolbar_btn_setting -> { showDialogSetting() }
                 R.id.toolbar_frame_date -> { showDatePickerDialog() }
                 R.id.btn_add_inspection -> { showDialogAddEvent(TYPE_INSPECTION) }
                 R.id.btn_add_trip -> { showDialogAddEvent(TYPE_TRIP) }
                 R.id.btn_add_other -> { showDialogAddEvent(TYPE_OTHER) }
-                R.id.toolbar_btn_month_day -> {
+                R.id.toolbar_btn_month -> {
                     val bundle = Bundle()
-                    bundle.putSerializable(MonthFragment.KEY_ARGUMENTS, date)
+                    bundle.putSerializable(KEY_ARGUMENTS_TO_MONTH, date)
                     findNavController().navigate(R.id.action_dayFragment_to_monthFragment, bundle)
                 }
             }
@@ -172,6 +174,10 @@ class DayFragment : Fragment(), OnClickListener {
             date = date
         )
         DialogAdd.show(parentFragmentManager, event, true)
+    }
+
+    private fun showDialogSetting(){
+        DialogCostSetting().show(parentFragmentManager, DialogCostSetting.DIALOG_SETTING_TAG )
     }
 
     private fun showDialogEditEvent(event: Event){

@@ -11,9 +11,6 @@
         android:label="fragment_day"
         tools:layout="@layout/fragment_day" >
         <action
-            android:id="@+id/action_dayFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
-        <action
             android:id="@+id/action_dayFragment_to_monthFragment"
             app:destination="@id/monthFragment" />
     </fragment>
@@ -22,9 +19,6 @@
         android:name="com.alex.riacalc.screens.month.MonthFragment"
         android:label="fragment_month"
         tools:layout="@layout/fragment_month" >
-        <action
-            android:id="@+id/action_monthFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
         <action
             android:id="@+id/action_monthFragment_to_exportFragmet"
             app:destination="@id/exportFragmet" />
@@ -40,17 +34,5 @@
         <action
             android:id="@+id/action_exportFragmet_to_monthFragment"
             app:destination="@id/monthFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/settingFragment"
-        android:name="com.alex.riacalc.screens.setting.SettingFragment"
-        android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" >
-        <action
-            android:id="@+id/action_settingFragment_to_monthFragment"
-            app:destination="@id/monthFragment" />
-        <action
-            android:id="@+id/action_settingFragment_to_dayFragment"
-            app:destination="@id/dayFragment" />
     </fragment>
 </navigation>

@@ -1,20 +1,17 @@
-package com.alex.riacalc.screens
+package com.alex.riacalc.screens.month
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemDayBinding
 import com.alex.riacalc.model.Day
-import com.alex.riacalc.utils.TYPE_INSPECTION
-import com.alex.riacalc.utils.TYPE_OTHER
-import com.alex.riacalc.utils.TYPE_TRIP
 import java.util.Calendar
 
-class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
+class AdapterForMonth(private val actionListenerDay: ActionListenerDay): RecyclerView.Adapter<AdapterForMonth.MyHolder>(), View.OnClickListener {
 
     private var listDay: List<Day> = emptyList()
     private lateinit var dayNames: Array<String>
@@ -33,11 +30,15 @@ class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
         context = parent.context
         dayNames = context.resources.getStringArray(R.array.day_name)
 
+        binding.root.setOnClickListener(this)
+
         return MyHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         val day = listDay[position]
+
+        holder.itemView.tag = day
 
         with(holder.binding){
             itemDayCount.text = day.inspectionCount.toString()
@@ -52,12 +53,20 @@ class AdapterForMonth(): RecyclerView.Adapter<AdapterForMonth.MyHolder>() {
         }
 
         val layoutManager = GridLayoutManager(context, 5)
-        val adapter = AdapterForDayItem(day.list, context)
+        val adapter = AdapterForMonthItem(day.list, context)
 
         holder.binding.itemDayRecyclerview.layoutManager = layoutManager
         holder.binding.itemDayRecyclerview.adapter = adapter
-
     }
 
+
     class MyHolder(val binding: ItemDayBinding): RecyclerView.ViewHolder(binding.root)
+
+    override fun onClick(v: View) {
+        val day = v.tag as Day
+        actionListenerDay.editDay(day.date)
+    }
+}
+interface ActionListenerDay {
+    fun editDay(date: Calendar)
 }

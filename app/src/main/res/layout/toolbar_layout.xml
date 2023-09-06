@@ -16,10 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar_btn_setting"
-            app:layout_constraintEnd_toStartOf="@id/toolbar_btn_month_day"
-            app:layout_constraintStart_toEndOf="@id/toolbar_btn_setting"
-            app:layout_constraintTop_toTopOf="@+id/toolbar_btn_setting">
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:id="@+id/toolbar_text_date_first"
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:gravity="center_horizontal"
-                android:text="день / місяць" />
+                android:text="@string/tmp_day_month" />
 
             <TextView
                 android:id="@+id/toolbar_text_date_second"
@@ -36,13 +36,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:text="число / рік" />
+                android:text="@string/tmp_date_year" />
 
 
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/toolbar_btn_month_day"
+            android:id="@+id/toolbar_btn_month"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="24dp"
@@ -50,7 +50,9 @@
             android:background="@null"
             android:src="@drawable/ic_calendar_month"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            />
 
 
         <ImageButton
@@ -59,11 +61,12 @@
             android:layout_height="30dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
-            android:visibility="gone"
             android:background="@null"
             android:src="@drawable/ic_upload"
-            app:layout_constraintEnd_toStartOf="@+id/toolbar_btn_month_day"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            />
 
         <ImageButton
             android:id="@+id/toolbar_btn_setting"
@@ -74,7 +77,22 @@
             android:background="@null"
             android:src="@drawable/ic_settings"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/toolbar_btn_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@null"
+            android:src="@drawable/ic_arrow_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            />
 
         <LinearLayout
             android:id="@+id/toolbar_linear_inspections"
@@ -104,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center_horizontal"
-                android:text="99" />
+                android:text="@string/text_0" />
 
             <TextView
                 android:id="@+id/toolbar_txt_reviews_sum"
@@ -141,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center_horizontal"
-                android:text="9" />
+                android:text="@string/text_0" />
 
             <TextView
                 android:id="@+id/toolbar_txt_trips_sum"
@@ -183,7 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="center_horizontal"
-                android:text="9" />
+                android:text="@string/text_0" />
 
             <TextView
                 android:id="@+id/toolbar_txt_other_sum"

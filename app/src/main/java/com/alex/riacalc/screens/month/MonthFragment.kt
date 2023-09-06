@@ -17,8 +17,9 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
-import com.alex.riacalc.screens.AdapterForMonth
 import com.alex.riacalc.screens.DialogSetMonthAndYear
+import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
+import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
 import java.util.Calendar
 
 class MonthFragment : Fragment(), OnClickListener {
@@ -50,12 +51,18 @@ class MonthFragment : Fragment(), OnClickListener {
         val mainActivity = activity as MainActivity
         mainBinding = mainActivity.binding
 
-        val argCalendar = arguments?.getSerializable(KEY_ARGUMENTS) as Calendar
+        val argCalendar = arguments?.getSerializable(KEY_ARGUMENTS_TO_MONTH) as Calendar
         viewModel.setDate(argCalendar)
 
         layoutManager = LinearLayoutManager(requireContext())
-        adapter = AdapterForMonth()
 
+        adapter = AdapterForMonth(object : ActionListenerDay {
+            override fun editDay(date: Calendar) {
+                val bundle = Bundle()
+                bundle.putSerializable(KEY_ARGUMENTS_TO_DAY, date)
+                findNavController().navigate(R.id.action_monthFragment_to_dayFragment, bundle )
+            }
+        })
         binding.recyclerViewMonth.layoutManager = layoutManager
         binding.recyclerViewMonth.adapter = adapter
 
@@ -66,16 +73,17 @@ class MonthFragment : Fragment(), OnClickListener {
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
         viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
 
-        //--------------toolbar-------
         with(mainBinding.toolbar){
-            toolbarBtnMonthDay.setImageResource(R.drawable.ic_calendar_day)
+            toolbarBtnSetting.visibility = View.GONE
+            toolbarBtnMonth.visibility = View.GONE
+
+            toolbarBtnBack.visibility = View.VISIBLE
             toolbarBtnExport.visibility = View.VISIBLE
+
             toolbarFrameDate.setOnClickListener(this@MonthFragment)
-            toolbarBtnSetting.setOnClickListener(this@MonthFragment)
-            toolbarBtnMonthDay.setOnClickListener(this@MonthFragment)
             toolbarBtnExport.setOnClickListener(this@MonthFragment)
+            toolbarBtnBack.setOnClickListener(this@MonthFragment)
         }
-        //----------------------------
         return binding.root
     }
 
@@ -89,10 +97,8 @@ class MonthFragment : Fragment(), OnClickListener {
     override fun onClick(v: View?) {
         if (v != null) {
             when (v.id) {
-                R.id.toolbar_btn_setting -> {
-                    findNavController().navigate(R.id.action_monthFragment_to_settingFragment)
-                }
-                R.id.toolbar_btn_month_day -> {
+
+                R.id.toolbar_btn_back -> {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
                 R.id.toolbar_btn_export -> {
@@ -178,9 +184,5 @@ class MonthFragment : Fragment(), OnClickListener {
                 listDays.sumOf { it.otherSum }
             )
         }
-    }
-
-    companion object {
-        const val KEY_ARGUMENTS = "key_argument"
     }
 }

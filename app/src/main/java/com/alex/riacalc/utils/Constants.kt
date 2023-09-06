@@ -10,7 +10,11 @@ const val TYPE_INSPECTION = 0
 const val TYPE_TRIP = 1
 const val TYPE_OTHER = 2
 
-const val patternDateAndTime = "yyyy-MM-dd HH:mm:ss"
-const val patternDate = "yyyy-MM-dd"
+const val KEY_ARGUMENTS_TO_MONTH = "key_argument_to_month"
+const val KEY_ARGUMENTS_TO_DAY = "key_argument_to_day"
+
+const val PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss"
+const val PATTERN_DATE = "yyyy-MM-dd"
+
 
 
