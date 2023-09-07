@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     private var _binding: ActivityMainBinding? = null
     val binding get() = _binding!!
-
-    private lateinit var navController: NavController
     private lateinit var toolbar: Toolbar
 
 
@@ -24,15 +22,11 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-//        navController = navHost.navController
-
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
 
         AppPreferences.getPreferences(this)
     }
-
 
 
     override fun onDestroy() {

@@ -1,25 +1,22 @@
 <resources>
     <string name="app_name">RiaCalc</string>
 
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="text_description_inspection">Опис перевірки</string>
+    <string name="text_inspection">Перевірка</string>
     <string name="text_trip">Поїздка</string>
     <string name="text_other_expense">Інші витрати</string>
-    
     <string name="text_change_price">Змінити вартість</string>
     <string name="text_cost">Вартість</string>
     <string name="text_sum">Сума</string>
     <string name="text_cost_default_inspection">Вартість переврки</string>
     <string name="text_need_specify_cost">Вкажіть вартість</string>
-
-
+    <string name="text_edit">Редагувати</string>
+    <string name="text_delete">Видалити</string>
     <string name="text_currency">грн</string>
     
     <string name="text_hint_add_description">Додайте опис</string>
 
-    <string name="text_reviews">Перевірки:</string>
+    <string name="text_inspections">Перевірки:</string>
     <string name="text_trips">Поїздки:</string>
     <string name="text_other_expenses">Інші витрати:</string>
     <string name="template_formatted_currency">%1$d грн</string>
@@ -34,6 +31,7 @@
     <string name="text_btn_inspection">Перевірка</string>
     <string name="text_btn_trip">Поїздка</string>
     <string name="text_btn_other">Інші витрати</string>
+    <string name="text_btn_ok">ОК</string>
 
     <string name="text_0">0</string>
 
@@ -46,6 +44,7 @@
     <string name="template_minus">-%d</string>
     <string name="tmp_day_month">день / місяць</string>
     <string name="tmp_date_year">число / рік</string>
+    <string name="text_no_description">(немає опису)</string>
 
 
     <string-array name="day_name">

@@ -72,8 +72,8 @@ class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Ad
         val popupMenu = PopupMenu(view.context, view)
         val event = view.tag as Event
 
-        popupMenu.menu.add(0, ID_MENU_EDIT, 0, "Edit")
-        popupMenu.menu.add(0, ID_MENU_DELETE, 0, "Delete")
+        popupMenu.menu.add(0, ID_MENU_EDIT, 0, R.string.text_edit)
+        popupMenu.menu.add(0, ID_MENU_DELETE, 0, R.string.text_delete)
         popupMenu.setOnMenuItemClickListener {
             when(it.itemId){
                 ID_MENU_EDIT -> {

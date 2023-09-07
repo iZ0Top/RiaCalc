@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.MainActivity
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ActivityMainBinding
+import com.alex.riacalc.databinding.DialogDescriptionBinding
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.screens.DialogAdd
@@ -43,11 +43,9 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var date: Calendar
     private lateinit var mainBinding: ActivityMainBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("DAY", "___________________________\nDayFragment - onCreate")
-
         viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
     }
 
@@ -58,23 +56,23 @@ class DayFragment : Fragment(), OnClickListener {
         Log.d("DAY", "DayFragment - onCreateView")
 
         _binding = FragmentDayBinding.inflate(inflater, container, false)
+        mainBinding = (activity as MainActivity).binding
 
         if (AppPreferences.getReviewDefaultCost() == 0) showDialogSetting()
+
         if (arguments != null){
             viewModel.setNewDate(requireArguments().getSerializable(KEY_ARGUMENTS_TO_DAY) as Calendar)
         }
-        val mainActivity = activity as MainActivity
-        mainBinding = mainActivity.binding
+
         layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = AdapterForDay(object : ActionListener {
-            override fun onEditEvent(event: Event) { showDialogEditEvent(event) }
-            override fun onDeleteEvent(event: Event) { viewModel.deleteEvent(event) }
-            override fun onShowDetails(event: Event) { showDialogDescription(event) }
-        })
+        initAdapter()
+        initObservers()
+        setupObservers()
+        setupDialogListener()
+
         binding.recyclerViewDay.layoutManager = layoutManager
         binding.recyclerViewDay.adapter = adapter
-
         binding.btnAddInspection.setOnClickListener(this)
         binding.btnAddTrip.setOnClickListener(this)
         binding.btnAddOther.setOnClickListener(this)
@@ -82,24 +80,16 @@ class DayFragment : Fragment(), OnClickListener {
         with(mainBinding.toolbar){
             toolbarBtnExport.visibility = View.GONE
             toolbarBtnBack.visibility = View.GONE
-
             toolbarBtnSetting.visibility = View.VISIBLE
-            toolbarBtnMonth.visibility = VISIBLE
+            toolbarBtnMonth.visibility = View.VISIBLE
 
             toolbarFrameDate.setOnClickListener(this@DayFragment)
             toolbarBtnSetting.setOnClickListener(this@DayFragment)
             toolbarBtnMonth.setOnClickListener(this@DayFragment)
         }
-
-        initObservers()
-        setupDialogListener()
-
-        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        viewModel.getMediatorLiveData().observe(viewLifecycleOwner, observerMediatorLD)
-        viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
-
         return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -110,6 +100,14 @@ class DayFragment : Fragment(), OnClickListener {
         _binding = null
     }
 
+    private fun initAdapter() {
+        adapter = AdapterForDay(object : ActionListener {
+            override fun onEditEvent(event: Event) { showDialogEditEvent(event) }
+            override fun onDeleteEvent(event: Event) { viewModel.deleteEvent(event) }
+            override fun onShowDetails(event: Event) { showDialogDescription(event) }
+        })
+    }
+
     private fun initObservers(){
         Log.d("DAY", "DayFragment - initObservers")
 
@@ -118,17 +116,21 @@ class DayFragment : Fragment(), OnClickListener {
             changeDate(it)
             viewModel.loadEventsForDay(it)
         }
-
         observerMediatorLD = Observer {
             Log.d("DAY", "DayFragment - observerMediatorLD worked")
             adapter.setList(it)
             viewModel.calculateDay(it)
         }
-
         observerStatistic = Observer {
             Log.d("DAY", "DayFragment - observerStatistic worked")
             updateInfo(it)
         }
+    }
+
+    private fun setupObservers() {
+        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
+        viewModel.getMediatorLiveData().observe(viewLifecycleOwner, observerMediatorLD)
+        viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
     }
 
     override fun onClick(v: View?) {
@@ -156,7 +158,6 @@ class DayFragment : Fragment(), OnClickListener {
             toolbarTxtReviewsCount.text = stats.inspectionsCount.toString()
             toolbarTxtTripsCount.text= stats.tripsCount.toString()
             toolbarTxtOtherCount.text = stats.otherCount.toString()
-
             toolbarTxtReviewsSum.text = resources.getString(R.string.template_formatted_currency, stats.inspectionsSum)
             toolbarTxtTripsSum.text = resources.getString(R.string.template_formatted_currency, stats.tripsSum)
             toolbarTxtOtherSum.text = resources.getString(R.string.template_formatted_currency, stats.otherSum)
@@ -224,10 +225,34 @@ class DayFragment : Fragment(), OnClickListener {
 
     private fun showDialogDescription(event: Event) {
 
-        AlertDialog.Builder(context)
-            .setMessage(event.toString())
-            .setCancelable(true)
-            .setPositiveButton("Ok", null)
+        val dialog = AlertDialog.Builder(context)
+        val dialogBinding = DialogDescriptionBinding.inflate(layoutInflater)
+
+        if (event.description.isNotEmpty()) {
+            dialogBinding.dialogDescriptionNoDesc.visibility = View.GONE
+            dialogBinding.dialogDescriptionDesc.visibility = View.VISIBLE
+            dialogBinding.dialogDescriptionDesc.text = event.description
+        }
+
+        when(event.type){
+            TYPE_INSPECTION -> {
+                dialog.setTitle(R.string.text_inspection)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
+            }
+            TYPE_TRIP -> {
+                dialog.setTitle(R.string.text_trip)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_minus, event.cost)
+            }
+            TYPE_OTHER -> {
+                dialog.setTitle(R.string.text_other_expense)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_minus, event.cost)
+            }
+            else -> { return }
+        }
+
+        dialog.setCancelable(true)
+            .setView(dialogBinding.root)
+            .setPositiveButton(R.string.text_btn_ok, null)
             .create()
             .show()
     }
