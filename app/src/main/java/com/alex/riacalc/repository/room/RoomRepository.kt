@@ -8,17 +8,14 @@ import com.alex.riacalc.repository.BaseRepository
 class RoomRepository(val eventDao: RoomDao) : BaseRepository {
 
     override fun getEventsForDay(selectedDay: String): LiveData<List<EventForDB>> {
-        Log.d("TAG", "RoomRepository - getEventsForDay. Selected day: $selectedDay")
         return eventDao.getEventsForDay(selectedDay)
     }
 
     override fun getEventsForMonth(selectedMonth: String): LiveData<List<EventForDB>> {
-        Log.d("TAG", "RoomRepository - getEventsForMonth. Selected month: $selectedMonth")
         return eventDao.getEventsForMonth(selectedMonth)
     }
 
     override suspend fun insertEvent(event: EventForDB) {
-        Log.d("TAG", "RoomRepository - insertEvent. EventForDB:\n ${event.toString()}")
         eventDao.insertEvent(event)
     }
 

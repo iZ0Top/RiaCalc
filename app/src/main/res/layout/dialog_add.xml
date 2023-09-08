@@ -17,21 +17,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_dialog_description"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lay_et_dialog_description"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:minHeight="50dp"
         android:ems="10"
-        android:inputType="text"
         android:hint="@string/text_hint_add_description"
-        android:autofillHints="description"
+        app:hintEnabled="true"
+        app:hintAnimationEnabled="true"
         android:selectAllOnFocus="true"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_dialog_title"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/text_dialog_title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_dialog_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/text_dialog_price"
@@ -41,26 +50,35 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_dialog_description"
+        app:layout_constraintTop_toBottomOf="@+id/lay_et_dialog_description"
         style="@style/text_headline_h1"/>
 
 
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/et_dialog_price"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lay_et_dialog_price"
         android:layout_width="65dp"
-        android:layout_height="50dp"
-        android:minHeight="50dp"
-        app:errorEnabled="true"
+        android:layout_height="match_parent"
         android:layout_marginTop="16dp"
         android:selectAllOnFocus="true"
-        android:inputType="numberDecimal"
-        android:digits="1234567890"
-        android:gravity="center"
-        android:hint="@string/text_0"
-        style="@style/text_headline_h1"
+        app:errorEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_dialog_price" />
+        app:layout_constraintTop_toBottomOf="@+id/text_dialog_price"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_dialog_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:inputType="numberDecimal"
+            android:digits="1234567890"
+            android:gravity="center"
+            android:hint="@string/text_0"
+            />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/text_dialog_currency"
@@ -69,8 +87,9 @@
         android:layout_marginStart="16dp"
         android:text="@string/text_currency"
         style="@style/text_headline_h1"
-        app:layout_constraintBottom_toBottomOf="@+id/et_dialog_price"
+        app:layout_constraintBottom_toBottomOf="@+id/lay_et_dialog_price"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/et_dialog_price"
-        app:layout_constraintTop_toTopOf="@+id/et_dialog_price" />
+        app:layout_constraintStart_toEndOf="@+id/lay_et_dialog_price"
+        app:layout_constraintTop_toTopOf="@+id/lay_et_dialog_price" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

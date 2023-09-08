@@ -51,27 +51,19 @@ class MonthFragment : Fragment(), OnClickListener {
         val mainActivity = activity as MainActivity
         mainBinding = mainActivity.binding
 
-        val argCalendar = arguments?.getSerializable(KEY_ARGUMENTS_TO_MONTH) as Calendar
-        viewModel.setDate(argCalendar)
+        if (arguments != null){
+            viewModel.setDate(requireArguments().getSerializable(KEY_ARGUMENTS_TO_MONTH) as Calendar)
+        }
 
         layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = AdapterForMonth(object : ActionListenerDay {
-            override fun editDay(date: Calendar) {
-                val bundle = Bundle()
-                bundle.putSerializable(KEY_ARGUMENTS_TO_DAY, date)
-                findNavController().navigate(R.id.action_monthFragment_to_dayFragment, bundle )
-            }
-        })
-        binding.recyclerViewMonth.layoutManager = layoutManager
-        binding.recyclerViewMonth.adapter = adapter
-
+        initAdapter()
         initObservers()
-
+        setupObservers()
         setupDialogSetMonthAndYearListener()
 
-        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
+        binding.recyclerViewMonth.layoutManager = layoutManager
+        binding.recyclerViewMonth.adapter = adapter
 
         with(mainBinding.toolbar){
             toolbarBtnSetting.visibility = View.GONE
@@ -89,15 +81,47 @@ class MonthFragment : Fragment(), OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+
         viewModel.calendarLD.removeObserver(observerDate)
         _binding = null
     }
 
+    private fun initAdapter() {
+
+        adapter = AdapterForMonth(object : ActionListenerDay {
+            override fun editDay(date: Calendar) {
+                val bundle = Bundle()
+                bundle.putSerializable(KEY_ARGUMENTS_TO_DAY, date)
+                findNavController().navigate(R.id.action_monthFragment_to_dayFragment, bundle )
+            }
+        })
+    }
+
+    private fun initObservers(){
+
+        observerDate = Observer<Calendar> {
+            changeDate(it)
+            loadEvents()
+        }
+        observerDays = Observer {
+            updateInfo(it)
+            adapter.setList(it)
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
+        viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
+    }
+
+    private fun loadEvents() {
+        viewModel.loadEventsForMonth()
+    }
 
     override fun onClick(v: View?) {
+
         if (v != null) {
             when (v.id) {
-
                 R.id.toolbar_btn_back -> {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
@@ -111,23 +135,8 @@ class MonthFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun initObservers(){
-
-        observerDate = Observer<Calendar> {
-            Log.d("TAGM", "MonthFragment - onCreateView - observerDate")
-            changeDate(it)
-            loadEvents()
-        }
-
-        observerDays = Observer {
-            Log.d("TAGM", "MonthFragment - onCreateView - observerDays. list size: = ${it.size}")
-            updateInfo(it)
-            adapter.setList(it)
-        }
-    }
-
     private fun changeDate(newDate: Calendar) {
-        Log.d("TAGM", "MonthFragment - updateView")
+
         calendar = newDate
         val monthNames = resources.getStringArray(R.array.month_name_for_picker)
         with(mainBinding.toolbar) {
@@ -136,27 +145,13 @@ class MonthFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun loadEvents() {
-        viewModel.loadEventsForMonth()
-        Log.d("TAGM", "MonthFragment - loadEvents")
-    }
-
     private fun showDialogSetMonthAndYear() {
-        Log.d("TAGM", "MonthFragment - showDialogSetMonthAndYear")
-        DialogSetMonthAndYear.show(
-            parentFragmentManager,
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.YEAR)
-        )
+        DialogSetMonthAndYear.show(parentFragmentManager, calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR))
     }
 
     private fun setupDialogSetMonthAndYearListener() {
-        Log.d("TAGM", "MonthFragment - setupDialogSetMonthAndYearListener")
-        DialogSetMonthAndYear.setupListener(
-            parentFragmentManager,
-            viewLifecycleOwner
-        ) { month, year ->
 
+        DialogSetMonthAndYear.setupListener(parentFragmentManager, viewLifecycleOwner) { month, year ->
             val newDate = Calendar.getInstance()
             newDate.set(Calendar.YEAR, year)
             newDate.set(Calendar.MONTH, month)

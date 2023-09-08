@@ -70,7 +70,6 @@ class DialogSetMonthAndYear : DialogFragment() {
         _binding = null
     }
 
-
     companion object {
 
         const val BUNDLE_KEY_MONTH = "bundle_key_month"
