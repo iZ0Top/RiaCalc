@@ -35,6 +35,7 @@ class DialogAdd: DialogFragment() {
 
         if (isNew) {
             if (event.type == TYPE_INSPECTION) binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
+            else binding.etDialogPrice.setText(R.string.text_0)
         }
         else{
             binding.etDialogDescription.setText(event.description)
@@ -53,8 +54,8 @@ class DialogAdd: DialogFragment() {
                 val cost = binding.etDialogPrice.text.toString().toIntOrNull()
 
                 if (cost == 0 || cost == null){
-                    binding.etDialogPrice.text = null
-                    binding.etDialogPrice.setText("0")
+                    binding.layEtDialogPrice.boxStrokeColor = resources.getColor(R.color.red_500)
+                    binding.etDialogPrice.setText(R.string.text_0)
                     binding.etDialogPrice.setTextColor(resources.getColor(R.color.red_500))
                     return@setOnClickListener
                 }
@@ -91,7 +92,7 @@ class DialogAdd: DialogFragment() {
     }
 
     companion object{
-        const val DIALOG_ADD_TAG = "add_dialog"
+        private const val DIALOG_ADD_TAG = "add_dialog"
         const val BUNDLE_EVENT_KEY = "bundle_event_key"
         const val BUNDLE_TYPE_KEY = "bundle_status_key"
         const val DIALOG_REQUEST_KEY = "add_request-key"

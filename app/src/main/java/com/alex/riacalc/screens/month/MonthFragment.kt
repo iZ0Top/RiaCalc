@@ -7,9 +7,11 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.MainActivity
@@ -18,6 +20,7 @@ import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
 import com.alex.riacalc.screens.DialogSetMonthAndYear
+import com.alex.riacalc.screens.SharedVM
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
 import java.util.Calendar
@@ -25,19 +28,24 @@ import java.util.Calendar
 class MonthFragment : Fragment(), OnClickListener {
 
     private lateinit var viewModel: MonthFragmentVM
+    private lateinit var sharedViewModel: SharedVM
 
     private var _binding: FragmentMonthBinding? = null
     private val binding get() = _binding!!
+    private lateinit var mainBinding: ActivityMainBinding
+
     private lateinit var observerDate: Observer<Calendar>
     private lateinit var observerDays: Observer<List<Day>>
     private lateinit var adapter: AdapterForMonth
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var calendar: Calendar
-    private lateinit var mainBinding: ActivityMainBinding
+
+    private var listDays = emptyList<Day>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MonthFragmentVM::class.java)
+        sharedViewModel = ViewModelProvider(this).get(SharedVM::class.java)
     }
 
     override fun onCreateView(
@@ -45,7 +53,6 @@ class MonthFragment : Fragment(), OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("TAGM", "MonthFragment - onCreateView")
 
         _binding = FragmentMonthBinding.inflate(inflater, container, false)
         val mainActivity = activity as MainActivity
@@ -81,13 +88,11 @@ class MonthFragment : Fragment(), OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-
         viewModel.calendarLD.removeObserver(observerDate)
         _binding = null
     }
 
     private fun initAdapter() {
-
         adapter = AdapterForMonth(object : ActionListenerDay {
             override fun editDay(date: Calendar) {
                 val bundle = Bundle()
@@ -98,20 +103,21 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     private fun initObservers(){
-
-        observerDate = Observer<Calendar> {
+        observerDate = Observer {
             changeDate(it)
             loadEvents()
         }
         observerDays = Observer {
             updateInfo(it)
             adapter.setList(it)
+            sharedViewModel.listDaysLD.value = it
         }
     }
 
     private fun setupObservers() {
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
+        //viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
+        viewModel.mediatorLiveData.observe(viewLifecycleOwner, observerDays)
     }
 
     private fun loadEvents() {
@@ -119,14 +125,13 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     override fun onClick(v: View?) {
-
         if (v != null) {
             when (v.id) {
                 R.id.toolbar_btn_back -> {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
                 R.id.toolbar_btn_export -> {
-                    Toast.makeText(requireContext(), "in progress..", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_monthFragment_to_exportFragmet)
                 }
                 R.id.toolbar_frame_date -> {
                     showDialogSetMonthAndYear()
@@ -136,7 +141,6 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     private fun changeDate(newDate: Calendar) {
-
         calendar = newDate
         val monthNames = resources.getStringArray(R.array.month_name_for_picker)
         with(mainBinding.toolbar) {
@@ -150,7 +154,6 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     private fun setupDialogSetMonthAndYearListener() {
-
         DialogSetMonthAndYear.setupListener(parentFragmentManager, viewLifecycleOwner) { month, year ->
             val newDate = Calendar.getInstance()
             newDate.set(Calendar.YEAR, year)
@@ -160,7 +163,6 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     private fun updateInfo(listDays: List<Day>){
-
         with(mainBinding.toolbar){
             toolbarTxtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
             toolbarTxtTripsCount.text = listDays.sumOf { it.tripCount }.toString()

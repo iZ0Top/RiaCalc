@@ -33,7 +33,7 @@ fun convertDateAndTimeToString(calendar: Calendar): String {
 }
 
 fun convertDateToString(calendar: Calendar): String {
-    val formatter = SimpleDateFormat(PATTERN_DATE, Locale.getDefault())
+    val formatter = SimpleDateFormat(PATTERN_DATE_Y_M_D, Locale.getDefault())
     return formatter.format(calendar.time)
 }
 

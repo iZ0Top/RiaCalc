@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/exportFragmet"
-        android:name="com.alex.riacalc.screens.export.ExportFragmet"
+        android:name="com.alex.riacalc.screens.export.ExportFragment"
         android:label="fragment_export"
         tools:layout="@layout/fragment_export" >
         <action

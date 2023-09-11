@@ -5,13 +5,13 @@
     android:insetTop="6dp"
     android:insetRight="4dp"
     android:insetBottom="4dp">
-    <ripple android:color="@color/red_600">
+    <ripple android:color="@color/black_200">
         <item>
             <shape
                 android:shape="rectangle"
                 android:tint="@color/black_600">
                 <corners android:radius="6dp" />
-                <solid android:color="@color/black_400" />
+                <solid android:color="@color/black_200" />
                 <padding android:bottom="6dp" />
             </shape>
         </item>

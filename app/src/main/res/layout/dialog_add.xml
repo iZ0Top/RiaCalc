@@ -57,11 +57,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/lay_et_dialog_price"
-        android:layout_width="65dp"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
         android:selectAllOnFocus="true"
         app:errorEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_dialog_price"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -72,22 +73,20 @@
             android:layout_height="wrap_content"
             android:selectAllOnFocus="true"
             android:inputType="numberDecimal"
+            android:maxLength="3"
             android:digits="1234567890"
-            android:gravity="center"
-            android:hint="@string/text_0"
+            android:gravity="start"
             />
-
-
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/text_dialog_currency"
+        style="@style/text_headline_h1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
         android:text="@string/text_currency"
-        style="@style/text_headline_h1"
-        app:layout_constraintBottom_toBottomOf="@+id/lay_et_dialog_price"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lay_et_dialog_price"
         app:layout_constraintTop_toTopOf="@+id/lay_et_dialog_price" />

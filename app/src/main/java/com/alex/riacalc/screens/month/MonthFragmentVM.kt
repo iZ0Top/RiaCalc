@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.model.EventForDB
+import com.alex.riacalc.utils.PATTERN_DATE_Y_M
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
@@ -20,27 +21,34 @@ import java.util.Locale
 class MonthFragmentVM: ViewModel() {
 
 
-    private val mediatorLiveData = MediatorLiveData<List<Day>>()
+    // private val mediatorLiveData = MediatorLiveData<List<Day>>()
 
     private var _calendarLD = MutableLiveData<Calendar>()
     val calendarLD: LiveData<Calendar> get() = _calendarLD
-
-
-    init {
-        Log.d("TAGM", "MonthFragmentVM - init")
-    }
-    override fun onCleared() {
-        super.onCleared()
-    }
+    val mediatorLiveData = MediatorLiveData<List<Day>>()
 
     fun setDate(calendar: Calendar){
-        Log.d("TAGM", "MonthFragmentVM - setDate")
         _calendarLD.value = calendar
     }
 
-    fun loadEventsForMonth (): LiveData<List<Day>>{
+//    fun loadEventsForMonth (): LiveData<List<Day>>{
+//        Log.d("TAGM", "MonthFragmentVM - loadEventsForMonth")
+//        val formatter = SimpleDateFormat(PATTERN_DATE_Y_M, Locale.getDefault())
+//        val date = formatter.format(calendarLD.value?.time!!)
+//
+//        val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
+//
+//        mediatorLiveData.addSource(eventsLD){listEventForDB ->
+//            val listEvent = listEventForDB.map { toEvent(it) }.toList()
+//            val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }
+//            mediatorLiveData.value = listDay
+//        }
+//        return mediatorLiveData
+//    }
+
+    fun loadEventsForMonth (){
         Log.d("TAGM", "MonthFragmentVM - loadEventsForMonth")
-        val formatter = SimpleDateFormat("yyyy-MM", Locale.getDefault())
+        val formatter = SimpleDateFormat(PATTERN_DATE_Y_M, Locale.getDefault())
         val date = formatter.format(calendarLD.value?.time!!)
 
         val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
@@ -50,7 +58,6 @@ class MonthFragmentVM: ViewModel() {
             val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }
             mediatorLiveData.value = listDay
         }
-        return mediatorLiveData
     }
 
     private fun createDays(list: List<Event>): List<Day>{
@@ -93,19 +100,16 @@ class MonthFragmentVM: ViewModel() {
             Log.d("TAGM", "createDays: \n $day").toString()
             day
         }
-
         return listDays.toList()
     }
 
-    fun editDay(){
-
-    }
-
-    fun exportReport(){
-
+    fun createReport(){
+        val listDays = mediatorLiveData.value
+        TODO()
     }
 
 
-
-
+    override fun onCleared() {
+        super.onCleared()
+    }
 }
