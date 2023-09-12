@@ -79,6 +79,7 @@ class DayFragment : Fragment(), OnClickListener {
         with(mainBinding.toolbar){
             toolbarBtnExport.visibility = View.GONE
             toolbarBtnBack.visibility = View.GONE
+
             toolbarBtnSetting.visibility = View.VISIBLE
             toolbarBtnMonth.visibility = View.VISIBLE
 

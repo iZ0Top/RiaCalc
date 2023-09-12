@@ -21,8 +21,6 @@ import java.util.Locale
 class MonthFragmentVM: ViewModel() {
 
 
-    // private val mediatorLiveData = MediatorLiveData<List<Day>>()
-
     private var _calendarLD = MutableLiveData<Calendar>()
     val calendarLD: LiveData<Calendar> get() = _calendarLD
     val mediatorLiveData = MediatorLiveData<List<Day>>()
@@ -31,32 +29,18 @@ class MonthFragmentVM: ViewModel() {
         _calendarLD.value = calendar
     }
 
-//    fun loadEventsForMonth (): LiveData<List<Day>>{
-//        Log.d("TAGM", "MonthFragmentVM - loadEventsForMonth")
-//        val formatter = SimpleDateFormat(PATTERN_DATE_Y_M, Locale.getDefault())
-//        val date = formatter.format(calendarLD.value?.time!!)
-//
-//        val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
-//
-//        mediatorLiveData.addSource(eventsLD){listEventForDB ->
-//            val listEvent = listEventForDB.map { toEvent(it) }.toList()
-//            val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }
-//            mediatorLiveData.value = listDay
-//        }
-//        return mediatorLiveData
-//    }
 
-    fun loadEventsForMonth (){
+    fun loadEventsForMonth (calendar: Calendar){
         Log.d("TAGM", "MonthFragmentVM - loadEventsForMonth")
         val formatter = SimpleDateFormat(PATTERN_DATE_Y_M, Locale.getDefault())
-        val date = formatter.format(calendarLD.value?.time!!)
+        val date = formatter.format(calendar.time)
 
-        val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)
+        val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)                                  //Отримуємо список з бази даних як ЛайвДату
 
-        mediatorLiveData.addSource(eventsLD){listEventForDB ->
-            val listEvent = listEventForDB.map { toEvent(it) }.toList()
-            val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }
-            mediatorLiveData.value = listDay
+        mediatorLiveData.addSource(eventsLD){listEventForDB ->                                      //Додаємо в МедіаторЛайвДата джерело - отриману ЛайвДату
+            val listEvent = listEventForDB.map { toEvent(it) }.toList()                             //Обробка в лямблі даних з джерела, перетворення Івентів
+            val listDay = createDays(listEvent).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }     //Обробка в лямблі даних з джерела, Створення Днів
+            mediatorLiveData.value = listDay                                                        //Присвоєння МедіаторЛайвДаті списка днів
         }
     }
 
@@ -105,7 +89,7 @@ class MonthFragmentVM: ViewModel() {
 
     fun createReport(){
         val listDays = mediatorLiveData.value
-        TODO()
+
     }
 
 

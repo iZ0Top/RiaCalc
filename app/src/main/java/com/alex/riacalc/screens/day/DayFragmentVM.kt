@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.repository.room.AppDatabase
@@ -49,6 +50,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         return _mediatorLiveData
     }
 
+
     fun loadEventsForDay(calendar: Calendar){
         val day = convertDateToString(calendar)
 
@@ -66,6 +68,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         }
 
     }
+
 
     fun insertEvent(event: Event) {
         val eventForDB = toEventForDB(event)
