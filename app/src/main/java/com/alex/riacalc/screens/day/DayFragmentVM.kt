@@ -66,9 +66,7 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
             val listEvent = listEventForDB.map { toEvent(it) }.toList()
             _mediatorLiveData.value = listEvent
         }
-
     }
-
 
     fun insertEvent(event: Event) {
         val eventForDB = toEventForDB(event)

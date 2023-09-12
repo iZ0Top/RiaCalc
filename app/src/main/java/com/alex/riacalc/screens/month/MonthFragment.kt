@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alex.riacalc.MainActivity
@@ -20,10 +17,10 @@ import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
 import com.alex.riacalc.screens.DialogSetMonthAndYear
-import com.alex.riacalc.screens.SharedVM
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
-import com.alex.riacalc.utils.convertDateAndTimeToString
+import com.alex.riacalc.utils.TYPE_OTHER
+import com.alex.riacalc.utils.TYPE_TRIP
 import com.alex.riacalc.utils.convertDateToString
 import java.util.Calendar
 
@@ -109,12 +106,12 @@ class MonthFragment : Fragment(), OnClickListener {
         observerDays = Observer {
             updateInfo(it)
             adapter.setList(it)
+            listDays = it
         }
     }
 
     private fun setupObservers() {
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
-        //viewModel.loadEventsForMonth().observe(viewLifecycleOwner, observerDays)
         viewModel.mediatorLiveData.observe(viewLifecycleOwner, observerDays)
     }
 
@@ -126,6 +123,7 @@ class MonthFragment : Fragment(), OnClickListener {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
                 R.id.toolbar_btn_export -> {
+                    showDialogExport(listDays)
 
                 }
                 R.id.toolbar_frame_date -> {
@@ -160,31 +158,36 @@ class MonthFragment : Fragment(), OnClickListener {
     private fun showDialogExport(listDays: List<Day>){
 
         val monthNames = resources.getStringArray(R.array.month_name)
+
         val date = listDays[0].date
         val numberAllInspections = listDays.sumOf { it.inspectionCount }.toString()
         val sumAllInspections = listDays.sumOf { it.inspectionSum }
         val sumAllExpenses = listDays.sumOf { it.tripSum } + listDays.sumOf { it.otherSum }
 
-        val string = "${monthNames[date.get(Calendar.MONTH)]}. ${Calendar.YEAR} \n" +
-                "Перевірок: $numberAllInspections =  $sumAllInspections грн" +
-                "Витрати: $sumAllExpenses"
+        val stringList = mutableListOf<String>()
 
-        for (x in listDays){
+        for (day in listDays){
 
-            val subListEvents = x.list
+            val dayEvents = day.list
+            val dayDate = convertDateToString(day.date)
+            val listString = mutableListOf<String>()
 
-            val subDate = convertDateToString(x.date)
-            val numberDayInspections = x.inspectionCount
-
-            if (x.tripCount != 0){
-
-                for (s in subListEvents){
-
+            if (day.tripCount != 0 || day.tripSum != 0){
+                for (event in dayEvents){
+                    when(event.type){
+                        TYPE_TRIP, TYPE_OTHER -> { listString.add(", ${event.description} - ${event.cost}\n") }
+                    }
                 }
             }
-
+            stringList.add("\n$dayDate:  ${day.inspectionCount}${listString.ifEmpty { "" }}")
         }
 
+        val exportText = "${monthNames[date.get(Calendar.MONTH)]}. ${Calendar.YEAR} \n" +
+                "Перевірок: $numberAllInspections =  $sumAllInspections грн" +
+                "Витрати: $sumAllExpenses " +
+                "$stringList"
+
+        Log.d("E", exportText)
 
         //Вересень. 2023
         //Перевірок: 199 шт = 21345 грн
@@ -192,7 +195,6 @@ class MonthFragment : Fragment(), OnClickListener {
         //01.09.2023:  11
         //02.09.2023:  9, Поїздка в калинвку - 40 грн
         //03.09.2023:  14
-
     }
 
     private fun updateInfo(listDays: List<Day>){
