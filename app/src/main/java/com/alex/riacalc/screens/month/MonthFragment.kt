@@ -1,10 +1,14 @@
 package com.alex.riacalc.screens.month
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -31,11 +35,11 @@ class MonthFragment : Fragment(), OnClickListener {
 
     private lateinit var observerDate: Observer<Calendar>
     private lateinit var observerDays: Observer<List<Day>>
+    private lateinit var observerStatistic: Observer<Statistic>
+    private lateinit var observerReport: Observer<String>
     private lateinit var adapter: AdapterForMonth
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var calendar: Calendar
-
-    private var listDays = emptyList<Day>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +47,6 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     override fun onCreateView(
-
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
@@ -97,18 +100,33 @@ class MonthFragment : Fragment(), OnClickListener {
 
     private fun initObservers(){
         observerDate = Observer {
-            changeDateAndUpdateList(it)
+            changeDate(it)
+            viewModel.loadEventsForMonth(it)
         }
         observerDays = Observer {
-            updateInfo(it)
             adapter.setList(it)
-            listDays = it
         }
+        observerStatistic = Observer {
+            updateStatistic(it)
+        }
+        observerReport = Observer {
+            copyToBuffer(it)
+        }
+    }
+
+    private fun copyToBuffer(report: String) {
+        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("label", report))
+        val toast = Toast.makeText(requireContext(), resources.getText(R.string.text_report_copied), Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.show()
     }
 
     private fun setupObservers() {
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
         viewModel.mediatorLiveData.observe(viewLifecycleOwner, observerDays)
+        viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
+        viewModel.reportLD.observe(viewLifecycleOwner, observerReport)
     }
 
 
@@ -119,7 +137,7 @@ class MonthFragment : Fragment(), OnClickListener {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
                 R.id.toolbar_btn_export -> {
-
+                    viewModel.createReport()
                 }
                 R.id.toolbar_frame_date -> {
                     showDialogSetMonthAndYear()
@@ -128,7 +146,7 @@ class MonthFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun changeDateAndUpdateList(newDate: Calendar) {
+    private fun changeDate(newDate: Calendar) {
         calendar = newDate
 
         val monthNames = resources.getStringArray(R.array.month_name_for_picker)
@@ -136,7 +154,6 @@ class MonthFragment : Fragment(), OnClickListener {
             toolbarTextDateFirst.text = monthNames[calendar.get(Calendar.MONTH)]
             toolbarTextDateSecond.text = calendar.get(Calendar.YEAR).toString()
         }
-        viewModel.loadEventsForMonth(calendar)
     }
 
     private fun showDialogSetMonthAndYear() {
@@ -152,46 +169,7 @@ class MonthFragment : Fragment(), OnClickListener {
         }
     }
 
-//    private fun showDialogExport(listDays: List<Day>){
-//
-//        if (listDays.isEmpty()) return
-//
-//        val monthNames = resources.getStringArray(R.array.month_name_for_picker)
-//        val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-//        val stringBuilder = StringBuilder()
-//
-//        val date = listDays[0].date
-//        val numberInspections = listDays.sumOf { it.inspectionCount }
-//        val sumInspections = listDays.sumOf { it.inspectionSum }
-//        val sumExpenses = listDays.sumOf { it.tripSum } + listDays.sumOf { it.otherSum }
-//
-//        stringBuilder.append("${monthNames[date.get(Calendar.MONTH)]}. ${date.get(Calendar.YEAR)}")
-//        stringBuilder.append(resources.getString(R.string.template_inspections, numberInspections, sumInspections))
-//        stringBuilder.append(resources.getString(R.string.template_expenses, sumExpenses))
-//
-//        for (day in listDays){
-//            val dayEventsList = day.list
-//            stringBuilder.append("\n${convertDateToString(day.date)}: ${day.inspectionCount}")
-//            if (day.tripCount != 0 || day.tripSum != 0){
-//                for (event in dayEventsList){
-//                    when(event.type){
-//                        TYPE_TRIP, TYPE_OTHER -> { stringBuilder.append(", ${event.description} - ${event.cost}")}
-//                    }
-//                }
-//            }
-//        }
-//
-//        clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("label", stringBuilder.toString()))
-//
-//        val toast = Toast.makeText(requireContext(), resources.getText(R.string.text_report_copied), Toast.LENGTH_SHORT)
-//        toast.setGravity(Gravity.CENTER, 0, 0)
-//        toast.show()
-//
-//        Log.d("REP", stringBuilder.toString())
-//    }
-
-    private fun updateInfo(statistic: Statistic){
-
+    private fun updateStatistic(statistic: Statistic){
 
         with(mainBinding.toolbar){
             toolbarTxtReviewsCount.text = statistic.inspectionsCount.toString()
@@ -202,25 +180,5 @@ class MonthFragment : Fragment(), OnClickListener {
             toolbarTxtTripsSum.text = resources.getString(R.string.template_formatted_currency, statistic.tripsSum)
             toolbarTxtOtherSum.text = resources.getString(R.string.template_formatted_currency, statistic.otherSum)
         }
-
-
-//        with(mainBinding.toolbar){
-//            toolbarTxtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
-//            toolbarTxtTripsCount.text = listDays.sumOf { it.tripCount }.toString()
-//            toolbarTxtOtherCount.text = listDays.sumOf { it.otherCount }.toString()
-//
-//            toolbarTxtReviewsSum.text = resources.getString(
-//                R.string.template_formatted_currency,
-//                listDays.sumOf { it.inspectionSum }
-//            )
-//            toolbarTxtTripsSum.text = resources.getString(
-//                R.string.template_formatted_currency,
-//                listDays.sumOf { it.tripSum }
-//            )
-//            toolbarTxtOtherSum.text = resources.getString(
-//                R.string.template_formatted_currency,
-//                listDays.sumOf { it.otherSum }
-//            )
-//        }
     }
 }
