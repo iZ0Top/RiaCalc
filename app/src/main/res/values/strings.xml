@@ -2,9 +2,19 @@
     <string name="app_name">RiaCalc</string>
 
     <string name="text_description_inspection">Опис перевірки</string>
+
     <string name="text_inspection">Перевірка</string>
+    <string name="text_btn_inspection">Перевірка</string>
+    <string name="text_inspections">Перевірки:</string>
+
     <string name="text_trip">Поїздка</string>
+    <string name="text_btn_trip">Поїздка</string>
+    <string name="text_trips">Поїздки:</string>
+
     <string name="text_other_expense">Інші витрати</string>
+    <string name="text_btn_other">Інші витрати</string>
+    <string name="text_other_expenses">Інші витрати:</string>
+
     <string name="text_change_price">Змінити вартість</string>
     <string name="text_cost">Вартість</string>
     <string name="text_sum">Сума</string>
@@ -13,28 +23,23 @@
     <string name="text_edit">Редагувати</string>
     <string name="text_delete">Видалити</string>
     <string name="text_currency">грн</string>
-    
     <string name="text_hint_add_description">Додайте опис</string>
 
-    <string name="text_inspections">Перевірки:</string>
-    <string name="text_trips">Поїздки:</string>
-    <string name="text_other_expenses">Інші витрати:</string>
-    <string name="template_formatted_currency">%1$d грн</string>
-    
     <string name="text_setting_title_general">Налаштування програми</string>
     <string name="text_setting_title_export">Налаштування експорту </string>
     <string name="text_setting_price">Вартість  перевірки, грн</string>
     <string name="text_setting_show_price">Відображати вартість</string>
     <string name="text_setting_add_trips">Додавати поїздки</string>
     <string name="text_setting_add_other">Додавати інші витрати </string>
-    
-    <string name="text_btn_inspection">Перевірка</string>
-    <string name="text_btn_trip">Поїздка</string>
-    <string name="text_btn_other">Інші витрати</string>
-    <string name="text_btn_ok">ОК</string>
+    <string name="text_no_description">(немає опису)</string>
+    <string name="text_report_copied">Звіт скопійовано в буфер обміну!</string>
 
+    <string name="text_btn_ok">ОК</string>
     <string name="text_0">0</string>
 
+    <string name="template_inspections">\nПеревірки: %1$d = %2$d грн</string>
+    <string name="template_expenses">\nВитрати: %1$d грн</string>
+    <string name="template_formatted_currency">%1$d грн</string>
     <string name="template_item_inspection">+%1$d  %2$s</string>
     <string name="template_item_expense">-%1$d  %2$s</string>
     <string name="template_date">%1$d %2$s</string>
@@ -44,8 +49,6 @@
     <string name="template_minus">-%d</string>
     <string name="tmp_day_month">день / місяць</string>
     <string name="tmp_date_year">число / рік</string>
-    <string name="text_no_description">(немає опису)</string>
-
 
     <string-array name="day_name">
         <item>Неділя</item>
@@ -86,7 +89,4 @@
         <item>Листопад</item>
         <item>Грудень</item>
     </string-array>
-
-
-
 </resources>

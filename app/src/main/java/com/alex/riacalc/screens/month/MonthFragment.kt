@@ -1,7 +1,6 @@
 package com.alex.riacalc.screens.month
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -16,12 +15,10 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
+import com.alex.riacalc.model.Statistic
 import com.alex.riacalc.screens.DialogSetMonthAndYear
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
-import com.alex.riacalc.utils.TYPE_OTHER
-import com.alex.riacalc.utils.TYPE_TRIP
-import com.alex.riacalc.utils.convertDateToString
 import java.util.Calendar
 
 class MonthFragment : Fragment(), OnClickListener {
@@ -100,8 +97,7 @@ class MonthFragment : Fragment(), OnClickListener {
 
     private fun initObservers(){
         observerDate = Observer {
-            changeDate(it)
-            viewModel.loadEventsForMonth(it)
+            changeDateAndUpdateList(it)
         }
         observerDays = Observer {
             updateInfo(it)
@@ -123,7 +119,6 @@ class MonthFragment : Fragment(), OnClickListener {
                     findNavController().navigate(R.id.action_monthFragment_to_dayFragment)
                 }
                 R.id.toolbar_btn_export -> {
-                    showDialogExport(listDays)
 
                 }
                 R.id.toolbar_frame_date -> {
@@ -133,13 +128,15 @@ class MonthFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun changeDate(newDate: Calendar) {
+    private fun changeDateAndUpdateList(newDate: Calendar) {
         calendar = newDate
+
         val monthNames = resources.getStringArray(R.array.month_name_for_picker)
         with(mainBinding.toolbar) {
             toolbarTextDateFirst.text = monthNames[calendar.get(Calendar.MONTH)]
             toolbarTextDateSecond.text = calendar.get(Calendar.YEAR).toString()
         }
+        viewModel.loadEventsForMonth(calendar)
     }
 
     private fun showDialogSetMonthAndYear() {
@@ -155,66 +152,75 @@ class MonthFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun showDialogExport(listDays: List<Day>){
+//    private fun showDialogExport(listDays: List<Day>){
+//
+//        if (listDays.isEmpty()) return
+//
+//        val monthNames = resources.getStringArray(R.array.month_name_for_picker)
+//        val clipboardManager = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//        val stringBuilder = StringBuilder()
+//
+//        val date = listDays[0].date
+//        val numberInspections = listDays.sumOf { it.inspectionCount }
+//        val sumInspections = listDays.sumOf { it.inspectionSum }
+//        val sumExpenses = listDays.sumOf { it.tripSum } + listDays.sumOf { it.otherSum }
+//
+//        stringBuilder.append("${monthNames[date.get(Calendar.MONTH)]}. ${date.get(Calendar.YEAR)}")
+//        stringBuilder.append(resources.getString(R.string.template_inspections, numberInspections, sumInspections))
+//        stringBuilder.append(resources.getString(R.string.template_expenses, sumExpenses))
+//
+//        for (day in listDays){
+//            val dayEventsList = day.list
+//            stringBuilder.append("\n${convertDateToString(day.date)}: ${day.inspectionCount}")
+//            if (day.tripCount != 0 || day.tripSum != 0){
+//                for (event in dayEventsList){
+//                    when(event.type){
+//                        TYPE_TRIP, TYPE_OTHER -> { stringBuilder.append(", ${event.description} - ${event.cost}")}
+//                    }
+//                }
+//            }
+//        }
+//
+//        clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("label", stringBuilder.toString()))
+//
+//        val toast = Toast.makeText(requireContext(), resources.getText(R.string.text_report_copied), Toast.LENGTH_SHORT)
+//        toast.setGravity(Gravity.CENTER, 0, 0)
+//        toast.show()
+//
+//        Log.d("REP", stringBuilder.toString())
+//    }
 
-        val monthNames = resources.getStringArray(R.array.month_name)
+    private fun updateInfo(statistic: Statistic){
 
-        val date = listDays[0].date
-        val numberAllInspections = listDays.sumOf { it.inspectionCount }.toString()
-        val sumAllInspections = listDays.sumOf { it.inspectionSum }
-        val sumAllExpenses = listDays.sumOf { it.tripSum } + listDays.sumOf { it.otherSum }
 
-        val stringList = mutableListOf<String>()
-
-        for (day in listDays){
-
-            val dayEvents = day.list
-            val dayDate = convertDateToString(day.date)
-            val listString = mutableListOf<String>()
-
-            if (day.tripCount != 0 || day.tripSum != 0){
-                for (event in dayEvents){
-                    when(event.type){
-                        TYPE_TRIP, TYPE_OTHER -> { listString.add(", ${event.description} - ${event.cost}\n") }
-                    }
-                }
-            }
-            stringList.add("\n$dayDate:  ${day.inspectionCount}${listString.ifEmpty { "" }}")
-        }
-
-        val exportText = "${monthNames[date.get(Calendar.MONTH)]}. ${Calendar.YEAR} \n" +
-                "Перевірок: $numberAllInspections =  $sumAllInspections грн" +
-                "Витрати: $sumAllExpenses " +
-                "$stringList"
-
-        Log.d("E", exportText)
-
-        //Вересень. 2023
-        //Перевірок: 199 шт = 21345 грн
-        //Витрати: 123 грн
-        //01.09.2023:  11
-        //02.09.2023:  9, Поїздка в калинвку - 40 грн
-        //03.09.2023:  14
-    }
-
-    private fun updateInfo(listDays: List<Day>){
         with(mainBinding.toolbar){
-            toolbarTxtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
-            toolbarTxtTripsCount.text = listDays.sumOf { it.tripCount }.toString()
-            toolbarTxtOtherCount.text = listDays.sumOf { it.otherCount }.toString()
+            toolbarTxtReviewsCount.text = statistic.inspectionsCount.toString()
+            toolbarTxtTripsCount.text = statistic.tripsCount.toString()
+            toolbarTxtOtherCount.text = statistic.otherCount.toString()
 
-            toolbarTxtReviewsSum.text = resources.getString(
-                R.string.template_formatted_currency,
-                listDays.sumOf { it.inspectionSum }
-            )
-            toolbarTxtTripsSum.text = resources.getString(
-                R.string.template_formatted_currency,
-                listDays.sumOf { it.tripSum }
-            )
-            toolbarTxtOtherSum.text = resources.getString(
-                R.string.template_formatted_currency,
-                listDays.sumOf { it.otherSum }
-            )
+            toolbarTxtReviewsSum.text = resources.getString(R.string.template_formatted_currency, statistic.inspectionsSum)
+            toolbarTxtTripsSum.text = resources.getString(R.string.template_formatted_currency, statistic.tripsSum)
+            toolbarTxtOtherSum.text = resources.getString(R.string.template_formatted_currency, statistic.otherSum)
         }
+
+
+//        with(mainBinding.toolbar){
+//            toolbarTxtReviewsCount.text = listDays.sumOf {it.inspectionCount }.toString()
+//            toolbarTxtTripsCount.text = listDays.sumOf { it.tripCount }.toString()
+//            toolbarTxtOtherCount.text = listDays.sumOf { it.otherCount }.toString()
+//
+//            toolbarTxtReviewsSum.text = resources.getString(
+//                R.string.template_formatted_currency,
+//                listDays.sumOf { it.inspectionSum }
+//            )
+//            toolbarTxtTripsSum.text = resources.getString(
+//                R.string.template_formatted_currency,
+//                listDays.sumOf { it.tripSum }
+//            )
+//            toolbarTxtOtherSum.text = resources.getString(
+//                R.string.template_formatted_currency,
+//                listDays.sumOf { it.otherSum }
+//            )
+//        }
     }
 }
