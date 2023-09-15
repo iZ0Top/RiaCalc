@@ -19,6 +19,7 @@ import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.DialogDescriptionBinding
 import com.alex.riacalc.databinding.FragmentDayBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.model.Statistic
 import com.alex.riacalc.screens.DialogAdd
 import com.alex.riacalc.screens.DialogCostSetting
 import com.alex.riacalc.utils.AppPreferences
@@ -39,7 +40,7 @@ class DayFragment : Fragment(), OnClickListener {
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var observerMediatorLD: Observer<List<Event>>
     private lateinit var observerDate: Observer<Calendar>
-    private lateinit var observerStatistic: Observer<DayFragmentVM.Companion.Statistic>
+    private lateinit var observerStatistic: Observer<Statistic>
     private lateinit var date: Calendar
     private lateinit var mainBinding: ActivityMainBinding
 
@@ -149,7 +150,7 @@ class DayFragment : Fragment(), OnClickListener {
         }
     }
 
-    private fun updateInfo(stats: DayFragmentVM.Companion.Statistic){
+    private fun updateInfo(stats: Statistic){
 
         with(mainBinding.toolbar){
             toolbarTxtReviewsCount.text = stats.inspectionsCount.toString()

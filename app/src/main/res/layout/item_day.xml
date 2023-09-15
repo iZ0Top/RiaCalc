@@ -54,6 +54,7 @@
             android:layout_marginEnd="8dp"
             android:gravity="end"
             android:text="0 грн"
+            android:textColor="@color/green_600"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/item_day_count"
             app:layout_constraintTop_toTopOf="parent" />

@@ -134,7 +134,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="@string/template_formatted_currency" />
+                android:text="@string/template_formatted_currency"
+                android:textColor="@color/green_600"/>
         </LinearLayout>
 
         <LinearLayout
@@ -172,7 +173,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="@string/template_formatted_currency" />
+                android:text="@string/template_formatted_currency"
+                android:textColor="@color/red_600"/>
         </LinearLayout>
 
         <LinearLayout
@@ -215,7 +217,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="@string/template_formatted_currency" />
+                android:text="@string/template_formatted_currency"
+                android:textColor="@color/red_600"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

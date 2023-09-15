@@ -40,8 +40,6 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
     val mediatorLiveData = MediatorLiveData<List<Day>>()
 
-    private lateinit var listDays: List<Day>
-    private lateinit var statistic: Statistic
 
     fun setDate(calendar: Calendar) {
         _calendarLD.value = calendar
@@ -55,12 +53,12 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)                                  //Отримуємо список з бази даних як ЛайвДату
 
         mediatorLiveData.addSource(eventsLD) { listEventForDB ->                                    //Додаємо в МедіаторЛайвДата джерело - отриману ЛайвДату
-            val events = listEventForDB.map { toEvent(it) }.toList()                             //Обробка в лямблі даних з джерела, перетворення Івентів
-            val days = createDays(events).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }     //Обробка в лямблі даних з джерела, Створення Днів
-            listDays = days
-            mediatorLiveData.value = days                                                        //Присвоєння МедіаторЛайвДаті списка дні
+            val events = listEventForDB.map { toEvent(it) }.toList()                                //Обробка в лямблі даних з джерела, перетворення Івентів
+            val days = createDays(events).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }           //Обробка в лямблі даних з джерела, Створення Днів
+
+            calculateStatistic(days)
+            mediatorLiveData.value = days                                                           //Присвоєння МедіаторЛайвДаті списка дні
         }
-        calculateStatistic()
     }
 
     private fun createDays(list: List<Event>): List<Day> {
@@ -108,29 +106,26 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         return listDays.toList()
     }
 
-    private fun calculateStatistic() {
+    private fun calculateStatistic(listDays: List<Day>) {
 
-        statistic = Statistic(
+        _statisticLD.value = Statistic(
             inspectionsCount = listDays.sumOf { it.inspectionCount },
             inspectionsSum = listDays.sumOf { it.inspectionSum },
             tripsCount = listDays.sumOf { it.tripCount },
             tripsSum = listDays.sumOf { it.tripSum },
             otherCount = listDays.sumOf { it.otherCount },
             otherSum = listDays.sumOf { it.otherSum }
-        ).also {
-            _statisticLD.value = it
-        }
+        )
     }
 
     fun createReport() {
 
-        if (listDays.isEmpty()) {
-            _reportLD.value = "Немає даних"
-            return
-        }
+        val listDays = mediatorLiveData.value
+        val statistic = statisticLD.value
+
+        if (listDays == null || statistic == null) return
 
         val monthNames = application.resources.getStringArray(R.array.month_name_for_picker)
-        //val clipboardManager = application.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         val date = listDays[0].date
         val stringBuilder = StringBuilder()

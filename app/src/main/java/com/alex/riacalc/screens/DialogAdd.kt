@@ -57,6 +57,9 @@ class DialogAdd: DialogFragment() {
                     binding.layEtDialogPrice.boxStrokeColor = resources.getColor(R.color.red_500)
                     binding.etDialogPrice.setText(R.string.text_0)
                     binding.etDialogPrice.setTextColor(resources.getColor(R.color.red_500))
+                    //binding.layEtDialogPrice.hasFocus()
+                    binding.etDialogPrice.requestFocus()
+
                     return@setOnClickListener
                 }
                 event.description = description

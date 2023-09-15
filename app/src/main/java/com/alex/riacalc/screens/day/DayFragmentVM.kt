@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.model.EventForDB
+import com.alex.riacalc.model.Statistic
 import com.alex.riacalc.repository.room.AppDatabase
 import com.alex.riacalc.repository.room.RoomRepository
 import com.alex.riacalc.utils.REPOSITORY
@@ -131,17 +131,6 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         _currentListLD = null
-    }
-
-    companion object {
-        data class Statistic(
-            var inspectionsCount: Int,
-            var inspectionsSum: Int,
-            var tripsCount: Int,
-            var tripsSum: Int,
-            var otherCount: Int,
-            var otherSum: Int
-        )
     }
 }
 

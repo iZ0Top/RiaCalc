@@ -84,7 +84,12 @@ class MonthFragment : Fragment(), OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+
         viewModel.calendarLD.removeObserver(observerDate)
+        viewModel.mediatorLiveData.removeObserver(observerDays)
+        viewModel.statisticLD.removeObserver(observerStatistic)
+        viewModel.reportLD.removeObserver(observerReport)
+
         _binding = null
     }
 
@@ -128,7 +133,6 @@ class MonthFragment : Fragment(), OnClickListener {
         viewModel.statisticLD.observe(viewLifecycleOwner, observerStatistic)
         viewModel.reportLD.observe(viewLifecycleOwner, observerReport)
     }
-
 
     override fun onClick(v: View?) {
         if (v != null) {
