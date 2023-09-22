@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -54,7 +55,6 @@ class DayFragment : Fragment(), OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _binding = FragmentDayBinding.inflate(inflater, container, false)
         mainBinding = (activity as MainActivity).binding
 
@@ -63,6 +63,8 @@ class DayFragment : Fragment(), OnClickListener {
         if (arguments != null){
             viewModel.setNewDate(requireArguments().getSerializable(KEY_ARGUMENTS_TO_DAY) as Calendar)
         }
+
+        (activity as MainActivity).window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
 
         layoutManager = LinearLayoutManager(requireContext())
 
