@@ -31,7 +31,7 @@ class DialogAdd: DialogFragment() {
         val event = arguments?.getSerializable(BUNDLE_EVENT_KEY) as Event
         val isNew = arguments?.getBoolean(BUNDLE_TYPE_KEY) as Boolean
 
-        changeView(event.type, isNew)
+        changeView(event.type)
 
         if (isNew) {
             if (event.type == TYPE_INSPECTION) binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
@@ -45,7 +45,7 @@ class DialogAdd: DialogFragment() {
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .setCancelable(true)
-            .setPositiveButton("OK", null)
+            .setPositiveButton(R.string.text_btn_ok, null)
             .create()
 
         dialog.setOnShowListener {
@@ -57,7 +57,6 @@ class DialogAdd: DialogFragment() {
                     binding.layEtDialogPrice.boxStrokeColor = resources.getColor(R.color.red_500)
                     binding.etDialogPrice.setText(R.string.text_0)
                     binding.etDialogPrice.setTextColor(resources.getColor(R.color.red_500))
-                    //binding.layEtDialogPrice.hasFocus()
                     binding.etDialogPrice.requestFocus()
 
                     return@setOnClickListener
@@ -81,15 +80,23 @@ class DialogAdd: DialogFragment() {
         Log.d("TAG", "DialogAdd - onDestroy")
     }
 
-    private fun changeView(type: Int, isNew: Boolean){
+    private fun changeView(type: Int){
         when(type){
             TYPE_TRIP -> {
                 binding.textDialogTitle.text = resources.getString(R.string.text_trip)
                 binding.textDialogPrice.text = resources.getString(R.string.text_cost)
+
+                binding.etDialogDescription.isFocusable = true
+                binding.etDialogDescription.isFocusableInTouchMode = true
+                binding.etDialogDescription.requestFocus()
             }
             TYPE_OTHER -> {
                 binding.textDialogTitle.text = resources.getString(R.string.text_other_expense)
                 binding.textDialogPrice.text = resources.getString(R.string.text_sum)
+
+                binding.etDialogDescription.isFocusable = true
+                binding.etDialogDescription.isFocusableInTouchMode = true
+                binding.etDialogDescription.requestFocus()
             }
         }
     }
