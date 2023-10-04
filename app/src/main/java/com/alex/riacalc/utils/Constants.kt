@@ -17,5 +17,7 @@ const val PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss"
 const val PATTERN_DATE_Y_M_D = "yyyy-MM-dd"
 const val PATTERN_DATE_Y_M = "yyyy-MM"
 
+const val PATTERN_DATE_D_M_Y = "dd.MM.yyyy"
+
 
 

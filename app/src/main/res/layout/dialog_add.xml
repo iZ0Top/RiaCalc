@@ -25,6 +25,8 @@
         android:ems="10"
         android:hint="@string/text_hint_add_description"
         app:hintEnabled="true"
+        app:errorEnabled="true"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:hintAnimationEnabled="true"
         android:selectAllOnFocus="true"
         android:layout_marginTop="16dp"
@@ -57,12 +59,12 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/lay_et_dialog_price"
-        android:layout_width="80dp"
+        android:layout_width="100dp"
         android:layout_height="match_parent"
         android:layout_marginTop="16dp"
         android:selectAllOnFocus="true"
         app:errorEnabled="true"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_dialog_price"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -72,6 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:selectAllOnFocus="true"
+            android:lines="1"
             android:inputType="numberDecimal"
             android:maxLength="3"
             android:digits="1234567890"

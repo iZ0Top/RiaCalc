@@ -2,6 +2,7 @@ package com.alex.riacalc.screens
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
@@ -50,17 +51,25 @@ class DialogAdd: DialogFragment() {
 
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+
                 val description = binding.etDialogDescription.text.toString()
                 val cost = binding.etDialogPrice.text.toString().toIntOrNull()
 
-                if (cost == 0 || cost == null){
-                    binding.layEtDialogPrice.boxStrokeColor = resources.getColor(R.color.red_500)
-                    binding.etDialogPrice.setText(R.string.text_0)
-                    binding.etDialogPrice.setTextColor(resources.getColor(R.color.red_500))
-                    binding.etDialogPrice.requestFocus()
+                if (event.type == TYPE_OTHER || event.type == TYPE_TRIP){
+                    if (binding.etDialogDescription.text.isNullOrEmpty()){
+                        binding.layEtDialogDescription.error = resources.getString(n)
+                        binding.etDialogDescription.requestFocus()
+                        return@setOnClickListener
+                    }
+                }
 
+                if (cost == 0 || cost == null){
+                    binding.etDialogPrice.setText(R.string.text_0)
+                    binding.layEtDialogPrice.error = " "
+                    binding.etDialogPrice.requestFocus()
                     return@setOnClickListener
                 }
+
                 event.description = description
                 event.cost = cost
 
@@ -71,7 +80,14 @@ class DialogAdd: DialogFragment() {
                 dialog.dismiss()
             }
         }
+
         return dialog
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
     }
 
     override fun onDestroy() {
@@ -85,18 +101,10 @@ class DialogAdd: DialogFragment() {
             TYPE_TRIP -> {
                 binding.textDialogTitle.text = resources.getString(R.string.text_trip)
                 binding.textDialogPrice.text = resources.getString(R.string.text_cost)
-
-                binding.etDialogDescription.isFocusable = true
-                binding.etDialogDescription.isFocusableInTouchMode = true
-                binding.etDialogDescription.requestFocus()
             }
             TYPE_OTHER -> {
                 binding.textDialogTitle.text = resources.getString(R.string.text_other_expense)
                 binding.textDialogPrice.text = resources.getString(R.string.text_sum)
-
-                binding.etDialogDescription.isFocusable = true
-                binding.etDialogDescription.isFocusableInTouchMode = true
-                binding.etDialogDescription.requestFocus()
             }
         }
     }

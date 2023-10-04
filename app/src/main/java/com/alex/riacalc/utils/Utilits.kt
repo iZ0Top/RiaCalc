@@ -37,6 +37,11 @@ fun convertDateToString(calendar: Calendar): String {
     return formatter.format(calendar.time)
 }
 
+fun convertDateForReport(calendar: Calendar): String{
+    val formatter = SimpleDateFormat(PATTERN_DATE_D_M_Y, Locale.getDefault())
+    return formatter.format(calendar.time)
+}
+
 fun convertDateAndTimeToCalendar(string: String): Calendar {
     val formatter = SimpleDateFormat(PATTERN_DATE_TIME, Locale.getDefault())
     val date = formatter.parse(string)

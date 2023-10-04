@@ -22,6 +22,7 @@ import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
+import com.alex.riacalc.utils.convertDateForReport
 import com.alex.riacalc.utils.convertDateToString
 import com.alex.riacalc.utils.toEvent
 import java.text.SimpleDateFormat
@@ -130,23 +131,14 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         val date = listDays[0].date
         val stringBuilder = StringBuilder()
             .append("${monthNames[date.get(Calendar.MONTH)]}. ${date.get(Calendar.YEAR)}")
-            .append(
-                application.resources.getString(
-                    R.string.template_inspections,
-                    statistic.inspectionsCount,
-                    statistic.inspectionsSum
-                )
-            )
-            .append(
-                application.resources.getString(
-                    R.string.template_expenses,
-                    (statistic.tripsSum + statistic.otherSum)
-                )
-            )
+            .append(application.resources.getString(R.string.template_inspections, statistic.inspectionsCount))
+            .append(application.resources.getString(R.string.template_trips, statistic.tripsSum))
+            .append(application.resources.getString(R.string.template_expenses, statistic.otherSum))
 
         for (day in listDays) {
             val dayEventsList = day.list
-            stringBuilder.append("\n${convertDateToString(day.date)}: ${day.inspectionCount}")
+//            stringBuilder.append("\n${convertDateForReport(day.date)}: Перевірки =  ${day.inspectionCount}")
+            stringBuilder.append(application.resources.getString(R.string.template_report_item, convertDateForReport(day.date), day.inspectionCount))
             if (day.tripCount != 0 || day.tripSum != 0) {
                 for (event in dayEventsList) {
                     when (event.type) {
