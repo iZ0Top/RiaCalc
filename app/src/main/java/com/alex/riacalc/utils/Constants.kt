@@ -13,7 +13,7 @@ const val TYPE_OTHER = 2
 const val KEY_ARGUMENTS_TO_MONTH = "key_argument_to_month"
 const val KEY_ARGUMENTS_TO_DAY = "key_argument_to_day"
 
-const val PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss"
+const val PATTERN_DATE_Y_M_D_H_S = "yyyy-MM-dd HH:mm:ss"
 const val PATTERN_DATE_Y_M_D = "yyyy-MM-dd"
 const val PATTERN_DATE_Y_M = "yyyy-MM"
 

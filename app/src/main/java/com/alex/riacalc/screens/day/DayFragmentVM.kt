@@ -11,6 +11,7 @@ import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.model.Statistic
 import com.alex.riacalc.repository.room.AppDatabase
 import com.alex.riacalc.repository.room.RoomRepository
+import com.alex.riacalc.utils.PATTERN_DATE_Y_M_D
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
@@ -30,7 +31,6 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     private var _mediatorLiveData = MediatorLiveData<List<Event>>()
     private var _calendarLD = MutableLiveData<Calendar>()
     private var _statisticLD = MutableLiveData<Statistic>()
-
 
     val calendarLD: LiveData<Calendar> get() = _calendarLD
     val statisticLD: LiveData<Statistic> get() = _statisticLD
@@ -52,7 +52,8 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
 
     fun loadEventsForDay(calendar: Calendar){
-        val day = convertDateToString(calendar)
+        //val day = convertDateToString(calendar)
+        val day = convertDateToString(calendar, PATTERN_DATE_Y_M_D)
 
         _currentListLD?.let {
             _mediatorLiveData.removeSource(it)

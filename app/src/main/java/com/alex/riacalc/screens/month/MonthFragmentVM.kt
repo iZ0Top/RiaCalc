@@ -1,28 +1,22 @@
 package com.alex.riacalc.screens.month
 
 import android.app.Application
-import android.content.ClipboardManager
-import android.content.Context
+
 import android.util.Log
-import android.view.Gravity
-import android.widget.Toast
-import androidx.compose.runtime.internal.composableLambdaInstance
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.alex.riacalc.R
 import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Event
-import com.alex.riacalc.model.EventForDB
 import com.alex.riacalc.model.Statistic
+import com.alex.riacalc.utils.PATTERN_DATE_D_M_Y
 import com.alex.riacalc.utils.PATTERN_DATE_Y_M
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
-import com.alex.riacalc.utils.convertDateForReport
 import com.alex.riacalc.utils.convertDateToString
 import com.alex.riacalc.utils.toEvent
 import java.text.SimpleDateFormat
@@ -137,8 +131,7 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
         for (day in listDays) {
             val dayEventsList = day.list
-//            stringBuilder.append("\n${convertDateForReport(day.date)}: Перевірки =  ${day.inspectionCount}")
-            stringBuilder.append(application.resources.getString(R.string.template_report_item, convertDateForReport(day.date), day.inspectionCount))
+            stringBuilder.append(application.resources.getString(R.string.template_report_item, convertDateToString(day.date, PATTERN_DATE_D_M_Y), day.inspectionCount))
             if (day.tripCount != 0 || day.tripSum != 0) {
                 for (event in dayEventsList) {
                     when (event.type) {

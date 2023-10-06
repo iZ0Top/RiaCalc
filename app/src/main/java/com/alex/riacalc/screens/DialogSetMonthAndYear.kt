@@ -16,7 +16,7 @@ import java.util.Calendar
 class DialogSetMonthAndYear : DialogFragment() {
 
     private var _binding: DialogMonthAndYearBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -38,7 +38,7 @@ class DialogSetMonthAndYear : DialogFragment() {
             displayedValues = monthNames
             value = month
             wrapSelectorWheel = false
-            setOnValueChangedListener(NumberPicker.OnValueChangeListener { _, old, new ->
+            setOnValueChangedListener(NumberPicker.OnValueChangeListener { _, _, new ->
                 month = new
             })
         }
@@ -48,7 +48,7 @@ class DialogSetMonthAndYear : DialogFragment() {
             maxValue = Calendar.getInstance().get(Calendar.YEAR)
             value = year
             wrapSelectorWheel = false
-            setOnValueChangedListener(NumberPicker.OnValueChangeListener { _, old, new ->
+            setOnValueChangedListener(NumberPicker.OnValueChangeListener { _, _, new ->
                 year = new
             })
         }
@@ -72,9 +72,9 @@ class DialogSetMonthAndYear : DialogFragment() {
 
     companion object {
 
+        private const val TAG_DIALOG_MONTH_AND_YEAR = "tag_dialog_month_and_year"
         const val BUNDLE_KEY_MONTH = "bundle_key_month"
         const val BUNDLE_KEY_YEAR = "bundle_key_year"
-        const val TAG_DIALOG_MONTH_AND_YEAR = "tag_dialog_month_and_year"
         const val REQUEST_KEY_DIALOG_MONTH_AND_YEAR = "request_key_dialog_month_and_year"
 
         fun show(fManager: FragmentManager, month: Int, year: Int) {

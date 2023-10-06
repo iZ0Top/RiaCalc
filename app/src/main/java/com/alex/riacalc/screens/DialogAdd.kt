@@ -4,8 +4,11 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.res.Resources.Theme
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentResultListener
@@ -47,7 +50,9 @@ class DialogAdd: DialogFragment() {
             .setView(binding.root)
             .setCancelable(true)
             .setPositiveButton(R.string.text_btn_ok, null)
+            .setNegativeButton(R.string.text_btn_cancel, null)
             .create()
+
 
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
@@ -57,8 +62,7 @@ class DialogAdd: DialogFragment() {
 
                 if (event.type == TYPE_OTHER || event.type == TYPE_TRIP){
                     if (binding.etDialogDescription.text.isNullOrEmpty()){
-                        binding.layEtDialogDescription.error = resources.getString(n)
-                        binding.etDialogDescription.requestFocus()
+                        binding.layEtDialogDescription.error = resources.getString(R.string.text_need_add_description)
                         return@setOnClickListener
                     }
                 }
@@ -79,15 +83,24 @@ class DialogAdd: DialogFragment() {
                 parentFragmentManager.setFragmentResult(DIALOG_REQUEST_KEY, bundleRequest)
                 dialog.dismiss()
             }
+
+            binding.etDialogDescription.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrBlank()) binding.layEtDialogDescription.error = null
+                }
+                override fun afterTextChanged(p0: Editable?) { }
+            })
+
+            binding.etDialogPrice.addTextChangedListener(object : TextWatcher{
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    if (!p0.isNullOrBlank()) binding.layEtDialogPrice.error = null
+                }
+                override fun afterTextChanged(p0: Editable?) {}
+            })
         }
-
         return dialog
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-
     }
 
     override fun onDestroy() {
@@ -115,14 +128,14 @@ class DialogAdd: DialogFragment() {
         const val BUNDLE_TYPE_KEY = "bundle_status_key"
         const val DIALOG_REQUEST_KEY = "add_request-key"
 
-        fun show(fManager: FragmentManager, event: Event, isNew: Boolean){                          //публічний метод з конструктором (фрагментменеджер та аргументи)
+        fun show(fManager: FragmentManager, event: Event, isNew: Boolean){
             Log.d("TAG", "DialogAdd - show")
-            val dialogFragment = DialogAdd()                                                        //створюємо екземляр діалога
+            val dialogFragment = DialogAdd()
             val bundle = Bundle()
             bundle.putSerializable(BUNDLE_EVENT_KEY, event)
             bundle.putBoolean(BUNDLE_TYPE_KEY, isNew)
-            dialogFragment.arguments = bundle                                                       //передаемо аргументи в діалог через бандл, бандл створюємо тут же
-            dialogFragment.show(fManager, DIALOG_ADD_TAG)                                           //показ діалога (фрагмент менеджер і тег діалога)
+            dialogFragment.arguments = bundle
+            dialogFragment.show(fManager, DIALOG_ADD_TAG)
         }
 
         fun setupListener(fManager: FragmentManager, lcOwner: LifecycleOwner, listener: (Event, Boolean) -> Unit){
