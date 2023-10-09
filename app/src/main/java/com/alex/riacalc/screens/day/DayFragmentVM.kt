@@ -52,7 +52,6 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
 
     fun loadEventsForDay(calendar: Calendar){
-        //val day = convertDateToString(calendar)
         val day = convertDateToString(calendar, PATTERN_DATE_Y_M_D)
 
         _currentListLD?.let {

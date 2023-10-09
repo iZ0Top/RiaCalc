@@ -12,7 +12,7 @@ import com.alex.riacalc.utils.AppPreferences
 class DialogCostSetting : DialogFragment() {
 
     private var _binding: DialogCostSettingBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 

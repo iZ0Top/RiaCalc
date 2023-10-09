@@ -38,8 +38,12 @@ class DialogAdd: DialogFragment() {
         changeView(event.type)
 
         if (isNew) {
-            if (event.type == TYPE_INSPECTION) binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
-            else binding.etDialogPrice.setText(R.string.text_0)
+            if (event.type == TYPE_INSPECTION){
+                binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
+            }
+//            else{
+//                binding.etDialogPrice.text = null
+//            }
         }
         else{
             binding.etDialogDescription.setText(event.description)
@@ -68,7 +72,7 @@ class DialogAdd: DialogFragment() {
                 }
 
                 if (cost == 0 || cost == null){
-                    binding.etDialogPrice.setText(R.string.text_0)
+                    binding.etDialogPrice.text = null
                     binding.layEtDialogPrice.error = " "
                     binding.etDialogPrice.requestFocus()
                     return@setOnClickListener

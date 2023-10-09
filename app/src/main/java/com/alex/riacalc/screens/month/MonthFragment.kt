@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.OnClickListener
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -69,11 +71,11 @@ class MonthFragment : Fragment(), OnClickListener {
         binding.recyclerViewMonth.adapter = adapter
 
         with(mainBinding.toolbar){
-            toolbarBtnSetting.visibility = View.GONE
-            toolbarBtnMonth.visibility = View.GONE
+            toolbarBtnSetting.visibility = GONE
+            toolbarBtnMonth.visibility = GONE
 
-            toolbarBtnBack.visibility = View.VISIBLE
-            toolbarBtnExport.visibility = View.VISIBLE
+            toolbarBtnBack.visibility = VISIBLE
+            toolbarBtnExport.visibility = VISIBLE
 
             toolbarFrameDate.setOnClickListener(this@MonthFragment)
             toolbarBtnExport.setOnClickListener(this@MonthFragment)
@@ -109,6 +111,17 @@ class MonthFragment : Fragment(), OnClickListener {
             viewModel.loadEventsForMonth(it)
         }
         observerDays = Observer {
+            if (it.isNotEmpty()){
+                binding.monthProgressBar.visibility = GONE
+                binding.monthTextNoData.visibility = GONE
+                binding.recyclerViewMonth.visibility = VISIBLE
+                mainBinding.toolbar.toolbarBtnExport.visibility = GONE
+            } else {
+                binding.monthProgressBar.visibility = GONE
+                binding.recyclerViewMonth.visibility = GONE
+                binding.monthTextNoData.visibility = VISIBLE
+                mainBinding.toolbar.toolbarBtnExport.visibility = VISIBLE
+            }
             adapter.setList(it)
         }
         observerStatistic = Observer {

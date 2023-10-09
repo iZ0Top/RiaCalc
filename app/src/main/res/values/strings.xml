@@ -56,6 +56,8 @@
     <string name="tmp_day_month">день / місяць</string>
     <string name="tmp_date_year">число / рік</string>
 
+    <string name="text_no_month_data">(За цей місяць немає даних)</string>
+
     <string-array name="day_name">
         <item>Неділя</item>
         <item>Понеділок</item>

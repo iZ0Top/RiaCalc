@@ -3,7 +3,6 @@ package com.alex.riacalc.utils
 import com.alex.riacalc.MainActivity
 import com.alex.riacalc.repository.room.RoomRepository
 
-lateinit var APP: MainActivity
 lateinit var REPOSITORY: RoomRepository
 
 const val TYPE_INSPECTION = 0
@@ -16,8 +15,9 @@ const val KEY_ARGUMENTS_TO_DAY = "key_argument_to_day"
 const val PATTERN_DATE_Y_M_D_H_S = "yyyy-MM-dd HH:mm:ss"
 const val PATTERN_DATE_Y_M_D = "yyyy-MM-dd"
 const val PATTERN_DATE_Y_M = "yyyy-MM"
-
 const val PATTERN_DATE_D_M_Y = "dd.MM.yyyy"
 
+const val PREF_NAME = "pref_name"
+const val PREF_DEFAULT_COST = "default_cost"
 
 
