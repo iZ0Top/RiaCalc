@@ -57,6 +57,8 @@
     <string name="tmp_date_year">число / рік</string>
 
     <string name="text_no_month_data">(За цей місяць немає даних)</string>
+    <string name="text_cost_default_inspection_car_dealership">Вартість перевірки автосалону</string>
+    <string name="text_car_dealership">Автосалон</string>
 
     <string-array name="day_name">
         <item>Неділя</item>

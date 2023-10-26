@@ -92,4 +92,14 @@
         app:layout_constraintStart_toEndOf="@+id/lay_et_dialog_price"
         app:layout_constraintTop_toTopOf="@+id/lay_et_dialog_price" />
 
+    <CheckBox
+        android:id="@+id/checkbox_car_dealership"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_car_dealership"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lay_et_dialog_description" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

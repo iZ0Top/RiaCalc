@@ -15,8 +15,15 @@ object AppPreferences {
     fun setReviewDefaultCost(value: Int){
         mPreferences.edit().putInt(PREF_DEFAULT_COST, value).apply()
     }
+    fun setReviewCarDealershipCost(value: Int){
+        mPreferences.edit().putInt(PREF_DEFAULT_CAR_DEALERSHIP_COST, value).apply()
+    }
 
     fun getReviewDefaultCost(): Int{
         return mPreferences.getInt(PREF_DEFAULT_COST, 0)
     }
+    fun getReviewCarDealershipCost(): Int{
+        return mPreferences.getInt(PREF_DEFAULT_CAR_DEALERSHIP_COST, 0)
+    }
+
 }

@@ -5,7 +5,7 @@ import java.util.Calendar
 
 data class Event(
     val id: Int,
-    val type: Int,
+    var type: Int,
     var cost: Int,
     var description: String,
     var date: Calendar

@@ -20,6 +20,7 @@ class DialogCostSetting : DialogFragment() {
         _binding = DialogCostSettingBinding.inflate(inflater)
 
         binding.dialogCostSettingEt.setText(AppPreferences.getReviewDefaultCost().toString())
+        binding.dialogCostCarDealershipSettingEt.setText(AppPreferences.getReviewCarDealershipCost().toString())
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -31,13 +32,21 @@ class DialogCostSetting : DialogFragment() {
 
         dialog.setOnShowListener {
             dialog.getButton(Dialog.BUTTON_POSITIVE).setOnClickListener {
-                val value = binding.dialogCostSettingEt.text.toString().toIntOrNull()
-                if (value == null || value == 0) {
-                    binding.dialogCostSettingEt.setText(requireContext().getText(R.string.text_0))
-                    binding.dialogCostSettingTiLayout.error = requireContext().getString(R.string.text_need_specify_cost)
+                val costInspection = binding.dialogCostSettingEt.text.toString().toIntOrNull()
+                val costCarDealershipInspection = binding.dialogCostCarDealershipSettingEt.text.toString().toIntOrNull()
+                if (costInspection == null || costInspection == 0) {
+                    binding.dialogCostSettingEt.setText(0)
+                    binding.dialogCostSettingTiLayout.error = " "
                     return@setOnClickListener
                 }
-                AppPreferences.setReviewDefaultCost(value)
+                if (costCarDealershipInspection == null || costCarDealershipInspection == 0){
+                    binding.dialogCostCarDealershipSettingEt.setText(0)
+                    binding.dialogCostCarDealershipSettingTiLayout.error = " "
+                    return@setOnClickListener
+                }
+
+                AppPreferences.setReviewDefaultCost(costInspection)
+                AppPreferences.setReviewCarDealershipCost(costCarDealershipInspection)
                 dialog.dismiss()
             }
         }

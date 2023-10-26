@@ -6,8 +6,10 @@ import com.alex.riacalc.repository.room.RoomRepository
 lateinit var REPOSITORY: RoomRepository
 
 const val TYPE_INSPECTION = 0
-const val TYPE_TRIP = 1
-const val TYPE_OTHER = 2
+const val TYPE_INSPECTION_CAR_DEALERSHIP = 1
+const val TYPE_TRIP = 2
+const val TYPE_OTHER = 3
+
 
 const val KEY_ARGUMENTS_TO_MONTH = "key_argument_to_month"
 const val KEY_ARGUMENTS_TO_DAY = "key_argument_to_day"
@@ -19,5 +21,6 @@ const val PATTERN_DATE_D_M_Y = "dd.MM.yyyy"
 
 const val PREF_NAME = "pref_name"
 const val PREF_DEFAULT_COST = "default_cost"
+const val PREF_DEFAULT_CAR_DEALERSHIP_COST = "default_car_dealership_cost"
 
 

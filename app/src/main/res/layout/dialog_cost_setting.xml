@@ -2,49 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/dialog_cost_setting_ti_layout"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:errorEnabled="true"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_tv_header">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/dialog_cost_setting_et"
-            android:inputType="numberDecimal"
-            android:digits="0123456789"
-            android:lines="1"
-            android:maxLength="3"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <TextView
-        android:id="@+id/dialog_cost_setting_currency"
+        android:id="@+id/dialog_cost_setting_tv_header"
         style="@style/text_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginBottom="14dp"
-        android:text="@string/text_currency"
-        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_setting_ti_layout"
-        app:layout_constraintStart_toEndOf="@+id/dialog_cost_setting_ti_layout"
-        app:layout_constraintTop_toTopOf="@+id/dialog_cost_setting_ti_layout" />
-
-    <TextView
-        android:id="@+id/dialog_cost_setting_tv_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/text_headline_h1"
         android:layout_marginTop="16dp"
         android:text="@string/text_cost_default_inspection"
         app:layout_constraintBottom_toTopOf="@id/dialog_cost_setting_ti_layout"
@@ -52,14 +18,84 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_cost_setting_ti_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:errorEnabled="true"
+app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_tv_header">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_cost_setting_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxLength="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
-        android:visibility="gone"
-        android:id="@+id/dialog_cost_setting_tv_info"
+        android:id="@+id/dialog_cost_setting_currency"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/text_currency"
+        app:layout_constraintStart_toEndOf="@+id/dialog_cost_setting_ti_layout"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_setting_ti_layout" />
+
+    <TextView
+        android:id="@+id/dialog_cost_car_dealership_setting_tv_header"
+        style="@style/text_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_cost_default_inspection_car_dealership"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_cost_setting_ti_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_ti_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_cost_car_dealership_setting_ti_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_dealership_setting_tv_header">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_cost_car_dealership_setting_et"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:digits="0123456789"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxLength="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/dialog_cost_car_dealership_setting_currency"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/text_currency"
+        app:layout_constraintStart_toEndOf="@+id/dialog_cost_car_dealership_setting_ti_layout"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_car_dealership_setting_ti_layout" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

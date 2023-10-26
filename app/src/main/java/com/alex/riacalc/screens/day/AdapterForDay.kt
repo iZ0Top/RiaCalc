@@ -16,11 +16,12 @@ interface ActionListener {
     fun onShowDetails(event: Event)
 }
 
-class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Adapter<AdapterForDay.MyHolder>(), View.OnClickListener {
+class AdapterForDay(private val actionListener: ActionListener) :
+    RecyclerView.Adapter<AdapterForDay.MyHolder>(), View.OnClickListener {
 
     private var listEvents: List<Event> = emptyList()
 
-    fun setList(list: List<Event>){
+    fun setList(list: List<Event>) {
         listEvents = list
         notifyDataSetChanged()
     }
@@ -42,32 +43,39 @@ class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Ad
         holder.itemView.tag = event
         holder.binding.itemPopupMenu.tag = event
 
-        when(event.type){
+
+
+        when (event.type) {
             0 -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
-                if (event.cost <= AppPreferences.getReviewDefaultCost())
-                    holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
-                else {
-                    holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.blue_100))
-                }
+                holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
             }
-            1, 2 -> {
+            1 -> {
+                holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
+                holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
+            }
+            2, 3 -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_expense, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.red_100))
             }
         }
     }
-    class MyHolder(val binding: ItemEventBinding): RecyclerView.ViewHolder(binding.root)
+
+    class MyHolder(val binding: ItemEventBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onClick(v: View) {
         val event = v.tag as Event
-        when(v.id){
-            R.id.item_popup_menu -> { showPopUpMenu(v) }
+        when (v.id) {
+            R.id.item_popup_menu -> {
+                showPopUpMenu(v)
+            }
+
             else -> {
                 actionListener.onShowDetails(event)
             }
         }
     }
+
     private fun showPopUpMenu(view: View) {
         val popupMenu = PopupMenu(view.context, view)
         val event = view.tag as Event
@@ -75,10 +83,11 @@ class AdapterForDay(private val actionListener: ActionListener): RecyclerView.Ad
         popupMenu.menu.add(0, ID_MENU_EDIT, 0, R.string.text_edit)
         popupMenu.menu.add(0, ID_MENU_DELETE, 0, R.string.text_delete)
         popupMenu.setOnMenuItemClickListener {
-            when(it.itemId){
+            when (it.itemId) {
                 ID_MENU_EDIT -> {
                     actionListener.onEditEvent(event)
                 }
+
                 ID_MENU_DELETE -> {
                     actionListener.onDeleteEvent(event)
                 }
