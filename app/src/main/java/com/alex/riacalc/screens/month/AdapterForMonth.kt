@@ -59,7 +59,6 @@ class AdapterForMonth(private val actionListenerDay: ActionListenerDay): Recycle
         holder.binding.itemDayRecyclerview.adapter = adapter
     }
 
-
     class MyHolder(val binding: ItemDayBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onClick(v: View) {

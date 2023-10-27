@@ -15,6 +15,7 @@ import com.alex.riacalc.utils.PATTERN_DATE_D_M_Y
 import com.alex.riacalc.utils.PATTERN_DATE_Y_M
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 import com.alex.riacalc.utils.convertDateToString
@@ -70,7 +71,8 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
             for (event in events) {
                 when (event.type) {
-                    TYPE_INSPECTION -> {
+                    TYPE_INSPECTION,
+                    TYPE_INSPECTION_CAR_DEALERSHIP -> {
                         inspectionCount++
                         inspectionSum += event.cost
                     }

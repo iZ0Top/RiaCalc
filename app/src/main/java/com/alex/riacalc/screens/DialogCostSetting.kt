@@ -4,10 +4,8 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.alex.riacalc.R
 import com.alex.riacalc.databinding.DialogCostSettingBinding
 import com.alex.riacalc.utils.AppPreferences
-
 
 class DialogCostSetting : DialogFragment() {
 
@@ -32,19 +30,20 @@ class DialogCostSetting : DialogFragment() {
 
         dialog.setOnShowListener {
             dialog.getButton(Dialog.BUTTON_POSITIVE).setOnClickListener {
+
                 val costInspection = binding.dialogCostSettingEt.text.toString().toIntOrNull()
                 val costCarDealershipInspection = binding.dialogCostCarDealershipSettingEt.text.toString().toIntOrNull()
+
                 if (costInspection == null || costInspection == 0) {
-                    binding.dialogCostSettingEt.setText(0)
+                    binding.dialogCostSettingEt.hint = "0"
                     binding.dialogCostSettingTiLayout.error = " "
                     return@setOnClickListener
                 }
                 if (costCarDealershipInspection == null || costCarDealershipInspection == 0){
-                    binding.dialogCostCarDealershipSettingEt.setText(0)
+                    binding.dialogCostCarDealershipSettingEt.hint = "0"
                     binding.dialogCostCarDealershipSettingTiLayout.error = " "
                     return@setOnClickListener
                 }
-
                 AppPreferences.setReviewDefaultCost(costInspection)
                 AppPreferences.setReviewCarDealershipCost(costCarDealershipInspection)
                 dialog.dismiss()

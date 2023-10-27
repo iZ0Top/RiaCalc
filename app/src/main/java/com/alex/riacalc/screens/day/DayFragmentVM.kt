@@ -14,6 +14,7 @@ import com.alex.riacalc.repository.room.RoomRepository
 import com.alex.riacalc.utils.PATTERN_DATE_Y_M_D
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 import com.alex.riacalc.utils.convertDateToString
@@ -104,7 +105,8 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
 
         for (i in list) {
             when (i.type) {
-                TYPE_INSPECTION -> {
+                TYPE_INSPECTION,
+                TYPE_INSPECTION_CAR_DEALERSHIP -> {
                     inspectionsCount++
                     inspectionsSum += i.cost
                 }

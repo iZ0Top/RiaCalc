@@ -10,7 +10,6 @@ const val TYPE_INSPECTION_CAR_DEALERSHIP = 1
 const val TYPE_TRIP = 2
 const val TYPE_OTHER = 3
 
-
 const val KEY_ARGUMENTS_TO_MONTH = "key_argument_to_month"
 const val KEY_ARGUMENTS_TO_DAY = "key_argument_to_day"
 

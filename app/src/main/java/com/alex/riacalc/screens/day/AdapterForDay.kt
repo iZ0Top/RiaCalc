@@ -43,8 +43,6 @@ class AdapterForDay(private val actionListener: ActionListener) :
         holder.itemView.tag = event
         holder.binding.itemPopupMenu.tag = event
 
-
-
         when (event.type) {
             0 -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
@@ -52,9 +50,10 @@ class AdapterForDay(private val actionListener: ActionListener) :
             }
             1 -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
-                holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
+                holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.blue_100))
             }
-            2, 3 -> {
+            2,
+            3 -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_expense, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.red_100))
             }
@@ -69,7 +68,6 @@ class AdapterForDay(private val actionListener: ActionListener) :
             R.id.item_popup_menu -> {
                 showPopUpMenu(v)
             }
-
             else -> {
                 actionListener.onShowDetails(event)
             }
@@ -87,7 +85,6 @@ class AdapterForDay(private val actionListener: ActionListener) :
                 ID_MENU_EDIT -> {
                     actionListener.onEditEvent(event)
                 }
-
                 ID_MENU_DELETE -> {
                     actionListener.onDeleteEvent(event)
                 }

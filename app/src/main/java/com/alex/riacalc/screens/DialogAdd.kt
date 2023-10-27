@@ -2,14 +2,12 @@ package com.alex.riacalc.screens
 
 import android.app.Dialog
 import android.content.DialogInterface
-import android.content.res.Resources.Theme
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentResultListener
@@ -39,15 +37,6 @@ class DialogAdd : DialogFragment() {
 
         changeView(event.type)
 
-//        if (isNew) {
-//            if (event.type == TYPE_INSPECTION){
-//                binding.etDialogPrice.setText(AppPreferences.getReviewDefaultCost().toString())
-//            }
-//        }
-//        else{
-//            binding.etDialogDescription.setText(event.description)
-//            binding.etDialogPrice.setText(event.cost.toString())
-//        }
         if (!isNew) {
             binding.etDialogDescription.setText(event.description)
 
@@ -82,7 +71,6 @@ class DialogAdd : DialogFragment() {
                             event.cost = AppPreferences.getReviewDefaultCost()
                         }
                     }
-
                     TYPE_TRIP,
                     TYPE_OTHER -> {
                         val description = binding.etDialogDescription.text.toString()
@@ -104,49 +92,12 @@ class DialogAdd : DialogFragment() {
                         event.cost = cost
                     }
                 }
-
-
-//                val description = binding.etDialogDescription.text.toString()
-//                val cost = binding.etDialogPrice.text.toString().toIntOrNull()
-//
-//                if (event.type == TYPE_OTHER || event.type == TYPE_TRIP){
-//                    if (binding.etDialogDescription.text.isNullOrEmpty()){
-//                        binding.layEtDialogDescription.error = resources.getString(R.string.text_need_add_description)
-//                        return@setOnClickListener
-//                    }
-//                }
-//
-//                if (cost == 0 || cost == null){
-//                    binding.etDialogPrice.text = null
-//                    binding.layEtDialogPrice.error = " "
-//                    binding.etDialogPrice.requestFocus()
-//                    return@setOnClickListener
-//                }
-//
-//                event.description = description
-//                event.cost = cost
-
                 val bundleRequest = Bundle()
                 bundleRequest.putSerializable(BUNDLE_EVENT_KEY, event)
                 bundleRequest.putBoolean(BUNDLE_TYPE_KEY, isNew)
                 parentFragmentManager.setFragmentResult(DIALOG_REQUEST_KEY, bundleRequest)
                 dialog.dismiss()
             }
-//            binding.etDialogDescription.addTextChangedListener(object : TextWatcher{
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    if (!p0.isNullOrBlank()) binding.layEtDialogDescription.error = null
-//                }
-//                override fun afterTextChanged(p0: Editable?) { }
-//            })
-//
-//            binding.etDialogPrice.addTextChangedListener(object : TextWatcher{
-//                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-//                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-//                    if (!p0.isNullOrBlank()) binding.layEtDialogPrice.error = null
-//                }
-//                override fun afterTextChanged(p0: Editable?) {}
-//            })
         }
         return dialog
     }
@@ -212,14 +163,11 @@ class DialogAdd : DialogFragment() {
             listener: (Event, Boolean) -> Unit
         ) {
             Log.d("TAG", "DialogAdd - setupListener")
-            fManager.setFragmentResultListener(
-                DIALOG_REQUEST_KEY,
-                lcOwner,
-                FragmentResultListener { _, result ->
-                    val event = result.getSerializable(BUNDLE_EVENT_KEY) as Event
-                    val isNew = result.getBoolean(BUNDLE_TYPE_KEY)
-                    listener.invoke(event, isNew)
-                })
+            fManager.setFragmentResultListener(DIALOG_REQUEST_KEY, lcOwner) { _, result ->
+                val event = result.getSerializable(BUNDLE_EVENT_KEY) as Event
+                val isNew = result.getBoolean(BUNDLE_TYPE_KEY)
+                listener.invoke(event, isNew)
+            }
         }
     }
 }

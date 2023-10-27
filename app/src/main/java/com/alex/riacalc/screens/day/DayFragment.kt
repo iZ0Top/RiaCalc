@@ -3,7 +3,6 @@ package com.alex.riacalc.screens.day
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
@@ -27,6 +26,7 @@ import com.alex.riacalc.utils.AppPreferences
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
 import com.alex.riacalc.utils.TYPE_INSPECTION
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 import java.util.Calendar
@@ -48,13 +48,13 @@ class DayFragment : Fragment(), OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(DayFragmentVM::class.java)
+        viewModel = ViewModelProvider(this)[DayFragmentVM::class.java]
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDayBinding.inflate(inflater, container, false)
         mainBinding = (activity as MainActivity).binding
 
@@ -188,7 +188,7 @@ class DayFragment : Fragment(), OnClickListener {
     private fun showDatePickerDialog() {
 
         DatePickerDialog(
-            requireContext(), DatePickerDialog.OnDateSetListener { _, i, i2, i3 ->
+            requireContext(), { _, i, i2, i3 ->
                 val newCalendar = Calendar.getInstance()
                 newCalendar.set(i, i2, i3)
                 viewModel.setNewDate(newCalendar)
@@ -235,6 +235,10 @@ class DayFragment : Fragment(), OnClickListener {
         when(event.type){
             TYPE_INSPECTION -> {
                 dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
+            }
+            TYPE_INSPECTION_CAR_DEALERSHIP -> {
+                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection_car_dealership)
                 dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
             }
             TYPE_TRIP -> {

@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
     val binding get() = _binding!!
     private lateinit var toolbar: Toolbar
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
         AppPreferences.getPreferences(this)
     }
-
 
     override fun onDestroy() {
         super.onDestroy()
