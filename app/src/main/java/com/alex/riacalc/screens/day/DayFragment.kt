@@ -93,7 +93,6 @@ class DayFragment : Fragment(), OnClickListener {
         return binding.root
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
 

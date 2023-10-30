@@ -46,14 +46,18 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         val formatter = SimpleDateFormat(PATTERN_DATE_Y_M, Locale.getDefault())
         val date = formatter.format(calendar.time)
 
-        val eventsLD = REPOSITORY.eventDao.getEventsForMonth(date)                                  //Отримуємо список з бази даних як ЛайвДату
+        val eventsLD =
+            REPOSITORY.eventDao.getEventsForMonth(date)                                  //Отримуємо список з бази даних як ЛайвДату
 
         mediatorLiveData.addSource(eventsLD) { listEventForDB ->                                    //Додаємо в МедіаторЛайвДата джерело - отриману ЛайвДату
-            val events = listEventForDB.map { toEvent(it) }.toList()                                //Обробка в лямблі даних з джерела, перетворення Івентів
-            val days = createDays(events).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }           //Обробка в лямблі даних з джерела, Створення Днів
+            val events = listEventForDB.map { toEvent(it) }
+                .toList()                                //Обробка в лямблі даних з джерела, перетворення Івентів
+            val days =
+                createDays(events).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }           //Обробка в лямблі даних з джерела, Створення Днів
 
             calculateStatistic(days)
-            mediatorLiveData.value = days                                                           //Присвоєння МедіаторЛайвДаті списка дні
+            mediatorLiveData.value =
+                days                                                           //Присвоєння МедіаторЛайвДаті списка дні
         }
     }
 
@@ -133,7 +137,13 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
         for (day in listDays) {
             val dayEventsList = day.list
-            stringBuilder.append(application.resources.getString(R.string.template_report_item, convertDateToString(day.date, PATTERN_DATE_D_M_Y), day.inspectionCount))
+            stringBuilder.append(
+                application.resources.getString(
+                    R.string.template_report_item,
+                    convertDateToString(day.date, PATTERN_DATE_D_M_Y),
+                    day.inspectionCount
+                )
+            )
             if (day.tripCount != 0 || day.tripSum != 0) {
                 for (event in dayEventsList) {
                     when (event.type) {

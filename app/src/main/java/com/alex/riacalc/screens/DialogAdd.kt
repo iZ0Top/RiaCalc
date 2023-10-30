@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentResultListener
@@ -69,6 +70,7 @@ class DialogAdd : DialogFragment() {
                             event.type = TYPE_INSPECTION_CAR_DEALERSHIP
                         } else {
                             event.cost = AppPreferences.getReviewDefaultCost()
+                            event.type = TYPE_INSPECTION
                         }
                     }
                     TYPE_TRIP,
@@ -79,13 +81,13 @@ class DialogAdd : DialogFragment() {
                         addTextChangeListener()
 
                         if (description.isEmpty()) {
-                            binding.etDialogDescription.error =
+                            binding.layEtDialogDescription.error =
                                 resources.getString(R.string.text_need_add_description)
                             return@setOnClickListener
                         }
 
                         if (cost == null || cost == 0) {
-                            binding.etDialogPrice.error = " "
+                            binding.layEtDialogPrice.error = " "
                             return@setOnClickListener
                         }
                         event.description = description
@@ -135,11 +137,17 @@ class DialogAdd : DialogFragment() {
         binding.etDialogDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrBlank()) binding.etDialogDescription.error = null
+                if (!p0.isNullOrBlank()) binding.layEtDialogDescription.error = null
             }
-
             override fun afterTextChanged(p0: Editable?) {}
         })
+        binding.etDialogPrice.addTextChangedListener { object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (!p0.isNullOrBlank()) binding.layEtDialogPrice.error = null
+            }
+            override fun afterTextChanged(p0: Editable?) {}
+        } }
     }
 
     companion object {
