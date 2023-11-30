@@ -115,12 +115,12 @@ class MonthFragment : Fragment(), OnClickListener {
                 binding.monthProgressBar.visibility = GONE
                 binding.monthTextNoData.visibility = GONE
                 binding.recyclerViewMonth.visibility = VISIBLE
-                mainBinding.toolbar.toolbarBtnExport.visibility = GONE
+                mainBinding.toolbar.toolbarBtnExport.visibility = VISIBLE
             } else {
                 binding.monthProgressBar.visibility = GONE
                 binding.recyclerViewMonth.visibility = GONE
                 binding.monthTextNoData.visibility = VISIBLE
-                mainBinding.toolbar.toolbarBtnExport.visibility = VISIBLE
+                mainBinding.toolbar.toolbarBtnExport.visibility = GONE
             }
             adapter.setList(it)
         }
