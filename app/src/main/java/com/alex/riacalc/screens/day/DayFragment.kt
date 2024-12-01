@@ -80,6 +80,7 @@ class DayFragment : Fragment(), OnClickListener {
         binding.btnAddOther.setOnClickListener(this)
 
         with(mainBinding.toolbar){
+
             toolbarBtnExport.visibility = View.GONE
             toolbarBtnBack.visibility = View.GONE
 

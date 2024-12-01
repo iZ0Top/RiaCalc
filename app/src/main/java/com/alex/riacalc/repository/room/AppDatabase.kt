@@ -10,7 +10,6 @@ import com.alex.riacalc.model.EventForDB
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getEventDao(): RoomDao
-
     companion object {
         @Volatile
         private var db: AppDatabase? = null

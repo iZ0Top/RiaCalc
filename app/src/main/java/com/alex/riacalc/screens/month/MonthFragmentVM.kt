@@ -47,17 +47,17 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         val date = formatter.format(calendar.time)
 
         val eventsLD =
-            REPOSITORY.eventDao.getEventsForMonth(date)                                  //Отримуємо список з бази даних як ЛайвДату
+            REPOSITORY.eventDao.getEventsForMonth(date)                                             //Отримуємо список з бази даних як ЛайвДату
 
         mediatorLiveData.addSource(eventsLD) { listEventForDB ->                                    //Додаємо в МедіаторЛайвДата джерело - отриману ЛайвДату
             val events = listEventForDB.map { toEvent(it) }
-                .toList()                                //Обробка в лямблі даних з джерела, перетворення Івентів
+                .toList()                                                                           //Обробка в лямблі даних з джерела, перетворення Івентів
             val days =
-                createDays(events).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }           //Обробка в лямблі даних з джерела, Створення Днів
+                createDays(events).sortedBy { it.date.get(Calendar.DAY_OF_MONTH) }                  //Обробка в лямблі даних з джерела, Створення Днів
 
             calculateStatistic(days)
             mediatorLiveData.value =
-                days                                                           //Присвоєння МедіаторЛайвДаті списка дні
+                days                                                                                //Присвоєння МедіаторЛайвДаті списка дні
         }
     }
 
@@ -156,7 +156,6 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         }
         _reportLD.value = stringBuilder.toString()
     }
-
 
     override fun onCleared() {
         super.onCleared()

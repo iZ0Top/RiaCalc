@@ -27,8 +27,30 @@ class MainActivity : AppCompatActivity() {
         AppPreferences.getPreferences(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("m", "onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("m", "onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("m", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("m", "onStop")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        Log.d("m", "onDestroy")
         _binding = null
+
     }
 }
