@@ -7,7 +7,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -19,6 +24,9 @@ import com.alex.riacalc.model.Event
 import com.alex.riacalc.utils.AppPreferences
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
+import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
+import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 
@@ -26,6 +34,9 @@ class DialogAdd : DialogFragment() {
 
     private var _binding: DialogAddBinding? = null
     private val binding get() = _binding!!
+
+    private var mSpinner: AppCompatSpinner? = null
+
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Log.d("TAG", "DialogAdd - onCreateDialog")
@@ -36,19 +47,21 @@ class DialogAdd : DialogFragment() {
         val event = arguments?.getSerializable(BUNDLE_EVENT_KEY) as Event
         val isNew = arguments?.getBoolean(BUNDLE_TYPE_KEY) as Boolean
 
-        changeView(event.type)
+        modifyView(event, isNew)
 
-        if (!isNew) {
-            binding.etDialogDescription.setText(event.description)
 
-            if (event.type == TYPE_INSPECTION_CAR_DEALERSHIP) {
-                binding.checkboxCarDealership.isChecked = true
-            }
+//        if (!isNew) {
+//            binding.etDialogDescription.setText(event.description)
+//
+//            if (event.type == TYPE_INSPECTION_CAR_DEALERSHIP ) {
+//                //binding.checkboxCarDealership.isChecked = true                                    використовується при редагувані
+//            }
+//
+//            if (event.type == TYPE_OTHER || event.type == TYPE_TRIP) {
+//                binding.etDialogPrice.setText(event.cost.toString())
+//            }
+//        }
 
-            if (event.type == TYPE_OTHER || event.type == TYPE_TRIP) {
-                binding.etDialogPrice.setText(event.cost.toString())
-            }
-        }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -62,8 +75,51 @@ class DialogAdd : DialogFragment() {
 
                 when (event.type) {
                     TYPE_INSPECTION,
-                    TYPE_INSPECTION_CAR_DEALERSHIP -> {
-                        event.description = binding.etDialogDescription.text.toString()
+                    TYPE_INSPECTION_CAR_DEALERSHIP,
+                    TYPE_INSPECTION_CAR_PARK,
+                    TYPE_INSPECTION_CONST_PROGRESS,
+                    TYPE_INSPECTION_OTHER -> {
+
+                        mSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+
+                                if (parent != null) {
+                                    val cost = when (position){
+                                        0 -> AppPreferences.getReviewDefaultCost()
+                                        1 -> AppPreferences.getReviewCarDealershipCost()
+                                        2 -> AppPreferences.getReviewCarParkDefaultCost()
+                                        3 -> AppPreferences.getReviewConstProgress()
+                                        else -> {0}
+                                    }
+                                    binding.etDialogDescription.hint = parent.getItemAtPosition(position).toString()
+                                    binding.etDialogCost.hint = cost.toString()
+
+                                    val type = when (position){
+                                        0 -> TYPE_INSPECTION
+                                        1 -> TYPE_INSPECTION_CAR_DEALERSHIP
+                                        2 -> TYPE_INSPECTION_CAR_PARK
+                                        3 -> TYPE_INSPECTION_CONST_PROGRESS
+                                        4 -> TYPE_OTHER
+                                        else -> {0}
+                                    }
+
+                                    event.description = parent.getItemAtPosition(position).toString()
+                                    event.cost = cost
+                                    event.type = type
+                                }
+                            }
+                            override fun onNothingSelected(parent: AdapterView<*>?) {
+                                TODO("Not yet implemented")
+                            }
+                        }
+
+
+
 
                         if (binding.checkboxCarDealership.isChecked) {
                             event.cost = AppPreferences.getReviewCarDealershipCost()
@@ -76,6 +132,7 @@ class DialogAdd : DialogFragment() {
                     TYPE_TRIP,
                     TYPE_OTHER -> {
                         val description = binding.etDialogDescription.text.toString()
+
                         val cost = binding.etDialogPrice.text.toString().toIntOrNull()
 
                         addTextChangeListener()
@@ -87,13 +144,13 @@ class DialogAdd : DialogFragment() {
                         }
 
                         if (cost == null || cost == 0) {
-                            binding.layEtDialogPrice.error = " "
                             return@setOnClickListener
                         }
                         event.description = description
                         event.cost = cost
                     }
                 }
+
                 val bundleRequest = Bundle()
                 bundleRequest.putSerializable(BUNDLE_EVENT_KEY, event)
                 bundleRequest.putBoolean(BUNDLE_TYPE_KEY, isNew)
@@ -104,50 +161,76 @@ class DialogAdd : DialogFragment() {
         return dialog
     }
 
+    private fun showFilledView() {
+        TODO("Not yet implemented")
+    }
+
+    private fun showDefaultView() {
+        TODO("Not yet implemented")
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
         Log.d("TAG", "DialogAdd - onDestroy")
     }
 
-    private fun changeView(type: Int) {
+    private fun modifyView (event: Event, isNew: Boolean) {
 
-        when (type) {
+        when (event.type) {
             TYPE_INSPECTION,
-            TYPE_INSPECTION_CAR_DEALERSHIP -> {
-                binding.checkboxCarDealership.visibility = View.VISIBLE
-                binding.layEtDialogPrice.visibility = View.GONE
-                binding.textDialogPrice.visibility = View.GONE
-                binding.textDialogCurrency.visibility = View.GONE
-            }
+            TYPE_INSPECTION_CAR_DEALERSHIP,
+            TYPE_INSPECTION_CAR_PARK,
+            TYPE_INSPECTION_CONST_PROGRESS,
+            TYPE_INSPECTION_OTHER -> {
+                binding.textSet.visibility = View.GONE
+                binding.spinnerInspectionType.visibility = View.VISIBLE
+                createSpinner()
 
+                if (!isNew){
+                    binding.etDialogDescription.hint = event.description
+                    binding.etDialogCost.hint = event.cost.toString()
+                    val position = when(event.type){
+                        TYPE_INSPECTION -> 0
+                        TYPE_INSPECTION_CAR_DEALERSHIP -> 1
+                        TYPE_INSPECTION_CAR_PARK -> 2
+                        TYPE_INSPECTION_CONST_PROGRESS -> 3
+                        TYPE_INSPECTION_OTHER -> 4
+                        else -> {0}
+                    }
+                    mSpinner?.setSelection(position)
+                }
+            }
             TYPE_TRIP -> {
+                binding.spinnerInspectionType.visibility = View.GONE
+                binding.textSet.visibility = View.VISIBLE
+                binding.textSet.text = resources.getString(R.string.text_cost)
                 binding.textDialogTitle.text = resources.getString(R.string.text_trip)
-                binding.textDialogPrice.text = resources.getString(R.string.text_cost)
             }
-
             TYPE_OTHER -> {
+                binding.spinnerInspectionType.visibility = View.GONE
+                binding.textSet.visibility = View.VISIBLE
+                binding.textSet.text = resources.getString(R.string.text_cost)
                 binding.textDialogTitle.text = resources.getString(R.string.text_other_expense)
-                binding.textDialogPrice.text = resources.getString(R.string.text_sum)
             }
         }
     }
 
+
     private fun addTextChangeListener() {
-        binding.etDialogDescription.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrBlank()) binding.layEtDialogDescription.error = null
-            }
-            override fun afterTextChanged(p0: Editable?) {}
-        })
-        binding.etDialogPrice.addTextChangedListener { object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (!p0.isNullOrBlank()) binding.layEtDialogPrice.error = null
-            }
-            override fun afterTextChanged(p0: Editable?) {}
-        } }
+//        binding.etDialogDescription.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                if (!p0.isNullOrBlank()) binding.layEtDialogDescription.error = null
+//            }
+//            override fun afterTextChanged(p0: Editable?) {}
+//        })
+//        binding.etDialogCost.addTextChangedListener { object : TextWatcher {
+//            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+//            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//            }
+//            override fun afterTextChanged(p0: Editable?) {}
+//        } }
     }
 
     companion object {
@@ -178,4 +261,16 @@ class DialogAdd : DialogFragment() {
             }
         }
     }
+
+    private fun createSpinner(){
+        val textArray = resources.getStringArray(R.array.inspection_type)
+        mSpinner = binding.spinnerInspectionType
+        val spinnerAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, textArray)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mSpinner!!.adapter = spinnerAdapter
+    }
+
+
+
+
 }

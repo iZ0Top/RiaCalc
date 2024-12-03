@@ -18,6 +18,14 @@ object AppPreferences {
     fun setReviewCarDealershipCost(value: Int){
         mPreferences.edit().putInt(PREF_DEFAULT_CAR_DEALERSHIP_COST, value).apply()
     }
+    fun setReviewCarParkDefaultCost(value: Int){
+        mPreferences.edit().putInt(PREF_DEFAULT_CAR_PARK_COST, value).apply()
+    }
+    fun setReviewConstProgress(value: Int){
+        mPreferences.edit().putInt(PREF_DEFAULT_CONST_PROGRESS, value).apply()
+    }
+
+
 
     fun getReviewDefaultCost(): Int{
         return mPreferences.getInt(PREF_DEFAULT_COST, 0)
@@ -25,5 +33,10 @@ object AppPreferences {
     fun getReviewCarDealershipCost(): Int{
         return mPreferences.getInt(PREF_DEFAULT_CAR_DEALERSHIP_COST, 0)
     }
-
+    fun getReviewCarParkDefaultCost(): Int{
+        return mPreferences.getInt(PREF_DEFAULT_CAR_PARK_COST, 120)
+    }
+    fun getReviewConstProgress(): Int{
+        return mPreferences.getInt(PREF_DEFAULT_CONST_PROGRESS, 100)
+    }
 }

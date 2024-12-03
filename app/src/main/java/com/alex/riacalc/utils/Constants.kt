@@ -7,6 +7,9 @@ lateinit var REPOSITORY: RoomRepository
 
 const val TYPE_INSPECTION = 0
 const val TYPE_INSPECTION_CAR_DEALERSHIP = 1
+const val TYPE_INSPECTION_CAR_PARK = 11
+const val TYPE_INSPECTION_CONST_PROGRESS = 12
+const val TYPE_INSPECTION_OTHER = 13
 const val TYPE_TRIP = 2
 const val TYPE_OTHER = 3
 
@@ -21,5 +24,8 @@ const val PATTERN_DATE_D_M_Y = "dd.MM.yyyy"
 const val PREF_NAME = "pref_name"
 const val PREF_DEFAULT_COST = "default_cost"
 const val PREF_DEFAULT_CAR_DEALERSHIP_COST = "default_car_dealership_cost"
+const val PREF_DEFAULT_CAR_PARK_COST = "default_car_park_cost"
+const val PREF_DEFAULT_CONST_PROGRESS = "default_const_progress"
+
 
 
