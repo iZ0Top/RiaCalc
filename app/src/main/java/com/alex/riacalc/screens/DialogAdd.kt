@@ -29,6 +29,7 @@ import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
 import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
+import kotlin.math.log
 
 class DialogAdd : DialogFragment() {
 
@@ -39,7 +40,7 @@ class DialogAdd : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        Log.d("TAG", "DialogAdd - onCreateDialog")
+        Log.d("mtag", "DialogAdd - onCreateDialog")
 
         val inflater = requireActivity().layoutInflater
         _binding = DialogAddBinding.inflate(inflater)
@@ -49,6 +50,7 @@ class DialogAdd : DialogFragment() {
 
         modifyView(event, isNew)
 
+        if (isNew) showFilledView() else showFilledView()
 
 //        if (!isNew) {
 //            binding.etDialogDescription.setText(event.description)
@@ -73,6 +75,8 @@ class DialogAdd : DialogFragment() {
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
 
+                Log.d("mtag", "dialog.setOnShowListener")
+
                 when (event.type) {
                     TYPE_INSPECTION,
                     TYPE_INSPECTION_CAR_DEALERSHIP,
@@ -87,6 +91,7 @@ class DialogAdd : DialogFragment() {
                                 position: Int,
                                 id: Long
                             ) {
+                                Log.d("mtag", "mSpinner?.onItemSelectedListener")
 
                                 if (parent != null) {
                                     val cost = when (position){
@@ -96,6 +101,7 @@ class DialogAdd : DialogFragment() {
                                         3 -> AppPreferences.getReviewConstProgress()
                                         else -> {0}
                                     }
+                                    Log.d("mtag", "mSpinner?.onItemSelectedListener, parent != null")
                                     binding.etDialogDescription.hint = parent.getItemAtPosition(position).toString()
                                     binding.etDialogCost.hint = cost.toString()
 
@@ -121,19 +127,19 @@ class DialogAdd : DialogFragment() {
 
 
 
-                        if (binding.checkboxCarDealership.isChecked) {
-                            event.cost = AppPreferences.getReviewCarDealershipCost()
-                            event.type = TYPE_INSPECTION_CAR_DEALERSHIP
-                        } else {
-                            event.cost = AppPreferences.getReviewDefaultCost()
-                            event.type = TYPE_INSPECTION
-                        }
+//                        if (binding.checkboxCarDealership.isChecked) {
+//                            event.cost = AppPreferences.getReviewCarDealershipCost()
+//                            event.type = TYPE_INSPECTION_CAR_DEALERSHIP
+//                        } else {
+//                            event.cost = AppPreferences.getReviewDefaultCost()
+//                            event.type = TYPE_INSPECTION
+//                        }
                     }
                     TYPE_TRIP,
                     TYPE_OTHER -> {
                         val description = binding.etDialogDescription.text.toString()
 
-                        val cost = binding.etDialogPrice.text.toString().toIntOrNull()
+                        val cost = binding.etDialogCost.text.toString().toIntOrNull()
 
                         addTextChangeListener()
 
