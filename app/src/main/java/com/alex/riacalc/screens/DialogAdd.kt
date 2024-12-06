@@ -50,6 +50,9 @@ class DialogAdd : DialogFragment() {
 
         modifyView(event, isNew)
 
+        Log.d("mtag", "----\nevent = \nid=${event.id} \ntype=${event.type } \ncost=${event.cost} \ndescription ${event.description} \ndate=${event.date} \n----")
+
+
         if (isNew) showFilledView() else showFilledView()
 
 //        if (!isNew) {
