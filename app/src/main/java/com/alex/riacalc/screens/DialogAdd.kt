@@ -48,12 +48,9 @@ class DialogAdd : DialogFragment() {
         val event = arguments?.getSerializable(BUNDLE_EVENT_KEY) as Event
         val isNew = arguments?.getBoolean(BUNDLE_TYPE_KEY) as Boolean
 
+        Log.d("mtag", "----input----\nevent = \nid=${event.id} \ntype=${event.type } \ncost=${event.cost} \ndescription ${event.description} \ndate=${event.date} \n----")
+
         modifyView(event, isNew)
-
-        Log.d("mtag", "----\nevent = \nid=${event.id} \ntype=${event.type } \ncost=${event.cost} \ndescription ${event.description} \ndate=${event.date} \n----")
-
-
-        if (isNew) showFilledView() else showFilledView()
 
 //        if (!isNew) {
 //            binding.etDialogDescription.setText(event.description)
@@ -74,6 +71,52 @@ class DialogAdd : DialogFragment() {
             .setPositiveButton(R.string.text_btn_ok, null)
             .setNegativeButton(R.string.text_btn_cancel, null)
             .create()
+
+
+        when (event.type){
+            TYPE_INSPECTION, TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
+
+                createSpinner(event.type)
+
+                mSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        Log.d("mtag", "mSpinner?.onItemSelectedListener")
+//                        val cost = when (position){
+//                            0 -> AppPreferences.getReviewDefaultCost()
+//                            1 -> AppPreferences.getReviewCarDealershipCost()
+//                            2 -> AppPreferences.getReviewCarParkDefaultCost()
+//                            3 -> AppPreferences.getReviewConstProgress()
+//                            else -> {0}
+//                        }
+                        val type = when (position){
+                            0 -> TYPE_INSPECTION
+                            1 -> TYPE_INSPECTION_CAR_DEALERSHIP
+                            2 -> TYPE_INSPECTION_CAR_PARK
+                            3 -> TYPE_INSPECTION_CONST_PROGRESS
+                            4 -> TYPE_OTHER
+                            else -> {0}
+                        }
+
+
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                        TODO("Not yet implemented")
+                    }
+                }
+
+            }
+
+        }
+
+
+
 
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
@@ -157,6 +200,7 @@ class DialogAdd : DialogFragment() {
                         }
                         event.description = description
                         event.cost = cost
+                        Log.d("mtag", "----writed----\nevent = \nid=${event.id} \ntype=${event.type } \ncost=${event.cost} \ndescription ${event.description} \ndate=${event.date} \n----")
                     }
                 }
 
@@ -170,13 +214,6 @@ class DialogAdd : DialogFragment() {
         return dialog
     }
 
-    private fun showFilledView() {
-        TODO("Not yet implemented")
-    }
-
-    private fun showDefaultView() {
-        TODO("Not yet implemented")
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -185,6 +222,10 @@ class DialogAdd : DialogFragment() {
     }
 
     private fun modifyView (event: Event, isNew: Boolean) {
+        Log.d("mtag", "modifyView")
+
+        binding.etDialogDescription.setText(event.description)
+        binding.etDialogCost.setText(event.cost.toString())
 
         when (event.type) {
             TYPE_INSPECTION,
@@ -192,31 +233,32 @@ class DialogAdd : DialogFragment() {
             TYPE_INSPECTION_CAR_PARK,
             TYPE_INSPECTION_CONST_PROGRESS,
             TYPE_INSPECTION_OTHER -> {
+                Log.d("mtag", "modifyView - TYPE INSPECTION")
+
                 binding.textSet.visibility = View.GONE
                 binding.spinnerInspectionType.visibility = View.VISIBLE
-                createSpinner()
 
-                if (!isNew){
-                    binding.etDialogDescription.hint = event.description
-                    binding.etDialogCost.hint = event.cost.toString()
-                    val position = when(event.type){
-                        TYPE_INSPECTION -> 0
-                        TYPE_INSPECTION_CAR_DEALERSHIP -> 1
-                        TYPE_INSPECTION_CAR_PARK -> 2
-                        TYPE_INSPECTION_CONST_PROGRESS -> 3
-                        TYPE_INSPECTION_OTHER -> 4
-                        else -> {0}
-                    }
-                    mSpinner?.setSelection(position)
+
+                val position = when(event.type){
+                    TYPE_INSPECTION -> 0
+                    TYPE_INSPECTION_CAR_DEALERSHIP -> 1
+                    TYPE_INSPECTION_CAR_PARK -> 2
+                    TYPE_INSPECTION_CONST_PROGRESS -> 3
+                    TYPE_INSPECTION_OTHER -> 4
+                    else -> {0}
                 }
+                Log.d("mtag", "spinner - set selection position = $position")
+                    mSpinner?.setSelection(position)
             }
             TYPE_TRIP -> {
+                Log.d("mtag", "modifyView - TYPE TRIP")
                 binding.spinnerInspectionType.visibility = View.GONE
                 binding.textSet.visibility = View.VISIBLE
                 binding.textSet.text = resources.getString(R.string.text_cost)
                 binding.textDialogTitle.text = resources.getString(R.string.text_trip)
             }
             TYPE_OTHER -> {
+                Log.d("mtag", "modifyView - TYPE OTHER")
                 binding.spinnerInspectionType.visibility = View.GONE
                 binding.textSet.visibility = View.VISIBLE
                 binding.textSet.text = resources.getString(R.string.text_cost)
@@ -272,11 +314,37 @@ class DialogAdd : DialogFragment() {
     }
 
     private fun createSpinner(){
+
+        Log.d("mtag", "createSpinner")
         val textArray = resources.getStringArray(R.array.inspection_type)
         mSpinner = binding.spinnerInspectionType
         val spinnerAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, textArray)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinner!!.adapter = spinnerAdapter
+
+        mSpinner!!.onItemSelectedListener =  object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Log.d("mtag", "mSpinner.onItemSelectedListener")
+                val type = when (position){
+                    0 -> TYPE_INSPECTION
+                    1 -> TYPE_INSPECTION_CAR_DEALERSHIP
+                    2 -> TYPE_INSPECTION_CAR_PARK
+                    3 -> TYPE_INSPECTION_CONST_PROGRESS
+                    4 -> TYPE_OTHER
+                    else -> {0}
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
     }
 
 
