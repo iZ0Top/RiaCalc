@@ -11,6 +11,9 @@ import com.alex.riacalc.databinding.ItemGridBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
+import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
+import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 
@@ -37,7 +40,7 @@ class AdapterForMonthItem(
                 holder.binding.gridId.text = context.getString(R.string.template_plus, event.cost)
                 holder.binding.gridId.backgroundTintList = changeColor(R.color.green_100)
             }
-            TYPE_INSPECTION_CAR_DEALERSHIP -> {
+            TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
                 holder.binding.gridId.text = context.getString(R.string.template_plus, event.cost)
                 holder.binding.gridId.backgroundTintList = changeColor(R.color.blue_100)
             }

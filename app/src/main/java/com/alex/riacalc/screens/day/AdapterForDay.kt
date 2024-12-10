@@ -9,6 +9,13 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemEventBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.utils.AppPreferences
+import com.alex.riacalc.utils.TYPE_INSPECTION
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
+import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
+import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
+import com.alex.riacalc.utils.TYPE_OTHER
+import com.alex.riacalc.utils.TYPE_TRIP
 
 interface ActionListener {
     fun onEditEvent(event: Event)
@@ -44,16 +51,15 @@ class AdapterForDay(private val actionListener: ActionListener) :
         holder.binding.itemPopupMenu.tag = event
 
         when (event.type) {
-            0 -> {
+            TYPE_INSPECTION -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.green_100))
             }
-            1 -> {
+            TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.blue_100))
             }
-            2,
-            3 -> {
+            TYPE_TRIP, TYPE_OTHER -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_expense, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.red_100))
             }
