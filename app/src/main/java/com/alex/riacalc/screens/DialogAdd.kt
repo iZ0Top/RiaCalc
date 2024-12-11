@@ -43,10 +43,6 @@ class DialogAdd : DialogFragment() {
         val event = arguments?.getSerializable(BUNDLE_EVENT_KEY) as Event
         val isNew = arguments?.getBoolean(BUNDLE_TYPE_KEY) as Boolean
 
-        Log.d("mtag", "----input Event----\nid=${event.id} \ntype=${event.type } \ncost=${event.cost} \ndescription=${event.description} \ndate=${event.date} \n----")
-
-        modifyView(event)
-
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .setCancelable(true)
@@ -56,12 +52,19 @@ class DialogAdd : DialogFragment() {
 
         Log.d("mtag", "dialog created")
 
+        binding.etDialogDescription.setText(event.description)
+        binding.etDialogCost.setText(event.cost.toString())
+
         when (event.type){
             TYPE_INSPECTION, TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
+                Log.d("mtag", "dialog type = INSPECTION")
+
+                binding.textSet.visibility = View.GONE
+                binding.spinnerInspectionType.visibility = View.VISIBLE
 
                 createSpinner()
-                val position = convertTypeToPosition(event.type)
-                mSpinner?.setSelection(position)
+                val inputPosition = convertTypeToPosition(event.type)
+                mSpinner?.setSelection(inputPosition)
 
                 mSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(
@@ -70,7 +73,6 @@ class DialogAdd : DialogFragment() {
                         position: Int,
                         id: Long
                     ) {
-                        Log.d("mtag", "mSpinner onItemSelectedListener")
                         val cost = when (position){
                             0 -> AppPreferences.getReviewDefaultCost()
                             1 -> AppPreferences.getReviewCarDealershipCost()
@@ -78,45 +80,71 @@ class DialogAdd : DialogFragment() {
                             3 -> AppPreferences.getReviewConstProgress()
                             else -> {0}
                         }
-                        Log.d("mtag", "mSpinner onItemSelectedListener - position=$position, cost=$cost")
+                        val description = when (position){
+                            1 -> resources.getString(R.string.text_car_dealership)
+                            2 -> resources.getString(R.string.text_car_park)
+                            3 -> resources.getString(R.string.text_const_progress)
+                            else -> ""
+                        }
 
-                        binding.etDialogCost.setText(cost.toString())
-                        event.type = convertPositionToType(position)
+                        if (event.type != convertPositionToType(position)){
+                            binding.etDialogDescription.setText(description)
+                            event.type = convertPositionToType(position)
+                            binding.etDialogCost.setText(cost.toString())
+                        }
                     }
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
                 }
+            }
+            TYPE_TRIP -> {
+                Log.d("mtag", "dialog type = TRIP")
+                binding.spinnerInspectionType.visibility = View.GONE
+                binding.textSet.visibility = View.VISIBLE
+                binding.textSet.text = resources.getString(R.string.text_cost)
+                binding.textDialogTitle.text = resources.getString(R.string.text_trip)
+            }
+            TYPE_OTHER -> {
+                Log.d("mtag", "dialog type = OTHER")
+                binding.spinnerInspectionType.visibility = View.GONE
+                binding.textSet.visibility = View.VISIBLE
+                binding.textSet.text = resources.getString(R.string.text_cost)
+                binding.textDialogTitle.text = resources.getString(R.string.text_other_expense)
             }
         }
 
         dialog.setOnShowListener {
             dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
 
-                Log.d("mtag", "dialog.setOnShowListener")
-
-                //Натиснення кнопки ОК, перевірка данних і запис події
-                //Якшо тип перевірка, то перевірити чи значення вартості не порожне
-                //Якщо тип поїздка або інші витрати то перевірити чи є опис
-
                 val cost = binding.etDialogCost.text.toString().toIntOrNull()
                 val description = binding.etDialogDescription.text.toString()
 
-                if (cost == null || cost == 0) {
-                    Log.d("mtag", "dialog.setOnShowListener: cost == null || cost == 0")
-                    return@setOnClickListener
-                }
+                addTextChangeListener()
+                var isCorrectData = true
 
-                if (event.type == TYPE_OTHER || event.type == TYPE_INSPECTION){
-                    Log.d("mtag", "dialog.setOnShowListener: event.type == TYPE_OTHER || event.type == TYPE_INSPECTION")
-                    addTextChangeListener()
-                    if (description.isEmpty()){
-                        binding.layEtDialogDescription.error = resources.getString(R.string.text_need_add_description)
-                        return@setOnClickListener
+                when(event.type){
+                    TYPE_INSPECTION -> {
+                        if (cost == null || cost == 0){
+                            binding.etDialogCost.setText("0")
+                            binding.etDialogCost.setTextColor(resources.getColor(R.color.red_300))
+                            isCorrectData = false
+                        }
+                    }
+                    TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER, TYPE_TRIP, TYPE_OTHER -> {
+                        if (cost == null || cost == 0){
+                            binding.etDialogCost.setText("0")
+                            binding.etDialogCost.setTextColor(resources.getColor(R.color.red_300))
+                            isCorrectData = false
+                        }
+                        if (description.isBlank()){
+                            binding.layEtDialogDescription.error = resources.getString(R.string.text_need_add_description)
+                            isCorrectData = false
+                        }
                     }
                 }
-                event.cost = cost
+                if (!isCorrectData) return@setOnClickListener
+                event.cost = cost!!
                 event.description = description
-                Log.d("mtag", "----output Event----\nid=${event.id} \ntype=${event.type } \ncost=${event.cost} \ndescription=${event.description} \ndate=${event.date} \n----")
 
                 val bundleRequest = Bundle()
                 bundleRequest.putSerializable(BUNDLE_EVENT_KEY, event)
@@ -137,7 +165,6 @@ class DialogAdd : DialogFragment() {
             TYPE_INSPECTION_OTHER -> 4
             else -> {0}
         }
-        Log.d("mtag", "getCurrentPosition, position from input event=$p")
         return p
     }
     private fun convertPositionToType(position: Int): Int{
@@ -159,34 +186,6 @@ class DialogAdd : DialogFragment() {
         Log.d("TAG", "DialogAdd - onDestroy")
     }
 
-    private fun modifyView (event: Event) {
-        Log.d("mtag", "modifyView")
-
-        binding.etDialogDescription.setText(event.description)
-        binding.etDialogCost.setText(event.cost.toString())
-
-        when (event.type) {TYPE_INSPECTION, TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
-                Log.d("mtag", "modifyView - TYPE INSPECTION")
-                binding.textSet.visibility = View.GONE
-                binding.spinnerInspectionType.visibility = View.VISIBLE
-            }
-            TYPE_TRIP -> {
-                Log.d("mtag", "modifyView - TYPE TRIP")
-                binding.spinnerInspectionType.visibility = View.GONE
-                binding.textSet.visibility = View.VISIBLE
-                binding.textSet.text = resources.getString(R.string.text_cost)
-                binding.textDialogTitle.text = resources.getString(R.string.text_trip)
-            }
-            TYPE_OTHER -> {
-                Log.d("mtag", "modifyView - TYPE OTHER")
-                binding.spinnerInspectionType.visibility = View.GONE
-                binding.textSet.visibility = View.VISIBLE
-                binding.textSet.text = resources.getString(R.string.text_cost)
-                binding.textDialogTitle.text = resources.getString(R.string.text_other_expense)
-            }
-        }
-    }
-
     private fun createSpinner(){
 
         Log.d("mtag", "createSpinner")
@@ -199,12 +198,22 @@ class DialogAdd : DialogFragment() {
 
 
     private fun addTextChangeListener() {
+        Log.d("mtag", "addTextChangeListener")
         binding.etDialogDescription.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.etDialogCost.setTextColor(resources.getColor(R.color.black))
                 if (!p0.isNullOrBlank()) binding.layEtDialogDescription.error = null
             }
-            override fun afterTextChanged(p0: Editable?) {}
+            override fun afterTextChanged(p0: Editable?) { }
+        })
+        binding.etDialogCost.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.etDialogCost.setTextColor(resources.getColor(R.color.black))
+                Log.d("mtag", ">>>  etDialogCost onTextChanged")
+            }
+            override fun afterTextChanged(s: Editable?) { }
         })
     }
 

@@ -60,6 +60,9 @@
     <string name="text_no_month_data">(За цей місяць немає даних)</string>
     <string name="text_cost_default_inspection_car_dealership">Вартість перевірки автосалону</string>
     <string name="text_car_dealership">Автосалон</string>
+    <string name="text_car_park">Автомайданчик</string>
+    <string name="text_const_progress">Хід будівництва</string>
+
 
     <string-array name="inspection_type">
         <item>Перевірка</item>
