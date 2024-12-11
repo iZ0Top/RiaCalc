@@ -236,23 +236,7 @@ class DayFragment : Fragment(), OnClickListener {
         }
 
         when(event.type){
-            TYPE_INSPECTION -> {
-                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
-                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
-            }
-            TYPE_INSPECTION_CAR_DEALERSHIP -> {
-                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
-                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
-            }
-            TYPE_INSPECTION_CAR_PARK -> {
-                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
-                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
-            }
-            TYPE_INSPECTION_CONST_PROGRESS -> {
-                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
-                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
-            }
-            TYPE_INSPECTION_OTHER -> {
+            TYPE_INSPECTION, TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
                 dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
                 dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
             }
