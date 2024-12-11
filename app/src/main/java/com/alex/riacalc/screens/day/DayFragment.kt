@@ -27,6 +27,9 @@ import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
+import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
+import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 import java.util.Calendar
@@ -238,7 +241,19 @@ class DayFragment : Fragment(), OnClickListener {
                 dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
             }
             TYPE_INSPECTION_CAR_DEALERSHIP -> {
-                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection_car_dealership)
+                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
+            }
+            TYPE_INSPECTION_CAR_PARK -> {
+                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
+            }
+            TYPE_INSPECTION_CONST_PROGRESS -> {
+                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
+            }
+            TYPE_INSPECTION_OTHER -> {
+                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_inspection)
                 dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
             }
             TYPE_TRIP -> {

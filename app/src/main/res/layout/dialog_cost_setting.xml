@@ -7,27 +7,41 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/dialog_cost_setting_tv_header"
-        style="@style/text_normal"
+        android:id="@+id/text_standard_cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Стандартна вартість перевірок"
+        style="@style/text_normal"
         android:layout_marginTop="16dp"
-        android:text="@string/text_cost_default_inspection"
-        app:layout_constraintBottom_toTopOf="@id/dialog_cost_setting_ti_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/dialog_cost_setting_tv_header"
+        style="@style/text_normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="end"
+        android:text="@string/text_inspection"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_setting_ti_layout"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_setting_ti_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_setting_ti_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_cost_setting_ti_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:errorEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_tv_header">
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_setting_currency"
+        app:layout_constraintTop_toBottomOf="@+id/text_standard_cost">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_cost_setting_et"
@@ -45,35 +59,36 @@
         style="@style/text_normal"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:text="@string/text_currency"
-        app:layout_constraintStart_toEndOf="@+id/dialog_cost_setting_ti_layout"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dialog_cost_setting_ti_layout" />
 
     <TextView
         android:id="@+id/dialog_cost_car_dealership_setting_tv_header"
         style="@style/text_normal"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/text_cost_default_inspection_car_dealership"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="end"
+        android:text="Автосалон"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_car_dealership_setting_ti_layout"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_dealership_setting_ti_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_ti_layout" />
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_car_dealership_setting_ti_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_cost_car_dealership_setting_ti_layout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_dealership_setting_tv_header">
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_dealership_setting_currency"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_setting_ti_layout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_cost_car_dealership_setting_et"
@@ -91,11 +106,107 @@
         style="@style/text_normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/text_currency"
-        app:layout_constraintStart_toEndOf="@+id/dialog_cost_car_dealership_setting_ti_layout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dialog_cost_car_dealership_setting_ti_layout" />
+
+    <TextView
+        android:id="@+id/dialog_cost_car_park_setting_tv_header"
+        style="@style/text_normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Автомайданчик"
+        android:gravity="end"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_park_setting_ti_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_dealership_setting_ti_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_cost_car_park_setting_ti_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        app:errorEnabled="true"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_park_setting_currency"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_dealership_setting_ti_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_cost_car_park_setting_et"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:digits="0123456789"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxLength="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/dialog_cost_car_park_setting_currency"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/text_currency"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_dealership_setting_ti_layout" />
+
+    <TextView
+        android:id="@+id/dialog_cost_const_progress_setting_tv_header"
+        style="@style/text_normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Хід будівництва"
+        android:gravity="end"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_const_progress_setting_ti_layout"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_const_progress_setting_ti_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_cost_const_progress_setting_ti_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_park_setting_currency"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_cost_const_progress_setting_et"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:digits="0123456789"
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:maxLength="3" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/dialog_cost_const_progress_setting_currency"
+        style="@style/text_normal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/text_currency"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_const_progress_setting_ti_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

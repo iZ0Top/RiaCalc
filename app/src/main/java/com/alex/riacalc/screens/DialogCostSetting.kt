@@ -19,6 +19,9 @@ class DialogCostSetting : DialogFragment() {
 
         binding.dialogCostSettingEt.setText(AppPreferences.getReviewDefaultCost().toString())
         binding.dialogCostCarDealershipSettingEt.setText(AppPreferences.getReviewCarDealershipCost().toString())
+        binding.dialogCostCarParkSettingEt.setText(AppPreferences.getReviewCarParkDefaultCost().toString())
+        binding.dialogCostConstProgressSettingEt.setText(AppPreferences.getReviewConstProgress().toString())
+
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -33,19 +36,41 @@ class DialogCostSetting : DialogFragment() {
 
                 val costInspection = binding.dialogCostSettingEt.text.toString().toIntOrNull()
                 val costCarDealershipInspection = binding.dialogCostCarDealershipSettingEt.text.toString().toIntOrNull()
+                val costCarParkInspection = binding.dialogCostCarParkSettingEt.text.toString().toIntOrNull()
+                val costConstProgress = binding.dialogCostConstProgressSettingEt.text.toString().toIntOrNull()
+
+                var dataValid = true
 
                 if (costInspection == null || costInspection == 0) {
                     binding.dialogCostSettingEt.hint = "0"
                     binding.dialogCostSettingTiLayout.error = " "
-                    return@setOnClickListener
+                    dataValid = false
                 }
                 if (costCarDealershipInspection == null || costCarDealershipInspection == 0){
                     binding.dialogCostCarDealershipSettingEt.hint = "0"
                     binding.dialogCostCarDealershipSettingTiLayout.error = " "
+                    dataValid = false
+                }
+                if (costCarParkInspection == null || costCarParkInspection == 0){
+                    binding.dialogCostCarParkSettingEt.hint = "0"
+                    binding.dialogCostCarParkSettingTiLayout.error = " "
+                    dataValid = false
+                }
+                if (costConstProgress == null || costConstProgress == 0){
+                    binding.dialogCostConstProgressSettingEt.hint = "0"
+                    binding.dialogCostConstProgressSettingTiLayout.error = " "
+                    dataValid = false
+                }
+
+                if (dataValid){
+                    AppPreferences.setReviewDefaultCost(costInspection!!)
+                    AppPreferences.setReviewCarDealershipCost(costCarDealershipInspection!!)
+                    AppPreferences.setReviewCarParkDefaultCost(costCarParkInspection!!)
+                    AppPreferences.setReviewConstProgress(costConstProgress!!)
+                }
+                else{
                     return@setOnClickListener
                 }
-                AppPreferences.setReviewDefaultCost(costInspection)
-                AppPreferences.setReviewCarDealershipCost(costCarDealershipInspection)
                 dialog.dismiss()
             }
         }
