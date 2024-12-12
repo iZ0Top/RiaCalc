@@ -22,7 +22,6 @@ class DialogCostSetting : DialogFragment() {
         binding.dialogCostCarParkSettingEt.setText(AppPreferences.getReviewCarParkDefaultCost().toString())
         binding.dialogCostConstProgressSettingEt.setText(AppPreferences.getReviewConstProgress().toString())
 
-
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
             .setCancelable(false)
