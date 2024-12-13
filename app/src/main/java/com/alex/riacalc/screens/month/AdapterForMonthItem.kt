@@ -39,6 +39,9 @@ class AdapterForMonthItem(
             TYPE_INSPECTION -> {
                 holder.binding.gridId.text = context.getString(R.string.template_plus, event.cost)
                 holder.binding.gridId.backgroundTintList = changeColor(R.color.green_100)
+                if (event.description != ""){
+                    holder.binding.gridId.
+                }
             }
             TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
                 holder.binding.gridId.text = context.getString(R.string.template_plus, event.cost)
