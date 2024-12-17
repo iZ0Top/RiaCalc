@@ -22,6 +22,7 @@ import com.alex.riacalc.databinding.ActivityMainBinding
 import com.alex.riacalc.databinding.FragmentMonthBinding
 import com.alex.riacalc.model.Day
 import com.alex.riacalc.model.Statistic
+import com.alex.riacalc.screens.DialogReport
 import com.alex.riacalc.screens.DialogSetMonthAndYear
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
@@ -128,17 +129,19 @@ class MonthFragment : Fragment(), OnClickListener {
             updateStatistic(it)
         }
         observerReport = Observer {
-            copyToBuffer(it)
+            //copyToBuffer(it)
+            showDialogReport(it)
+
         }
     }
 
-    private fun copyToBuffer(report: String) {
-        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("label", report))
-        val toast = Toast.makeText(requireContext(), resources.getText(R.string.text_report_copied), Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.CENTER, 0, 0)
-        toast.show()
-    }
+//    private fun copyToBuffer(report: String) {
+//        val clipboardManager = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//        clipboardManager.setPrimaryClip(android.content.ClipData.newPlainText("label", report))
+//        val toast = Toast.makeText(requireContext(), resources.getText(R.string.text_report_copied), Toast.LENGTH_SHORT)
+//        toast.setGravity(Gravity.CENTER, 0, 0)
+//        toast.show()
+//    }
 
     private fun setupObservers() {
         viewModel.calendarLD.observe(viewLifecycleOwner, observerDate)
@@ -184,6 +187,9 @@ class MonthFragment : Fragment(), OnClickListener {
             newDate.set(Calendar.MONTH, month)
             viewModel.setDate(newDate)
         }
+    }
+    private fun showDialogReport(report: String) {
+        DialogReport.show(parentFragmentManager, report)
     }
 
     private fun updateStatistic(statistic: Statistic){

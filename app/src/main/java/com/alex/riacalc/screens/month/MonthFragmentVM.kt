@@ -16,6 +16,9 @@ import com.alex.riacalc.utils.PATTERN_DATE_Y_M
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
+import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
+import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 import com.alex.riacalc.utils.convertDateToString
@@ -68,6 +71,7 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
             var inspectionCount = 0
             var inspectionSum = 0
+            var inspectionOtherTypesCount = 0
             var tripCount = 0
             var tripSum = 0
             var otherCount = 0
@@ -75,12 +79,20 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
             for (event in events) {
                 when (event.type) {
-                    TYPE_INSPECTION,
-                    TYPE_INSPECTION_CAR_DEALERSHIP -> {
+                    TYPE_INSPECTION -> {
                         inspectionCount++
                         inspectionSum += event.cost
                     }
-
+                    //---new---
+                    TYPE_INSPECTION_CAR_DEALERSHIP,
+                    TYPE_INSPECTION_CAR_PARK,
+                    TYPE_INSPECTION_CONST_PROGRESS,
+                    TYPE_INSPECTION_OTHER -> {
+                        inspectionCount++
+                        inspectionSum += event.cost
+                        inspectionOtherTypesCount ++
+                    }
+                    //-------
                     TYPE_TRIP -> {
                         tripCount++
                         tripSum += event.cost
@@ -95,6 +107,9 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
             val day = Day(
                 date = events[0].date,
                 inspectionCount = inspectionCount,
+                //--new--
+                inspectionOtherTypesCount = inspectionOtherTypesCount,
+                //-------
                 inspectionSum = inspectionSum,
                 tripCount = tripCount,
                 tripSum = tripSum,
@@ -136,6 +151,7 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
             .append(application.resources.getString(R.string.template_expenses, statistic.otherSum))
 
         for (day in listDays) {
+
             val dayEventsList = day.list
             stringBuilder.append(
                 application.resources.getString(
@@ -144,6 +160,12 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                     day.inspectionCount
                 )
             )
+
+            if (day.inspectionOtherTypesCount != 0){
+                for ()
+            }
+
+
             if (day.tripCount != 0 || day.tripSum != 0) {
                 for (event in dayEventsList) {
                     when (event.type) {

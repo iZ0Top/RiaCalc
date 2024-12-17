@@ -33,7 +33,6 @@ class DialogAdd : DialogFragment() {
 
     private var mSpinner: AppCompatSpinner? = null
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Log.d("mtag", "DialogAdd - onCreateDialog")
 
