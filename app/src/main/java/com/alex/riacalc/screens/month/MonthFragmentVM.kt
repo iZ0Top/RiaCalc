@@ -161,14 +161,15 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                 )
             )
 
-            if (day.inspectionOtherTypesCount != 0){
-                for ()
-            }
 
-
-            if (day.tripCount != 0 || day.tripSum != 0) {
+            if (day.tripCount != 0 || day.tripSum != 0 || day.inspectionOtherTypesCount != 0) {
                 for (event in dayEventsList) {
                     when (event.type) {
+                        TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
+                            stringBuilder.append(", з них ")
+
+
+                        }
                         TYPE_TRIP, TYPE_OTHER -> {
                             stringBuilder.append(", ${event.description} - ${event.cost}")
                         }
