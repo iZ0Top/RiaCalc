@@ -15,6 +15,9 @@ import com.alex.riacalc.utils.PATTERN_DATE_Y_M_D
 import com.alex.riacalc.utils.REPOSITORY
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
+import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
+import com.alex.riacalc.utils.TYPE_INSPECTION_CONST_PROGRESS
+import com.alex.riacalc.utils.TYPE_INSPECTION_OTHER
 import com.alex.riacalc.utils.TYPE_OTHER
 import com.alex.riacalc.utils.TYPE_TRIP
 import com.alex.riacalc.utils.convertDateToString
@@ -102,13 +105,32 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         var tripsSum = 0
         var otherCount = 0
         var otherSum = 0
+        //-----
+        var inspCarD = 0
+        var inspCarP = 0
+        var inspConstP = 0
+
 
         for (i in list) {
             when (i.type) {
-                TYPE_INSPECTION,
+                TYPE_INSPECTION -> {
+                    inspectionsCount++
+                    inspectionsSum += i.cost
+                }
                 TYPE_INSPECTION_CAR_DEALERSHIP -> {
                     inspectionsCount++
                     inspectionsSum += i.cost
+                    inspCarD++
+                }
+                TYPE_INSPECTION_CAR_PARK -> {
+                    inspectionsCount++
+                    inspectionsSum += i.cost
+                    inspCarP++
+                }
+                TYPE_INSPECTION_CONST_PROGRESS -> {
+                    inspectionsCount++
+                    inspectionsSum += i.cost
+                    inspConstP++
                 }
                 TYPE_TRIP -> {
                     tripsCount++
@@ -126,7 +148,10 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
             tripsCount = tripsCount,
             tripsSum = tripsSum,
             otherCount = otherCount,
-            otherSum = otherSum
+            otherSum = otherSum,
+            inspCarD = inspCarD,
+            inspCarP = inspCarP,
+            inspConstP = inspConstP,
         )
     }
 

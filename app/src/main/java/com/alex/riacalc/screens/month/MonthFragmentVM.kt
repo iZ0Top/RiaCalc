@@ -71,11 +71,14 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
             var inspectionCount = 0
             var inspectionSum = 0
-            var inspectionOtherTypesCount = 0
             var tripCount = 0
             var tripSum = 0
             var otherCount = 0
             var otherSum = 0
+
+            var inspCarDCount = 0
+            var inspCarPCount = 0
+            var inspConstPCount = 0
 
             for (event in events) {
                 when (event.type) {
@@ -83,16 +86,21 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                         inspectionCount++
                         inspectionSum += event.cost
                     }
-                    //---new---
-                    TYPE_INSPECTION_CAR_DEALERSHIP,
-                    TYPE_INSPECTION_CAR_PARK,
-                    TYPE_INSPECTION_CONST_PROGRESS,
-                    TYPE_INSPECTION_OTHER -> {
+                    TYPE_INSPECTION_CAR_DEALERSHIP -> {
                         inspectionCount++
                         inspectionSum += event.cost
-                        inspectionOtherTypesCount ++
+                        inspCarDCount++
                     }
-                    //-------
+                    TYPE_INSPECTION_CAR_PARK -> {
+                        inspectionCount++
+                        inspectionSum += event.cost
+                        inspCarPCount++
+                    }
+                    TYPE_INSPECTION_CONST_PROGRESS -> {
+                        inspectionCount++
+                        inspectionSum += event.cost
+                        inspConstPCount++
+                    }
                     TYPE_TRIP -> {
                         tripCount++
                         tripSum += event.cost
@@ -104,17 +112,20 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                     }
                 }
             }
+
             val day = Day(
                 date = events[0].date,
                 inspectionCount = inspectionCount,
-                //--new--
-                inspectionOtherTypesCount = inspectionOtherTypesCount,
-                //-------
                 inspectionSum = inspectionSum,
                 tripCount = tripCount,
                 tripSum = tripSum,
                 otherCount = otherCount,
                 otherSum = otherSum,
+
+                inspCarDCount = inspCarDCount,
+                inspCarPCount = inspCarPCount,
+                inspConstPCount = inspConstPCount,
+
                 list = events
             )
             day
@@ -130,7 +141,10 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
             tripsCount = listDays.sumOf { it.tripCount },
             tripsSum = listDays.sumOf { it.tripSum },
             otherCount = listDays.sumOf { it.otherCount },
-            otherSum = listDays.sumOf { it.otherSum }
+            otherSum = listDays.sumOf { it.otherSum },
+            inspCarD = listDays.sumOf { it.inspCarDCount },
+            inspCarP = listDays.sumOf { it.inspCarPCount },
+            inspConstP = listDays.sumOf { it.inspConstPCount }
         )
     }
 
@@ -144,11 +158,44 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         val monthNames = application.resources.getStringArray(R.array.month_name_for_picker)
 
         val date = listDays[0].date
+
+
+        //якщо є переврки інши типів то додати строку - серед них:
+
+        //якщо є автосалон то додати - Ввтосалон:
+        //якщо є автомайданчик, то додати - Автомайданчики:
+        //якщо є хід будівництва то додати - Хід Будівництва:
+        //якщо є хід будівництва то додати - ... :
+
+        //якщо є витрати на поїздки, то додати їх
+        //якщо є інші витрати то додати їх
+
         val stringBuilder = StringBuilder()
             .append("${monthNames[date.get(Calendar.MONTH)]}. ${date.get(Calendar.YEAR)}")
             .append(application.resources.getString(R.string.template_inspections, statistic.inspectionsCount))
-            .append(application.resources.getString(R.string.template_trips, statistic.tripsSum))
-            .append(application.resources.getString(R.string.template_expenses, statistic.otherSum))
+
+
+        val inspectionDetails = listOf(
+            "Автосалон" to statistic.inspCarD,
+            "Автомайданчик" to statistic.inspCarP,
+            "Хід будівництва" to statistic.inspConstP,
+        ).filter {
+            it.second != 0
+        }
+
+        if (inspectionDetails.isNotEmpty()) {
+            stringBuilder.append("\nСеред них:")
+            inspectionDetails.forEach { (name, count) ->
+                stringBuilder.append("\n$name: $count")
+            }
+        }
+
+        if (statistic.tripsCount != 0) {
+            stringBuilder.append(application.resources.getString(R.string.template_trips, statistic.tripsSum))
+        }
+        if (statistic.otherCount != 0) {
+            stringBuilder.append(application.resources.getString(R.string.template_expenses, statistic.otherSum))
+        }
 
         for (day in listDays) {
 
@@ -161,17 +208,28 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                 )
             )
 
+            if (day.inspCarDCount != 0 || day.inspCarPCount !=0 || day.inspConstPCount !=0){
+                var count = 0
+                for (event in dayEventsList){
+                    when (event.type){
+                        TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_OTHER -> {
+                            if (count == 0){
+                                stringBuilder.append(", серед них ${event.description}")
+                            }
+                            else {
+                                stringBuilder.append(" + ${event.description}")
+                            }
+                            count++
+                        }
+                    }
+                }
+            }
 
-            if (day.tripCount != 0 || day.tripSum != 0 || day.inspectionOtherTypesCount != 0) {
+            if (day.tripCount != 0 || day.tripSum != 0) {
                 for (event in dayEventsList) {
                     when (event.type) {
-                        TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
-                            stringBuilder.append(", з них ")
-
-
-                        }
                         TYPE_TRIP, TYPE_OTHER -> {
-                            stringBuilder.append(", ${event.description} - ${event.cost}")
+                            stringBuilder.append(", ${event.description} -${event.cost}")
                         }
                     }
                 }

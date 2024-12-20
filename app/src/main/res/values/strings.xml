@@ -42,7 +42,7 @@
     <string name="text_btn_cancel">ВІДМІНА</string>
     <string name="text_0">0</string>
 
-    <string name="template_inspections">\nПеревірок: %1$d</string>
+    <string name="template_inspections">\nРазом перевірок: %1$d</string>
     <string name="template_trips">\nВитрати на поїздки: %1$d грн</string>
     <string name="template_expenses">\nІнші витрати: %1$d грн</string>
     <string name="template_report_item">\n%1$s: Перевірки: %2$d </string>

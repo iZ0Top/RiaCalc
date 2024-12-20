@@ -6,7 +6,11 @@ data class Statistic(
     var tripsCount: Int,
     var tripsSum: Int,
     var otherCount: Int,
-    var otherSum: Int
+    var otherSum: Int,
+    //
+    var inspCarD: Int,
+    var inspCarP: Int,
+    var inspConstP: Int,
 )
 
 

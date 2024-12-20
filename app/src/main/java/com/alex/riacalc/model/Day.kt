@@ -5,13 +5,17 @@ import java.util.Calendar
 data class Day(
     val date: Calendar,
     val inspectionCount: Int,
-    //---new---
-    val inspectionOtherTypesCount: Int,
-    //--------
     val inspectionSum: Int,
     val tripCount: Int,
     val tripSum: Int,
     val otherCount: Int,
     val otherSum: Int,
+    //
+    val inspCarDCount: Int,
+    val inspCarPCount: Int,
+    val inspConstPCount: Int,
+    //
     val list: List<Event>
+
+
 )
