@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemGridBinding
 import com.alex.riacalc.model.Event
+import com.alex.riacalc.utils.TYPE_BONUS
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
@@ -53,6 +54,10 @@ class AdapterForMonthItem(
             TYPE_TRIP, TYPE_OTHER -> {
                 holder.binding.gridText.text = context.getString(R.string.template_minus, event.cost)
                 holder.binding.gridText.backgroundTintList = changeColor(R.color.red_100)
+            }
+            TYPE_BONUS -> {
+                holder.binding.gridText.text = context.getString(R.string.template_plus, event.cost)
+                holder.binding.gridText.backgroundTintList = changeColor(R.color.yellow_100)
             }
         }
     }

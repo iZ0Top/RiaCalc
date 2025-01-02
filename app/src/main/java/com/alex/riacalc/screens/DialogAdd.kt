@@ -59,6 +59,7 @@ class DialogAdd : DialogFragment() {
             TYPE_INSPECTION, TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER -> {
                 Log.d("mtag", "dialog type = INSPECTION")
 
+                binding.textDialogTitle.text = resources.getString(R.string.text_description_inspection)
                 binding.textSet.visibility = View.GONE
                 binding.spinnerInspectionType.visibility = View.VISIBLE
 
@@ -103,6 +104,7 @@ class DialogAdd : DialogFragment() {
 
                 binding.textSet.visibility = View.GONE
                 binding.spinnerInspectionType.visibility = View.VISIBLE
+                binding.textDialogTitle.text = resources.getString(R.string.text_trip)
 
                 val itemNames = requireContext().resources.getStringArray(R.array.spending_names)
                 createSpinner(itemNames)
@@ -128,6 +130,7 @@ class DialogAdd : DialogFragment() {
             }
             TYPE_BONUS -> {
                 Log.d("mtag", "dialog type = BONUS")
+                binding.textDialogTitle.text = resources.getString(R.string.text_bonus_title)
                 binding.spinnerInspectionType.visibility = View.GONE
                 binding.textSet.visibility = View.VISIBLE
             }
@@ -150,7 +153,7 @@ class DialogAdd : DialogFragment() {
                             isCorrectData = false
                         }
                     }
-                    TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER, TYPE_TRIP, TYPE_OTHER -> {
+                    TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_INSPECTION_CAR_PARK, TYPE_INSPECTION_CONST_PROGRESS, TYPE_INSPECTION_OTHER, TYPE_TRIP, TYPE_OTHER, TYPE_BONUS -> {
                         if (cost == null || cost == 0){
                             binding.etDialogCost.setText("0")
                             binding.etDialogCost.setTextColor(resources.getColor(R.color.red_300))

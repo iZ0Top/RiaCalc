@@ -9,6 +9,7 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.ItemEventBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.utils.AppPreferences
+import com.alex.riacalc.utils.TYPE_BONUS
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
@@ -62,6 +63,10 @@ class AdapterForDay(private val actionListener: ActionListener) :
             TYPE_TRIP, TYPE_OTHER -> {
                 holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_expense, event.cost, event.description)
                 holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.red_100))
+            }
+            TYPE_BONUS -> {
+                holder.binding.itemText.text = holder.itemView.context.getString(R.string.template_item_inspection, event.cost, event.description)
+                holder.binding.root.setCardBackgroundColor(holder.itemView.context.getColor(R.color.yellow_100))
             }
         }
     }

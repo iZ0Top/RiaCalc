@@ -21,6 +21,7 @@ class DialogCostSetting : DialogFragment() {
         binding.dialogCostCarDealershipSettingEt.setText(AppPreferences.getReviewCarDealershipCost().toString())
         binding.dialogCostCarParkSettingEt.setText(AppPreferences.getReviewCarParkDefaultCost().toString())
         binding.dialogCostConstProgressSettingEt.setText(AppPreferences.getReviewConstProgress().toString())
+        binding.dialogCostBonusSwitch.isChecked = AppPreferences.getBonusViewStatus()
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
@@ -37,6 +38,7 @@ class DialogCostSetting : DialogFragment() {
                 val costCarDealershipInspection = binding.dialogCostCarDealershipSettingEt.text.toString().toIntOrNull()
                 val costCarParkInspection = binding.dialogCostCarParkSettingEt.text.toString().toIntOrNull()
                 val costConstProgress = binding.dialogCostConstProgressSettingEt.text.toString().toIntOrNull()
+                val bonusViewStatus = binding.dialogCostBonusSwitch.isChecked
 
                 var dataValid = true
 
@@ -66,6 +68,7 @@ class DialogCostSetting : DialogFragment() {
                     AppPreferences.setReviewCarDealershipCost(costCarDealershipInspection!!)
                     AppPreferences.setReviewCarParkDefaultCost(costCarParkInspection!!)
                     AppPreferences.setReviewConstProgress(costConstProgress!!)
+                    AppPreferences.setBonusViewStatus(bonusViewStatus)
                 }
                 else{
                     return@setOnClickListener

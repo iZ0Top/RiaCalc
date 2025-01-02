@@ -14,6 +14,7 @@ import com.alex.riacalc.model.Statistic
 import com.alex.riacalc.utils.PATTERN_DATE_D_M_Y
 import com.alex.riacalc.utils.PATTERN_DATE_Y_M
 import com.alex.riacalc.utils.REPOSITORY
+import com.alex.riacalc.utils.TYPE_BONUS
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
@@ -74,6 +75,9 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
             var otherCount = 0
             var otherSum = 0
 
+            var bonusCount = 0
+            var bonusSum = 0
+
             var inspCarDCount = 0
             var inspCarPCount = 0
             var inspConstPCount = 0
@@ -103,10 +107,13 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                         tripCount++
                         tripSum += event.cost
                     }
-
                     TYPE_OTHER -> {
                         otherCount++
                         otherSum += event.cost
+                    }
+                    TYPE_BONUS -> {
+                        bonusCount++
+                        bonusSum += event.cost
                     }
                 }
             }
@@ -119,6 +126,9 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
                 tripSum = tripSum,
                 otherCount = otherCount,
                 otherSum = otherSum,
+
+                bonusCount = bonusCount,
+                bonusSum = bonusSum,
 
                 inspCarDCount = inspCarDCount,
                 inspCarPCount = inspCarPCount,
@@ -140,6 +150,8 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
             tripsSum = listDays.sumOf { it.tripSum },
             otherCount = listDays.sumOf { it.otherCount },
             otherSum = listDays.sumOf { it.otherSum },
+            bonusCount = listDays.sumOf { it.bonusCount },
+            bonusSum = listDays.sumOf { it.bonusSum },
             inspCarD = listDays.sumOf { it.inspCarDCount },
             inspCarP = listDays.sumOf { it.inspCarPCount },
             inspConstP = listDays.sumOf { it.inspConstPCount }

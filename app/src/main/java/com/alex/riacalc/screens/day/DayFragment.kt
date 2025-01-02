@@ -181,11 +181,11 @@ class DayFragment : Fragment(), OnClickListener {
 
     private fun showDialogAddEvent(type: Int){
 
-        //val defaultCost = if (type == TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
+        val defaultCost = if (type == TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
         val event = Event(
             id = 0,
             type = type,
-            cost = 0,
+            cost = defaultCost,
             description = "",
             date = date
         )
@@ -259,6 +259,10 @@ class DayFragment : Fragment(), OnClickListener {
             TYPE_OTHER -> {
                 dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_other_expense)
                 dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_minus, event.cost)
+            }
+            TYPE_BONUS -> {
+                dialogBinding.dialogDescriptionTitle.text = resources.getString(R.string.text_bonus_title)
+                dialogBinding.dialogDescriptionCost.text = resources.getString(R.string.template_plus, event.cost)
             }
             else -> {
                 return
