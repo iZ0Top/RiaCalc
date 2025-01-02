@@ -25,6 +25,7 @@ import com.alex.riacalc.screens.DialogCostSetting
 import com.alex.riacalc.utils.AppPreferences
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_DAY
 import com.alex.riacalc.utils.KEY_ARGUMENTS_TO_MONTH
+import com.alex.riacalc.utils.TYPE_BONUS
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
@@ -80,7 +81,7 @@ class DayFragment : Fragment(), OnClickListener {
         binding.recyclerViewDay.adapter = adapter
         binding.btnAddInspection.setOnClickListener(this)
         binding.btnAddTrip.setOnClickListener(this)
-        binding.btnAddOther.setOnClickListener(this)
+        binding.btnAddBonus.setOnClickListener(this)
 
         with(mainBinding.toolbar){
 
@@ -145,7 +146,7 @@ class DayFragment : Fragment(), OnClickListener {
                 R.id.toolbar_frame_date -> { showDatePickerDialog() }
                 R.id.btn_add_inspection -> { showDialogAddEvent(TYPE_INSPECTION) }
                 R.id.btn_add_trip -> { showDialogAddEvent(TYPE_TRIP) }
-                R.id.btn_add_other -> { showDialogAddEvent(TYPE_OTHER) }
+                R.id.btn_add_bonus -> { showDialogAddEvent(TYPE_BONUS) }
                 R.id.toolbar_btn_month -> {
                     val bundle = Bundle()
                     bundle.putSerializable(KEY_ARGUMENTS_TO_MONTH, date)
@@ -159,21 +160,32 @@ class DayFragment : Fragment(), OnClickListener {
 
         with(mainBinding.toolbar){
             toolbarTxtReviewsCount.text = stats.inspectionsCount.toString()
-            toolbarTxtTripsCount.text= stats.tripsCount.toString()
-            toolbarTxtOtherCount.text = stats.otherCount.toString()
             toolbarTxtReviewsSum.text = resources.getString(R.string.template_formatted_currency, stats.inspectionsSum)
-            toolbarTxtTripsSum.text = resources.getString(R.string.template_formatted_currency, stats.tripsSum)
+
+            if (stats.tripsCount > 0) toolbarLinearTrips.visibility = View.VISIBLE else toolbarLinearTrips.visibility = View.GONE
+
+            toolbarTxtOtherCount.text = stats.otherCount.toString()
             toolbarTxtOtherSum.text = resources.getString(R.string.template_formatted_currency, stats.otherSum)
+
+            if (stats.otherCount > 0) toolbarLinearOther.visibility = View.VISIBLE else toolbarLinearOther.visibility = View.GONE
+
+            toolbarTxtTripsCount.text = stats.tripsCount.toString()
+            toolbarTxtTripsSum.text = resources.getString(R.string.template_formatted_currency, stats.tripsSum)
+
+            if (stats.bonusCount > 0 && AppPreferences.getBonusViewStatus())  toolbarLinearBonus.visibility = View.VISIBLE else toolbarLinearBonus.visibility = View.GONE
+
+            toolbarTxtBonusCount.text = stats.bonusCount.toString()
+            toolbarTxtBonusSum.text = resources.getString(R.string.template_formatted_currency, stats.bonusSum)
         }
     }
 
     private fun showDialogAddEvent(type: Int){
 
-        val defaultCost = if (type == TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
+        //val defaultCost = if (type == TYPE_INSPECTION) AppPreferences.getReviewDefaultCost() else 0
         val event = Event(
             id = 0,
             type = type,
-            cost = defaultCost,
+            cost = 0,
             description = "",
             date = date
         )

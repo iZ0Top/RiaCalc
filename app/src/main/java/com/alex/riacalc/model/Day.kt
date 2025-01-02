@@ -11,6 +11,9 @@ data class Day(
     val otherCount: Int,
     val otherSum: Int,
     //
+    val bonusCount: Int,
+    val bonusSum: Int,
+    //
     val inspCarDCount: Int,
     val inspCarPCount: Int,
     val inspConstPCount: Int,

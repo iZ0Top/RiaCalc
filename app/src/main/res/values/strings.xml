@@ -10,11 +10,11 @@
     <string name="text_inspections">Перевірки:</string>
 
     <string name="text_trip">Поїздка</string>
-    <string name="text_btn_trip">Поїздка</string>
+    <string name="text_btn_trip">поїздка-витрата</string>
     <string name="text_trips">Поїздки:</string>
 
     <string name="text_other_expense">Інші витрати</string>
-    <string name="text_btn_other">Інші витрати</string>
+    <string name="text_btn_other">Бонуси</string>
     <string name="text_other_expenses">Інші витрати:</string>
     
     <string name="text_need_add_description">Потрібно додати опис</string>
@@ -65,11 +65,16 @@
     <string name="text_const_progress">Хід будівництва</string>
 
 
-    <string-array name="inspection_type">
+    <string-array name="inspection_names">
         <item>Перевірка</item>
         <item>Автосалон</item>
         <item>Автомайданчик</item>
         <item>Хід будівництва</item>
+    </string-array>
+    
+    <string-array name="spending_names">
+        <item>Поїздка</item>
+        <item>Інше</item>
     </string-array>
 
     <string-array name="day_name">

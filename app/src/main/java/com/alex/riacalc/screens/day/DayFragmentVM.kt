@@ -13,6 +13,7 @@ import com.alex.riacalc.repository.room.AppDatabase
 import com.alex.riacalc.repository.room.RoomRepository
 import com.alex.riacalc.utils.PATTERN_DATE_Y_M_D
 import com.alex.riacalc.utils.REPOSITORY
+import com.alex.riacalc.utils.TYPE_BONUS
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
@@ -106,6 +107,9 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
         var otherCount = 0
         var otherSum = 0
         //-----
+        var bonusCount = 0
+        var bonusSum = 0
+        //-----
         var inspCarD = 0
         var inspCarP = 0
         var inspConstP = 0
@@ -140,6 +144,10 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
                     otherCount++
                     otherSum += i.cost
                 }
+                TYPE_BONUS -> {
+                    bonusCount++
+                    bonusSum += i.cost
+                }
             }
         }
         _statisticLD.value = Statistic(
@@ -149,6 +157,10 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
             tripsSum = tripsSum,
             otherCount = otherCount,
             otherSum = otherSum,
+            //---
+            bonusCount = bonusCount,
+            bonusSum = bonusSum,
+            //---
             inspCarD = inspCarD,
             inspCarP = inspCarP,
             inspConstP = inspConstP,

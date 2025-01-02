@@ -24,6 +24,9 @@ object AppPreferences {
     fun setReviewConstProgress(value: Int){
         mPreferences.edit().putInt(PREF_DEFAULT_CONST_PROGRESS, value).apply()
     }
+    fun setBonusViewStatus(value: Boolean){
+        mPreferences.edit().putBoolean(PREF_BONUS_VIEW_STATUS, value).apply()
+    }
 
 
 
@@ -38,5 +41,8 @@ object AppPreferences {
     }
     fun getReviewConstProgress(): Int{
         return mPreferences.getInt(PREF_DEFAULT_CONST_PROGRESS, 100)
+    }
+    fun getBonusViewStatus(): Boolean{
+        return mPreferences.getBoolean(PREF_BONUS_VIEW_STATUS, false)
     }
 }

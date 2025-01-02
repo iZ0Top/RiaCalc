@@ -8,6 +8,9 @@ data class Statistic(
     var otherCount: Int,
     var otherSum: Int,
     //
+    var bonusCount: Int,
+    var bonusSum: Int,
+    //
     var inspCarD: Int,
     var inspCarP: Int,
     var inspConstP: Int,

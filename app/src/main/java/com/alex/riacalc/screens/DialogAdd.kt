@@ -18,6 +18,7 @@ import com.alex.riacalc.R
 import com.alex.riacalc.databinding.DialogAddBinding
 import com.alex.riacalc.model.Event
 import com.alex.riacalc.utils.AppPreferences
+import com.alex.riacalc.utils.TYPE_BONUS
 import com.alex.riacalc.utils.TYPE_INSPECTION
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_DEALERSHIP
 import com.alex.riacalc.utils.TYPE_INSPECTION_CAR_PARK
@@ -61,7 +62,8 @@ class DialogAdd : DialogFragment() {
                 binding.textSet.visibility = View.GONE
                 binding.spinnerInspectionType.visibility = View.VISIBLE
 
-                createSpinner()
+                val itemNames = requireContext().resources.getStringArray(R.array.inspection_names)
+                createSpinner(itemNames)
                 val inputPosition = convertTypeToPosition(event.type)
                 mSpinner?.setSelection(inputPosition)
 
@@ -96,19 +98,38 @@ class DialogAdd : DialogFragment() {
                     }
                 }
             }
-            TYPE_TRIP -> {
+            TYPE_TRIP, TYPE_OTHER-> {
                 Log.d("mtag", "dialog type = TRIP")
-                binding.spinnerInspectionType.visibility = View.GONE
-                binding.textSet.visibility = View.VISIBLE
-                binding.textSet.text = resources.getString(R.string.text_cost)
-                binding.textDialogTitle.text = resources.getString(R.string.text_trip)
+
+                binding.textSet.visibility = View.GONE
+                binding.spinnerInspectionType.visibility = View.VISIBLE
+
+                val itemNames = requireContext().resources.getStringArray(R.array.spending_names)
+                createSpinner(itemNames)
+                val inputPosition = convertTypeToPosition(event.type)
+                mSpinner?.setSelection(inputPosition)
+
+                mSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+
+                        val title = when (position){
+                            0 -> resources.getString(R.string.text_trip)
+                            1 -> resources.getString(R.string.text_other_expense)
+                            else -> ""
+                        }
+                        if (event.type != convertPositionToTypeSpending(position)){
+                            binding.textDialogTitle.text = title
+                            binding.etDialogCost.setText("0")
+                        }
+                    }
+                    override fun onNothingSelected(p0: AdapterView<*>?) {
+                    }
+                }
             }
-            TYPE_OTHER -> {
-                Log.d("mtag", "dialog type = OTHER")
+            TYPE_BONUS -> {
+                Log.d("mtag", "dialog type = BONUS")
                 binding.spinnerInspectionType.visibility = View.GONE
                 binding.textSet.visibility = View.VISIBLE
-                binding.textSet.text = resources.getString(R.string.text_cost)
-                binding.textDialogTitle.text = resources.getString(R.string.text_other_expense)
             }
         }
 
@@ -157,8 +178,8 @@ class DialogAdd : DialogFragment() {
 
     private fun convertTypeToPosition(type: Int): Int {
         val p = when(type){
-            TYPE_INSPECTION -> 0
-            TYPE_INSPECTION_CAR_DEALERSHIP -> 1
+            TYPE_INSPECTION, TYPE_TRIP -> 0
+            TYPE_INSPECTION_CAR_DEALERSHIP, TYPE_OTHER -> 1
             TYPE_INSPECTION_CAR_PARK -> 2
             TYPE_INSPECTION_CONST_PROGRESS -> 3
             TYPE_INSPECTION_OTHER -> 4
@@ -177,6 +198,14 @@ class DialogAdd : DialogFragment() {
         }
         return p
     }
+    private fun convertPositionToTypeSpending(position: Int): Int{
+        val p = when(position){
+            0 -> TYPE_TRIP
+            1 -> TYPE_OTHER
+            else -> {0}
+        }
+        return p
+    }
 
 
     override fun onDestroy() {
@@ -185,12 +214,12 @@ class DialogAdd : DialogFragment() {
         Log.d("TAG", "DialogAdd - onDestroy")
     }
 
-    private fun createSpinner(){
+    private fun createSpinner(names: Array<String>){
 
         Log.d("mtag", "createSpinner")
-        val textArray = resources.getStringArray(R.array.inspection_type)
+        //val textArray = resources.getStringArray(R.array.inspection_type)
         mSpinner = binding.spinnerInspectionType
-        val spinnerAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, textArray)
+        val spinnerAdapter = ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item, names)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mSpinner!!.adapter = spinnerAdapter
     }

@@ -12,6 +12,7 @@ const val TYPE_INSPECTION_CONST_PROGRESS = 12
 const val TYPE_INSPECTION_OTHER = 13
 const val TYPE_TRIP = 2
 const val TYPE_OTHER = 3
+const val TYPE_BONUS = 9
 
 const val KEY_ARGUMENTS_TO_MONTH = "key_argument_to_month"
 const val KEY_ARGUMENTS_TO_DAY = "key_argument_to_day"
@@ -26,6 +27,7 @@ const val PREF_DEFAULT_COST = "default_cost"
 const val PREF_DEFAULT_CAR_DEALERSHIP_COST = "default_car_dealership_cost"
 const val PREF_DEFAULT_CAR_PARK_COST = "default_car_park_cost"
 const val PREF_DEFAULT_CONST_PROGRESS = "default_const_progress"
+const val PREF_BONUS_VIEW_STATUS = "bonus_view_status"
 
 
 

@@ -29,7 +29,6 @@ import java.util.Locale
 
 class MonthFragmentVM(private val application: Application) : AndroidViewModel(application) {
 
-
     private var _calendarLD = MutableLiveData<Calendar>()
     private var _statisticLD = MutableLiveData<Statistic>()
     private var _reportLD = MutableLiveData<String>()
@@ -38,7 +37,6 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
     val reportLD: LiveData<String> get() = _reportLD
 
     val mediatorLiveData = MediatorLiveData<List<Day>>()
-
 
     fun setDate(calendar: Calendar) {
         _calendarLD.value = calendar
@@ -159,7 +157,6 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
 
         val date = listDays[0].date
 
-
         //якщо є переврки інши типів то додати строку - серед них:
 
         //якщо є автосалон то додати - Ввтосалон:
@@ -173,7 +170,6 @@ class MonthFragmentVM(private val application: Application) : AndroidViewModel(a
         val stringBuilder = StringBuilder()
             .append("${monthNames[date.get(Calendar.MONTH)]}. ${date.get(Calendar.YEAR)}")
             .append(application.resources.getString(R.string.template_inspections, statistic.inspectionsCount))
-
 
         val inspectionDetails = listOf(
             "Автосалон" to statistic.inspCarD,

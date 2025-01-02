@@ -121,12 +121,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Автомайданчик"
         android:gravity="end"
+        android:text="Автомайданчик"
         app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout"
         app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_park_setting_ti_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_dealership_setting_ti_layout" />
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_car_park_setting_ti_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialog_cost_car_park_setting_ti_layout"
@@ -181,11 +181,11 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
         app:errorEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_car_park_setting_currency"
+        app:layout_constraintBottom_toTopOf="@id/dialog_cost_bonus_switch"
+        app:layout_constraintEnd_toStartOf="@+id/dialog_cost_const_progress_setting_currency"
         app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -193,10 +193,10 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:digits="0123456789"
-            android:selectAllOnFocus="true"
             android:inputType="numberDecimal"
             android:lines="1"
-            android:maxLength="3" />
+            android:maxLength="3"
+            android:selectAllOnFocus="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -209,8 +209,31 @@
         android:text="@string/text_currency"
         app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_const_progress_setting_ti_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_car_park_setting_ti_layout" />
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_const_progress_setting_ti_layout" />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/dialog_cost_bonus_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_cost_const_progress_setting_ti_layout"
+        app:layout_constraintStart_toStartOf="@+id/dialog_cost_const_progress_setting_ti_layout"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_cost_const_progress_setting_ti_layout"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/dialog_cost_bonus_text"
+        style="@style/text_normal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:gravity="end"
+        android:text="Відображати бонуси"
+        app:layout_constraintBottom_toBottomOf="@+id/dialog_cost_bonus_switch"
+        app:layout_constraintEnd_toEndOf="@+id/dialog_cost_const_progress_setting_tv_header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dialog_cost_bonus_switch" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
