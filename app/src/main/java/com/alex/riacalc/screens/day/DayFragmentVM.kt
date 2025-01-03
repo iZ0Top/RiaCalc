@@ -37,6 +37,8 @@ class DayFragmentVM(application: Application) : AndroidViewModel(application) {
     private var _calendarLD = MutableLiveData<Calendar>()
     private var _statisticLD = MutableLiveData<Statistic>()
 
+    private var _settingLD = MutableLiveData<Boolean>()
+
     val calendarLD: LiveData<Calendar> get() = _calendarLD
     val statisticLD: LiveData<Statistic> get() = _statisticLD
 

@@ -159,6 +159,7 @@ class DayFragment : Fragment(), OnClickListener {
     private fun updateInfo(stats: Statistic){
 
         with(mainBinding.toolbar){
+
             toolbarTxtReviewsCount.text = stats.inspectionsCount.toString()
             toolbarTxtReviewsSum.text = resources.getString(R.string.template_formatted_currency, stats.inspectionsSum)
 

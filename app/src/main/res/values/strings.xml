@@ -10,11 +10,11 @@
     <string name="text_inspections">Перевірки:</string>
 
     <string name="text_trip">Поїздка</string>
-    <string name="text_btn_trip">поїздка-витрата</string>
+    <string name="text_btn_trip">поїздка/витрата</string>
     <string name="text_trips">Поїздки:</string>
 
     <string name="text_other_expense">Інші витрати</string>
-    <string name="text_btn_other">Бонуси</string>
+    <string name="text_btn_other">Бонус</string>
     <string name="text_other_expenses">Інші витрати:</string>
     <string name="text_bonus_title">Опис бонуса</string>
     

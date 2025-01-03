@@ -3,6 +3,7 @@ package com.alex.riacalc.screens.month
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -193,14 +194,22 @@ class MonthFragment : Fragment(), OnClickListener {
     }
 
     private fun updateStatistic(statistic: Statistic){
+        Log.d("mtag", "updateStatistic")
 
         with(mainBinding.toolbar){
             toolbarTxtReviewsCount.text = statistic.inspectionsCount.toString()
-            toolbarTxtTripsCount.text = statistic.tripsCount.toString()
-            toolbarTxtOtherCount.text = statistic.otherCount.toString()
-
             toolbarTxtReviewsSum.text = resources.getString(R.string.template_formatted_currency, statistic.inspectionsSum)
+
+            if (statistic.bonusCount > 0) toolbarLinearBonus.visibility = View.VISIBLE else toolbarLinearBonus.visibility = View.GONE
+            toolbarTxtBonusCount.text = statistic.bonusCount.toString()
+            toolbarTxtBonusSum.text = resources.getString(R.string.template_formatted_currency, statistic.bonusSum)
+
+            if (statistic.tripsCount > 0) toolbarLinearTrips.visibility = View.VISIBLE else toolbarLinearTrips.visibility = View.GONE
+            toolbarTxtTripsCount.text = statistic.tripsCount.toString()
             toolbarTxtTripsSum.text = resources.getString(R.string.template_formatted_currency, statistic.tripsSum)
+
+            if (statistic.otherCount > 0) toolbarLinearOther.visibility = View.VISIBLE else toolbarLinearOther.visibility = View.GONE
+            toolbarTxtOtherCount.text = statistic.otherCount.toString()
             toolbarTxtOtherSum.text = resources.getString(R.string.template_formatted_currency, statistic.otherSum)
         }
     }

@@ -150,7 +150,52 @@
                 android:text="@string/template_formatted_currency"
                 android:textColor="@color/green_600"/>
         </LinearLayout>
+        //
+        <LinearLayout
+            android:id="@+id/toolbar_linear_bonus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_linear_inspections">
 
+            <TextView
+                android:id="@+id/toolbar_txt_bonus"
+                style="@style/text_normal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Бонуси" />
+
+            <TextView
+                android:id="@+id/toolbar_txt_bonus_count"
+                style="@style/text_normal"
+                android:textStyle="bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center_horizontal"
+                android:text="@string/text_0" />
+
+            <TextView
+                android:id="@+id/toolbar_txt_bonus_sum"
+                style="@style/text_normal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/template_formatted_currency"
+                android:textColor="@color/green_600"/>
+        </LinearLayout>
+
+
+        //
         <LinearLayout
             android:id="@+id/toolbar_linear_trips"
             android:layout_width="match_parent"
@@ -160,7 +205,7 @@
             android:layout_marginEnd="16dp"
             android:visibility="gone"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_linear_inspections">
+            app:layout_constraintTop_toBottomOf="@id/toolbar_linear_bonus">
 
             <TextView
                 android:id="@+id/toolbar_txt_trips"
@@ -234,48 +279,7 @@
                 android:textColor="@color/red_600"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/toolbar_linear_bonus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:orientation="horizontal"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_linear_other">
 
-            <TextView
-                android:id="@+id/toolbar_txt_bonus"
-                style="@style/text_normal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="Бонуси" />
-
-            <TextView
-                android:id="@+id/toolbar_txt_bonus_count"
-                style="@style/text_normal"
-                android:textStyle="bold"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:gravity="center_horizontal"
-                android:text="@string/text_0" />
-
-            <TextView
-                android:id="@+id/toolbar_txt_bonus_sum"
-                style="@style/text_normal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="end"
-                android:text="@string/template_formatted_currency"
-                android:textColor="@color/red_600"/>
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.Toolbar>

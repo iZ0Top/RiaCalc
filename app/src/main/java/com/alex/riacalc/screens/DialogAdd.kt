@@ -100,11 +100,10 @@ class DialogAdd : DialogFragment() {
                 }
             }
             TYPE_TRIP, TYPE_OTHER-> {
-                Log.d("mtag", "dialog type = TRIP")
+                Log.d("mtag", "dialog type = TRIP or OTHER")
 
                 binding.textSet.visibility = View.GONE
                 binding.spinnerInspectionType.visibility = View.VISIBLE
-                binding.textDialogTitle.text = resources.getString(R.string.text_trip)
 
                 val itemNames = requireContext().resources.getStringArray(R.array.spending_names)
                 createSpinner(itemNames)
@@ -113,15 +112,21 @@ class DialogAdd : DialogFragment() {
 
                 mSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
                     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                        Log.d("mtag", "dialog type = TRIP or OTHER - spinner listener, position=$position")
 
                         val title = when (position){
                             0 -> resources.getString(R.string.text_trip)
                             1 -> resources.getString(R.string.text_other_expense)
                             else -> ""
                         }
+                        binding.textDialogTitle.text = title
+
+                        Log.d("mtag", "dialog type = TRIP or OTHER - spinner listener, position=$position, convertPositionToTypeSpending=${convertPositionToTypeSpending(position)}")
                         if (event.type != convertPositionToTypeSpending(position)){
                             binding.textDialogTitle.text = title
+                            binding.etDialogDescription.setText("")
                             binding.etDialogCost.setText("0")
+                            event.type = convertPositionToTypeSpending(position)
                         }
                     }
                     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -133,6 +138,7 @@ class DialogAdd : DialogFragment() {
                 binding.textDialogTitle.text = resources.getString(R.string.text_bonus_title)
                 binding.spinnerInspectionType.visibility = View.GONE
                 binding.textSet.visibility = View.VISIBLE
+                binding.textSet.text = resources.getString(R.string.text_sum)
             }
         }
 
