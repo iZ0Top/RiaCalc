@@ -7,15 +7,401 @@
     android:layout_height="match_parent"
     tools:context=".screens.day.DayFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_day_header_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fragment_day_statistic_card">
 
+        <ImageView
+            android:id="@+id/fragment_day_ic_setting"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_settings"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fragment_day_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Понеділок\n14 квітня"
+            android:textSize="18dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:background="@drawable/rounded_background"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_day_ic_month"
+            app:layout_constraintStart_toEndOf="@id/fragment_day_ic_setting"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+
+            android:id="@+id/fragment_day_ic_month"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_calendar_month"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fragment_day_statistic_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="8dp"
+        app:strokeColor="@color/black_300"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/fragment_day_header_constraint"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recycler_view_day">
+
+        <LinearLayout
+            android:id="@+id/fragment_day_statistic_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_review_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_review"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Перевірки:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="15"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1200 грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_review_b_p"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_review_b_p_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_build_progress"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_b_p_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Хід будівництва:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_b_p_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_b_p_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="600грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_review_c_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_review_c_d_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_car_dealership"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_c_d_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Автосалони:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_c_d_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_c_d_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="300 грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_review_c_m"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_review_c_m_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_car_market"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_c_m_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Автомайданчики:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_c_m_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_review_c_m_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="300 грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_trip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_trip_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_trip"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_trip_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Поїздки:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_trip_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="150 грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_other_ex"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_other_ex_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_trip"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_other_ex_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Інші витрати:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_other_ex_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_other_ex_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="80 грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/fragment_day_stat_bonus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/fragment_day_stat_bonus_ic"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_bonus"/>
+                <TextView
+                    android:id="@+id/fragment_day_stat_bonus_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Бонуси:"
+                    android:textSize="18dp"
+                    android:layout_weight="0.5"
+                    android:layout_marginStart="4"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_bonus_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:textSize="18dp"
+                    android:layout_weight="0.2"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    />
+                <TextView
+                    android:id="@+id/fragment_day_stat_bonus_sum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="1500 грн"
+                    android:textSize="18dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="0.3"
+                    android:gravity="end"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_day"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_day_statistic_card"
         app:layout_constraintBottom_toTopOf="@id/btn_constraint"
-        tools:listitem="@layout/item_event"
+        tools:listitem="@layout/item_event_2"
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
